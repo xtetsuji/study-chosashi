@@ -328,6 +328,7 @@ function personCard(personId) {
     && scenario.answerOrder.includes(personId)
     && isVisible(person);
   const selected = selectedPeople.has(personId);
+  const finalDecedent = isFinalSnapshot() && person.relation === "被相続人";
   const card = document.createElement(selectable ? "button" : "div");
   card.className = "person-card";
   card.dataset.person = personId;
@@ -351,6 +352,7 @@ function personCard(personId) {
 
   if (!isVisible(person)) card.classList.add("is-not-born");
   if (isDead(person)) card.classList.add("is-dead");
+  if (finalDecedent) card.classList.add("is-decedent-final");
 
   if (isRevealed && isFinalSnapshot()) {
     if (scenario.heirs[personId]) {
@@ -380,6 +382,7 @@ function personCard(personId) {
 
   card.innerHTML = `
     ${selected && !isRevealed ? '<span class="selection-mark" aria-hidden="true">選択中</span>' : ""}
+    ${finalDecedent ? '<span class="decedent-mark">相続開始</span>' : ""}
     <span class="person-name">${person.name}</span>
     <span class="person-relation">${person.relation}</span>
     <span class="person-state">${state}</span>

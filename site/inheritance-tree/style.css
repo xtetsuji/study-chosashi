@@ -132,6 +132,10 @@ h1 span { color: var(--red); }
 .person-card.is-not-born { display: none; }
 .person-card.is-dead { border-style: dashed; opacity: 0.65; }
 .person-card.is-dead::after { position: absolute; top: 0.3rem; right: 0.38rem; color: #efaa96; content: "×"; font-weight: 900; }
+.person-card.is-decedent-final { border: 4px double #fff1e7; background: #713729; opacity: 1; box-shadow: 0 0 0 5px rgba(255, 241, 231, 0.2), 0 0.8rem 1.8rem rgba(0, 0, 0, 0.2); }
+.person-card.is-decedent-final .person-name { font-size: 1.15rem; }
+.person-card.is-decedent-final .person-relation { color: #ffe4da; font-weight: 800; }
+.person-card.is-decedent-final .person-state { color: #ffd2c2; }
 .person-card.is-heir { border: 3px solid #ff9a78; background: #315b57; box-shadow: 0 0 0 5px rgba(255, 154, 120, 0.24); }
 .person-card.is-heir::after { position: absolute; top: 0.3rem; right: 0.35rem; display: grid; width: 1.2rem; height: 1.2rem; place-items: center; border-radius: 50%; background: var(--red-bright); color: white; content: "✓"; font-size: 0.7rem; font-weight: 900; }
 .person-card.is-missed { border-color: #f2cd5c; box-shadow: 0 0 0 5px rgba(242, 205, 92, 0.24); }
@@ -143,6 +147,7 @@ h1 span { color: var(--red); }
 .person-card.is-wrong .person-state { color: #ffc3b2; }
 .person-card .person-share { margin-top: 0.3rem; color: #ffd7ca; font-size: 0.75rem; font-weight: 900; }
 .selection-mark { position: absolute; top: -0.75rem; left: 50%; z-index: 2; padding: 0.18rem 0.48rem; border-radius: 1rem; background: #77d1e4; color: #123a46; font-size: 0.58rem; font-weight: 900; line-height: 1.2; white-space: nowrap; transform: translateX(-50%); }
+.decedent-mark { position: absolute; top: -0.85rem; left: 50%; z-index: 2; padding: 0.22rem 0.58rem; border: 1px solid #fff1e7; border-radius: 1rem; background: #b64730; color: white; font-size: 0.6rem; font-weight: 900; line-height: 1.2; white-space: nowrap; transform: translateX(-50%); }
 .event-badge { display: block; max-width: 12rem; margin: 0.5rem auto 0; color: #efaa96; font-size: 0.62rem; text-align: center; }
 
 .split-family-tree { min-width: 680px; padding: 0 1rem; }
