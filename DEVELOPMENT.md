@@ -123,6 +123,7 @@ TypeScriptやパッケージ依存が必要な場合は、`period-flashcards/` �
 ```text
 /
 ├── civil-rights-transitions/
+├── inheritance-tree/
 └── period-flashcards/
 ```
 
