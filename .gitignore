@@ -1,0 +1,6 @@
+.DS_Store
+*.part
+node_modules/
+dist/
+.vite/
+kakomon/work/render/
