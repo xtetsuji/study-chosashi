@@ -397,6 +397,131 @@ const scenarios = [
       ["結論", "配偶者はおらず、最も近い直系尊属は母・富美だけなので、富美が全部を相続します。"],
     ],
   },
+  {
+    id: "dual-capacity-adopted-grandchild",
+    category: "二重資格",
+    title: "孫が養子と代襲者の二つの資格を持つ",
+    summary: "被相続人の養子でもある孫が、実親の枝を代襲し、自身の子としての取り分と合わせて取得する事例です。",
+    facts: [
+      ["被相続人", "泰三（たいぞう）"],
+      ["家族", "子2人・孫1人（配偶者なし）"],
+      ["過去問論点", "令和3年度・第3問を再構成"],
+    ],
+    events: [
+      { date: "2005", label: "家族", note: "泰三には、2人の子・大地と恵、孫・陸がいます。陸は大地の子です。", changedPeople: ["taizo", "daichi", "megumi2", "riku2"] },
+      { date: "2015", label: "養子縁組", note: "泰三が孫・陸を養子にしました。陸は泰三の子としての資格も持ちます。", changedPeople: ["taizo", "riku2"] },
+      { date: "2024", label: "大地が死亡", note: "泰三の子・大地が、泰三より先に死亡しました。", changedPeople: ["daichi"] },
+      { date: "2026", label: "相続開始", note: "泰三が死亡しました。陸の二つの資格を分けて相続分を計算します。", changedPeople: ["taizo"] },
+    ],
+    people: {
+      taizo: { name: "泰三", relation: "被相続人", diedStep: 3 },
+      daichi: { name: "大地", relation: "子", diedStep: 2 },
+      megumi2: { name: "恵", relation: "子" },
+      riku2: { name: "陸", relation: "孫・泰三の養子", relationBeforeConnection: "孫", parent: "daichi", connectionStep: 1 },
+    },
+    root: ["taizo"],
+    candidateHeading: "第1順位｜子の資格と代襲者の資格",
+    branches: [
+      { label: "恵の枝", roots: ["megumi2"] },
+      { label: "大地の枝｜陸が代襲", roots: ["daichi"] },
+    ],
+    answerOrder: ["megumi2", "daichi", "riku2"],
+    heirs: {
+      megumi2: { share: "1/3", note: "恵自身の子としての取り分" },
+      riku2: { share: "2/3", note: "養子として1/3＋大地の代襲者として1/3" },
+    },
+    nonHeirs: {
+      daichi: "相続開始前に死亡しています。大地の枝は陸が代襲します。",
+    },
+    reasoning: [
+      ["子の資格", "陸は泰三の養子なので、恵・大地と並ぶ泰三の子として1/3の取り分を持ちます。"],
+      ["代襲者の資格", "大地が先に死亡しているため、大地の子・陸は大地の枝の1/3も代襲します。"],
+      ["合算", "恵は1/3。陸は養子としての1/3と代襲による1/3を合わせ、2/3を取得します。"],
+    ],
+  },
+  {
+    id: "fetus-representation",
+    category: "胎児",
+    title: "相続開始時の胎児が生きて生まれる",
+    summary: "相続開始時に胎児だった孫が、その後生きて生まれ、先に死亡した親を代襲する事例です。",
+    facts: [
+      ["被相続人", "清（きよし）"],
+      ["家族", "子2人・孫1人（配偶者なし）"],
+      ["過去問論点", "令和6年度・第3問を再構成"],
+    ],
+    events: [
+      { date: "2024", label: "家族", note: "清には、2人の子・雅美と哲がいます。", changedPeople: ["kiyoshi", "masami", "tetsu"] },
+      { date: "2025", label: "哲が死亡", note: "清の子・哲が先に死亡しました。哲の子は胎児として存在しています。", changedPeople: ["tetsu", "mio2"] },
+      { date: "2026", label: "相続開始", note: "清が死亡しました。この時点で哲の子・澪は胎児です。", changedPeople: ["kiyoshi", "mio2"] },
+      { date: "2026", label: "生きて出生", note: "澪が生きて生まれました。相続について既に生まれたものとみなせるかを判定します。", changedPeople: ["mio2"] },
+    ],
+    people: {
+      kiyoshi: { name: "清", relation: "被相続人", diedStep: 2 },
+      masami: { name: "雅美", relation: "子" },
+      tetsu: { name: "哲", relation: "子", diedStep: 1 },
+      mio2: { name: "澪", relation: "孫・相続開始時は胎児", parent: "tetsu", appearsStep: 1, bornStep: 3, fetalUntilStep: 3 },
+    },
+    root: ["kiyoshi"],
+    candidateHeading: "第1順位｜子どもの枝",
+    branches: [
+      { label: "雅美の枝", roots: ["masami"] },
+      { label: "哲の枝", roots: ["tetsu"] },
+    ],
+    answerOrder: ["masami", "tetsu", "mio2"],
+    heirs: {
+      masami: { share: "1/2", note: "雅美の枝の取り分" },
+      mio2: { share: "1/2", note: "哲の枝を胎児として代襲" },
+    },
+    nonHeirs: {
+      tetsu: "相続開始前に死亡しています。哲の枝は澪が代襲します。",
+    },
+    reasoning: [
+      ["胎児", "胎児は相続について既に生まれたものとみなされます。今回は澪が生きて生まれた事例です。"],
+      ["代襲", "哲は清より先に死亡しているため、哲の子・澪が哲の枝を代襲します。"],
+      ["相続分", "雅美の枝と哲の枝が各1/2。澪が哲の枝の1/2を取得します。"],
+    ],
+  },
+  {
+    id: "disqualification-and-representation",
+    category: "相続欠格",
+    title: "相続欠格となった子の枝を孫が代襲する",
+    summary: "相続欠格となった本人は相続できませんが、その子が欠格者の枝を代襲する事例です。",
+    facts: [
+      ["被相続人", "正雄（まさお）"],
+      ["家族", "子2人・孫1人（配偶者なし）"],
+      ["過去問論点", "平成30年度・第3問を再構成"],
+    ],
+    events: [
+      { date: "2015", label: "家族", note: "正雄には、2人の子・淳と亮、孫・咲がいます。咲は亮の子です。", changedPeople: ["masao", "jun2", "ryo2", "saki2"] },
+      { date: "2026", label: "相続開始", note: "正雄が死亡しました。", changedPeople: ["masao"] },
+      { date: "2026", label: "相続欠格", note: "亮が民法891条の欠格事由に該当し、刑に処せられたものとします。", changedPeople: ["ryo2"] },
+    ],
+    people: {
+      masao: { name: "正雄", relation: "被相続人", diedStep: 1 },
+      jun2: { name: "淳", relation: "子" },
+      ryo2: { name: "亮", relation: "子・相続欠格", disqualifiedStep: 2 },
+      saki2: { name: "咲", relation: "孫", parent: "ryo2" },
+    },
+    root: ["masao"],
+    candidateHeading: "第1順位｜子どもの枝",
+    branches: [
+      { label: "淳の枝", roots: ["jun2"] },
+      { label: "亮の枝", roots: ["ryo2"] },
+    ],
+    answerOrder: ["jun2", "ryo2", "saki2"],
+    heirs: {
+      jun2: { share: "1/2", note: "淳の枝の取り分" },
+      saki2: { share: "1/2", note: "欠格となった亮の枝を代襲" },
+    },
+    nonHeirs: {
+      ryo2: "相続欠格により相続人となることができません。ただし、亮の子・咲は亮を代襲します。",
+    },
+    reasoning: [
+      ["相続欠格", "亮は民法891条の欠格事由に該当するため、自身は相続人になれません。"],
+      ["代襲", "相続欠格は民法887条2項の代襲原因に含まれるため、亮の子・咲が亮の枝を代襲します。"],
+      ["相続分", "淳の枝と亮の枝が各1/2。咲が亮の枝の1/2を取得します。"],
+    ],
+  },
 ];
 
 let scenarioIndex = 0;
@@ -440,7 +565,7 @@ function currentScenario() {
 }
 
 function isVisible(person) {
-  return (person.bornStep ?? 0) <= snapshotIndex;
+  return (person.appearsStep ?? person.bornStep ?? 0) <= snapshotIndex;
 }
 
 function isDead(person) {
@@ -455,6 +580,14 @@ function hasRenounced(person) {
   return person.renouncedStep !== undefined && person.renouncedStep <= snapshotIndex;
 }
 
+function isDisqualified(person) {
+  return person.disqualifiedStep !== undefined && person.disqualifiedStep <= snapshotIndex;
+}
+
+function isFetal(person) {
+  return person.fetalUntilStep !== undefined && snapshotIndex < person.fetalUntilStep;
+}
+
 function isFinalSnapshot() {
   return snapshotIndex === currentScenario().events.length - 1;
 }
@@ -462,6 +595,9 @@ function isFinalSnapshot() {
 function personCard(personId) {
   const scenario = currentScenario();
   const person = scenario.people[personId];
+  const relation = person.connectionStep !== undefined && snapshotIndex < person.connectionStep
+    ? person.relationBeforeConnection ?? person.relation
+    : person.relation;
   const selectable = isFinalSnapshot()
     && !isRevealed
     && scenario.answerOrder.includes(personId)
@@ -471,7 +607,9 @@ function personCard(personId) {
   const changedThisStep = scenario.events[snapshotIndex].changedPeople?.includes(personId) ?? false;
   const excluded = isExcluded(person);
   const renounced = hasRenounced(person);
-  const legalStatus = excluded ? "廃除" : renounced ? "相続放棄" : "";
+  const disqualified = isDisqualified(person);
+  const fetal = isFetal(person);
+  const legalStatus = excluded ? "廃除" : renounced ? "相続放棄" : disqualified ? "相続欠格" : "";
   const card = document.createElement(selectable ? "button" : "div");
   card.className = "person-card";
   card.dataset.person = personId;
@@ -483,7 +621,7 @@ function personCard(personId) {
     card.setAttribute("aria-pressed", String(selected));
     card.setAttribute(
       "aria-label",
-      `${person.name}（${person.relation}）を${selected ? "選択解除" : "法定相続人として選択"}`,
+      `${person.name}（${relation}）を${selected ? "選択解除" : "法定相続人として選択"}`,
     );
     card.addEventListener("click", () => togglePersonSelection(personId, "card"));
     card.addEventListener("keydown", (event) => {
@@ -497,6 +635,8 @@ function personCard(personId) {
   if (isDead(person)) card.classList.add("is-dead");
   if (excluded) card.classList.add("is-excluded");
   if (renounced) card.classList.add("is-renounced");
+  if (disqualified) card.classList.add("is-disqualified");
+  if (fetal) card.classList.add("is-fetal");
   if (changedThisStep && !finalDecedent) card.classList.add("has-current-change");
   if (finalDecedent) card.classList.add("is-decedent-final");
 
@@ -519,6 +659,8 @@ function personCard(personId) {
       ? "死亡"
       : !isRevealed && legalStatus
         ? legalStatus
+      : !isRevealed && fetal
+        ? "胎児"
       : isRevealed && scenario.heirs[personId]
         ? "✓ 法定相続人"
         : isRevealed
@@ -537,7 +679,7 @@ function personCard(personId) {
     ${changedThisStep && !finalDecedent ? '<span class="change-mark">今回の変化</span>' : ""}
     ${finalDecedent ? `<span class="decedent-mark">${person.diedStep === snapshotIndex ? "相続開始" : "被相続人"}</span>` : ""}
     <span class="person-name">${person.name}</span>
-    <span class="person-relation">${person.relation}</span>
+    <span class="person-relation">${relation}</span>
     <span class="person-state">${state}</span>
     ${share}
   `;

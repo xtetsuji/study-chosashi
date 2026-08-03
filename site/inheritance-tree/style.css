@@ -98,6 +98,8 @@ h1 span { color: var(--red); }
 .legend-mark--dead { border-style: dashed; }
 .legend-mark--excluded { border-color: #e7b96a; background: #544b32; color: #f3d99b; font-size: 0.52rem; font-weight: 900; }
 .legend-mark--renounced { border-color: #c6b5ed; background: #433e58; color: #ddd2f5; font-size: 0.52rem; font-weight: 900; }
+.legend-mark--disqualified { border-color: #f39a88; background: #59352f; color: #ffd5cb; font-size: 0.52rem; font-weight: 900; }
+.legend-mark--fetal { border-color: #77d1e4; background: #28535f; color: #d7f6fb; font-size: 0.52rem; font-weight: 900; }
 .legend-mark--heir { border-color: #f0aa93; background: #df6d4e; color: white; }
 .legend-mark--change { border-color: #f2cf67; background: #f2cf67; color: #173b3a; font-weight: 900; }
 .snapshot-note { margin: 1.25rem 0 0; padding: 0.8rem 1rem; border-left: 3px solid #e9896f; background: #214846; color: #d5dfdc; font-size: 0.82rem; line-height: 1.65; }
@@ -140,9 +142,13 @@ h1 span { color: var(--red); }
 .person-card.is-dead::after { position: absolute; top: 0.3rem; right: 0.38rem; color: #efaa96; content: "×"; font-weight: 900; }
 .person-card.is-excluded { border: 3px dotted #e7b96a; background: #544b32; opacity: 1; }
 .person-card.is-renounced { border: 3px dashed #c6b5ed; background: #433e58; opacity: 1; }
+.person-card.is-disqualified { border: 4px double #f39a88; background: #59352f; opacity: 1; }
+.person-card.is-fetal { border: 2px dotted #77d1e4; background: #28535f; opacity: 1; }
 .person-card.is-excluded .person-state { color: #f3d99b; }
 .person-card.is-renounced .person-state { color: #ddd2f5; }
-.person-card.is-excluded.is-selected, .person-card.is-renounced.is-selected { border: 3px solid #77d1e4; box-shadow: 0 0 0 5px rgba(119, 209, 228, 0.22); }
+.person-card.is-disqualified .person-state { color: #ffd5cb; }
+.person-card.is-fetal .person-state { color: #d7f6fb; }
+.person-card.is-excluded.is-selected, .person-card.is-renounced.is-selected, .person-card.is-disqualified.is-selected { border: 3px solid #77d1e4; box-shadow: 0 0 0 5px rgba(119, 209, 228, 0.22); }
 .person-card.has-current-change { border: 3px solid #f2cf67; background: #31564f; opacity: 1; box-shadow: 0 0 0 5px rgba(242, 207, 103, 0.22), 0 0.7rem 1.5rem rgba(0, 0, 0, 0.16); animation: change-emphasis 700ms ease-out; }
 .person-card.has-current-change .person-state { color: #ffe6a1; }
 .person-card.is-decedent-final { border: 4px double #fff1e7; background: #713729; opacity: 1; box-shadow: 0 0 0 5px rgba(255, 241, 231, 0.2), 0 0.8rem 1.8rem rgba(0, 0, 0, 0.2); }
