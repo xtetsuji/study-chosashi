@@ -7,7 +7,7 @@
       name="description"
       content="家族の出来事を時系列で追い、法定相続人と法定相続分を家系図で学ぶ試作教材"
     />
-    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./style.css?v=2" />
     <title>相続ツリー・ラボ｜法定相続人と法定相続分</title>
   </head>
   <body>
@@ -60,6 +60,10 @@
           <p class="section-help">出来事を選ぶと、その時点の家族の状態に戻れます。</p>
         </div>
         <ol class="timeline" id="timeline"></ol>
+        <div class="timeline-controls" aria-label="時点の移動">
+          <button id="previous-step-button" type="button">← 一つ前の時点</button>
+          <button id="next-step-button" type="button">次の出来事へ →</button>
+        </div>
       </section>
 
       <section class="lab" aria-labelledby="tree-title">
@@ -96,6 +100,7 @@
             <div>
               <p class="result-kicker" id="result-kicker"></p>
               <h3 id="result-title"></h3>
+              <p class="result-guide">家系図では、各人物カードの文字と記号でも判定結果を確認できます。</p>
             </div>
             <button class="retry-button" id="retry-button" type="button">もう一度考える</button>
           </div>
@@ -141,6 +146,6 @@
         この教材は、一般則を単純化して理解するための試験学習用プロトタイプです。個別事案への法的助言ではありません。
       </footer>
     </main>
-    <script src="./app.js"></script>
+    <script src="./app.js?v=2"></script>
   </body>
 </html>

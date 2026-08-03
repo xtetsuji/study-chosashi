@@ -14,6 +14,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body {
   min-width: 320px;
   min-height: 100vh;
@@ -78,6 +79,12 @@ h1 span { color: var(--red); }
 .timeline button.is-current::before { background: var(--red); box-shadow: 0 0 0 5px rgba(182, 71, 48, 0.15); }
 .timeline strong { font-size: 0.78rem; }
 .timeline small { font-size: 0.68rem; line-height: 1.45; }
+.timeline-controls { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 0.8rem; }
+.timeline-controls button { min-height: 2.7rem; padding: 0.55rem 1rem; border: 1px solid var(--green); background: transparent; color: var(--green); font-size: 0.76rem; font-weight: 800; cursor: pointer; }
+.timeline-controls button:last-child { background: var(--green); color: white; }
+.timeline-controls button:hover, .timeline-controls button:focus-visible { border-color: var(--red); color: var(--red); }
+.timeline-controls button:last-child:hover, .timeline-controls button:last-child:focus-visible { background: var(--red); color: white; }
+.timeline-controls button:disabled { border-color: #aaa9a3; background: transparent; color: #8d8d88; cursor: default; opacity: 0.6; }
 
 .lab { padding: clamp(1rem, 3vw, 2.2rem); background: var(--green); color: var(--paper); }
 .lab-header { display: flex; justify-content: space-between; gap: 1.5rem; align-items: start; }
@@ -119,14 +126,15 @@ h1 span { color: var(--red); }
 .person-card.is-not-born { display: none; }
 .person-card.is-dead { border-style: dashed; opacity: 0.65; }
 .person-card.is-dead::after { position: absolute; top: 0.3rem; right: 0.38rem; color: #efaa96; content: "×"; font-weight: 900; }
-.person-card.is-heir { border: 2px solid #f09a7f; background: #315b57; box-shadow: 0 0 0 4px rgba(223, 109, 78, 0.18); }
+.person-card.is-heir { border: 3px solid #ff9a78; background: #315b57; box-shadow: 0 0 0 5px rgba(255, 154, 120, 0.24); }
 .person-card.is-heir::after { position: absolute; top: 0.3rem; right: 0.35rem; display: grid; width: 1.2rem; height: 1.2rem; place-items: center; border-radius: 50%; background: var(--red-bright); color: white; content: "✓"; font-size: 0.7rem; font-weight: 900; }
-.person-card.is-missed { border-color: #f0c34e; }
-.person-card.is-wrong { border-color: #ef9a83; background: #4f3631; }
+.person-card.is-missed { border-color: #f2cd5c; box-shadow: 0 0 0 5px rgba(242, 205, 92, 0.24); }
+.person-card.is-wrong { border: 3px solid #ffb09a; background: #4f3631; box-shadow: 0 0 0 5px rgba(255, 176, 154, 0.16); }
 .person-card .person-name { font-family: serif; font-size: 1rem; font-weight: 800; }
 .person-card .person-relation { color: #b9cbc6; font-size: 0.65rem; line-height: 1.35; }
 .person-card .person-state { margin-top: 0.25rem; padding: 0.12rem 0.4rem; border: 1px solid currentColor; border-radius: 1rem; color: #9eb7b1; font-size: 0.58rem; }
 .person-card.is-heir .person-state { color: #ffb9a3; }
+.person-card.is-wrong .person-state { color: #ffc3b2; }
 .person-card .person-share { margin-top: 0.3rem; color: #ffd7ca; font-size: 0.75rem; font-weight: 900; }
 .event-badge { display: block; max-width: 12rem; margin: 0.5rem auto 0; color: #efaa96; font-size: 0.62rem; text-align: center; }
 
@@ -147,6 +155,7 @@ h1 span { color: var(--red); }
 
 .result-heading { display: flex; justify-content: space-between; gap: 1rem; align-items: start; }
 .result-kicker { margin: 0 0 0.35rem; color: var(--red); font-size: 0.7rem; font-weight: 900; letter-spacing: 0.12em; }
+.result-guide { margin: 0.55rem 0 0; color: var(--muted); font-size: 0.72rem; line-height: 1.6; }
 .share-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: 0.6rem; margin-top: 1.25rem; }
 .share-card { display: grid; min-height: 6.5rem; padding: 0.9rem; border: 1px solid var(--rule); background: #f8f4ec; }
 .share-card span { color: var(--muted); font-size: 0.7rem; }
@@ -195,6 +204,7 @@ footer { padding: 2rem 0 0; color: #727a76; font-size: 0.7rem; line-height: 1.7;
   .timeline { grid-template-columns: 1fr; }
   .timeline button { min-height: 4.2rem; padding: 0.7rem 0.7rem 0.7rem 1.3rem; border-top: 0; border-left: 2px solid var(--rule); }
   .timeline button::before { top: 1rem; left: -7px; }
+  .timeline-controls { display: grid; grid-template-columns: 1fr 1fr; }
   .lab { padding-inline: 0.75rem; }
   .lab-header, .result-heading { display: grid; }
   .legend { margin-top: 0.3rem; }

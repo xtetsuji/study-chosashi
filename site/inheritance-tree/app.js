@@ -280,6 +280,8 @@ const elements = {
   storySummary: byId("story-summary"),
   storyFacts: byId("story-facts"),
   timeline: byId("timeline"),
+  previousStepButton: byId("previous-step-button"),
+  nextStepButton: byId("next-step-button"),
   stepLabel: byId("step-label"),
   snapshotNote: byId("snapshot-note"),
   treeStage: byId("tree-stage"),
@@ -334,8 +336,12 @@ function personCard(personId) {
   const state = isDead(person)
     ? "死亡"
     : isRevealed && scenario.heirs[personId]
-      ? "法定相続人"
-      : "生存";
+      ? "✓ 法定相続人"
+      : isRevealed
+        ? selectedPeople.has(personId)
+          ? "選択したが対象外"
+          : "対象外"
+        : "生存";
   const share = isRevealed && scenario.heirs[personId]
     ? `<span class="person-share">${scenario.heirs[personId].share}</span>`
     : "";
@@ -456,6 +462,11 @@ function renderTimeline() {
     item.append(button);
     elements.timeline.append(item);
   });
+  elements.previousStepButton.disabled = snapshotIndex === 0;
+  elements.nextStepButton.hidden = isFinalSnapshot();
+  elements.nextStepButton.textContent = snapshotIndex === scenario.events.length - 2
+    ? "相続開始へ進む →"
+    : "次の出来事へ →";
 }
 
 function renderAnswerOptions() {
@@ -495,7 +506,7 @@ function renderResult() {
   elements.resultKicker.textContent = isCorrect ? "正解です" : "家系図で見直しましょう";
   elements.resultTitle.textContent = isCorrect
     ? "順位と代襲関係を正しく判定できました。"
-    : "枠が付いた人物が、この事例の法定相続人です。";
+    : "「✓ 法定相続人」と表示された人物が正解です。";
 
   elements.shareGrid.innerHTML = Object.entries(scenario.heirs)
     .map(([personId, share]) => `
@@ -563,13 +574,26 @@ elements.randomButton.addEventListener("click", () => {
   selectScenario(nextIndex);
 });
 
+function moveToSnapshot(index) {
+  snapshotIndex = Math.max(0, Math.min(index, currentScenario().events.length - 1));
+  selectedPeople = new Set();
+  isRevealed = false;
+  render();
+}
+
+elements.previousStepButton.addEventListener("click", () => moveToSnapshot(snapshotIndex - 1));
+elements.nextStepButton.addEventListener("click", () => moveToSnapshot(snapshotIndex + 1));
+
 elements.checkButton.addEventListener("click", () => {
   isRevealed = true;
   renderTree();
   renderQuestion();
   renderResult();
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  elements.resultPanel.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "nearest" });
+  elements.snapshotNote.textContent = selectedAnswerIsCorrect()
+    ? "正解です。オレンジの枠と「✓ 法定相続人」の表示で、相続人と相続分を確認してください。"
+    : "答え合わせを表示しました。「✓ 法定相続人」と表示された人物と、選んだ人物を見比べてください。";
+  elements.treeStage.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
 });
 
 elements.retryButton.addEventListener("click", () => {
