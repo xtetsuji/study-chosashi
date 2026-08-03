@@ -10,9 +10,9 @@ const scenarios = [
       ["遺言", "なし"],
     ],
     events: [
-      { date: "2008", label: "婚姻", note: "正人とみどりは法律上の夫婦です。" },
-      { date: "2013", label: "子ども", note: "春と葵の2人の子がいます。" },
-      { date: "2026", label: "相続開始", note: "正人が死亡しました。この時点で相続人を判定します。" },
+      { date: "2008", label: "婚姻", note: "正人とみどりは法律上の夫婦です。", changedPeople: ["masato", "midori"] },
+      { date: "2013", label: "子ども", note: "春と葵の2人の子がいます。", changedPeople: ["haru", "aoi"] },
+      { date: "2026", label: "相続開始", note: "正人が死亡しました。この時点で相続人を判定します。", changedPeople: ["masato"] },
     ],
     people: {
       masato: { name: "正人", relation: "被相続人", diedStep: 2 },
@@ -50,10 +50,10 @@ const scenarios = [
       ["先に死亡", "子・健"],
     ],
     events: [
-      { date: "1998", label: "家族", note: "宗一には、配偶者の恵と2人の子がいます。" },
-      { date: "2016", label: "孫の出生", note: "健の子として陸と海が生まれています。" },
-      { date: "2024", label: "健が死亡", note: "宗一の子・健が、宗一より先に死亡しました。" },
-      { date: "2026", label: "相続開始", note: "宗一が死亡しました。健の枝で代襲が起こるかを判定します。" },
+      { date: "1998", label: "家族", note: "宗一には、配偶者の恵と2人の子がいます。", changedPeople: ["soichi", "megumi", "yui", "ken"] },
+      { date: "2016", label: "孫の出生", note: "健の子として陸と海が生まれています。", changedPeople: ["riku", "umi"] },
+      { date: "2024", label: "健が死亡", note: "宗一の子・健が、宗一より先に死亡しました。", changedPeople: ["ken"] },
+      { date: "2026", label: "相続開始", note: "宗一が死亡しました。健の枝で代襲が起こるかを判定します。", changedPeople: ["soichi"] },
     ],
     people: {
       soichi: { name: "宗一", relation: "被相続人", diedStep: 3 },
@@ -96,11 +96,11 @@ const scenarios = [
       ["先に死亡", "子・誠、孫・翼"],
     ],
     events: [
-      { date: "2000", label: "家族", note: "文子には、直と誠の2人の子がいます。" },
-      { date: "2018", label: "ひ孫", note: "誠の子・翼には、灯と岳の2人の子がいます。" },
-      { date: "2023", label: "誠が死亡", note: "文子の子・誠が先に死亡しました。" },
-      { date: "2025", label: "翼も死亡", note: "代襲するはずだった孫・翼も、文子より先に死亡しました。" },
-      { date: "2026", label: "相続開始", note: "文子が死亡しました。誠の枝がどこまで続くかを判定します。" },
+      { date: "2000", label: "家族", note: "文子には、直と誠の2人の子がいます。", changedPeople: ["fumiko", "nao", "makoto", "tsubasa"] },
+      { date: "2018", label: "ひ孫", note: "誠の子・翼には、灯と岳の2人の子がいます。", changedPeople: ["akari", "gaku"] },
+      { date: "2023", label: "誠が死亡", note: "文子の子・誠が先に死亡しました。", changedPeople: ["makoto"] },
+      { date: "2025", label: "翼も死亡", note: "代襲するはずだった孫・翼も、文子より先に死亡しました。", changedPeople: ["tsubasa"] },
+      { date: "2026", label: "相続開始", note: "文子が死亡しました。誠の枝がどこまで続くかを判定します。", changedPeople: ["fumiko"] },
     ],
     people: {
       fumiko: { name: "文子", relation: "被相続人", diedStep: 4 },
@@ -143,10 +143,10 @@ const scenarios = [
       ["前提", "子・直系尊属はいない"],
     ],
     events: [
-      { date: "2010", label: "家族", note: "浩には配偶者の澄子、姉の玲子、兄の修がいます。子と直系尊属はいません。" },
-      { date: "2019", label: "修が死亡", note: "兄・修が浩より先に死亡しました。修の子・悠が代襲候補になります。" },
-      { date: "2024", label: "悠も死亡", note: "甥・悠も浩より先に死亡しました。悠には子・湊がいます。" },
-      { date: "2026", label: "相続開始", note: "浩が死亡しました。兄弟姉妹の枝が湊まで続くかを判定します。" },
+      { date: "2010", label: "家族", note: "浩には配偶者の澄子、姉の玲子、兄の修がいます。子と直系尊属はいません。", changedPeople: ["hiroshi", "sumiko", "reiko", "osamu", "yu", "minato"] },
+      { date: "2019", label: "修が死亡", note: "兄・修が浩より先に死亡しました。修の子・悠が代襲候補になります。", changedPeople: ["osamu"] },
+      { date: "2024", label: "悠も死亡", note: "甥・悠も浩より先に死亡しました。悠には子・湊がいます。", changedPeople: ["yu"] },
+      { date: "2026", label: "相続開始", note: "浩が死亡しました。兄弟姉妹の枝が湊まで続くかを判定します。", changedPeople: ["hiroshi"] },
     ],
     people: {
       hiroshi: { name: "浩", relation: "被相続人", diedStep: 3 },
@@ -190,10 +190,10 @@ const scenarios = [
       ["前提", "子・直系尊属はいない"],
     ],
     events: [
-      { date: "1985", label: "きょうだい", note: "一郎と次郎は父母の双方が同じ兄弟です。" },
-      { date: "1995", label: "半血の妹", note: "一郎には、父だけを同じくする妹・美緒もいます。" },
-      { date: "2024", label: "父母が死亡", note: "一郎の父と母は、一郎より先に死亡しました。" },
-      { date: "2026", label: "相続開始", note: "一郎が死亡しました。全血と半血の重みを使って相続分を計算します。" },
+      { date: "1985", label: "きょうだい", note: "一郎と次郎は父母の双方が同じ兄弟です。", changedPeople: ["ichiro", "jiro"] },
+      { date: "1995", label: "半血の妹", note: "一郎には、父だけを同じくする妹・美緒もいます。", changedPeople: ["mio"] },
+      { date: "2024", label: "父母が死亡", note: "一郎の父と母は、一郎より先に死亡しました。", changedPeople: ["father", "mother"] },
+      { date: "2026", label: "相続開始", note: "一郎が死亡しました。全血と半血の重みを使って相続分を計算します。", changedPeople: ["ichiro"] },
     ],
     people: {
       father: { name: "父", relation: "一郎・次郎・美緒の父", diedStep: 2 },
@@ -235,11 +235,11 @@ const scenarios = [
       ["養子の子", "花は縁組前、光は縁組後に出生"],
     ],
     events: [
-      { date: "2005", label: "花が出生", note: "太郎の子・花は、千代と太郎が養子縁組する前に生まれています。" },
-      { date: "2010", label: "養子縁組", note: "千代と太郎が養子縁組をしました。この日から養親子関係が生じます。" },
-      { date: "2012", label: "光が出生", note: "太郎の子・光は、養子縁組の後に生まれました。" },
-      { date: "2024", label: "太郎が死亡", note: "養子・太郎が千代より先に死亡しました。" },
-      { date: "2026", label: "相続開始", note: "千代が死亡しました。花と光が太郎を代襲できるかを判定します。" },
+      { date: "2005", label: "花が出生", note: "太郎の子・花は、千代と太郎が養子縁組する前に生まれています。", changedPeople: ["hana"] },
+      { date: "2010", label: "養子縁組", note: "千代と太郎が養子縁組をしました。この日から養親子関係が生じます。", changedPeople: ["chiyo", "taro"] },
+      { date: "2012", label: "光が出生", note: "太郎の子・光は、養子縁組の後に生まれました。", changedPeople: ["hikari"] },
+      { date: "2024", label: "太郎が死亡", note: "養子・太郎が千代より先に死亡しました。", changedPeople: ["taro"] },
+      { date: "2026", label: "相続開始", note: "千代が死亡しました。花と光が太郎を代襲できるかを判定します。", changedPeople: ["chiyo"] },
     ],
     people: {
       chiyo: { name: "千代", relation: "被相続人", diedStep: 4 },
@@ -329,6 +329,7 @@ function personCard(personId) {
     && isVisible(person);
   const selected = selectedPeople.has(personId);
   const finalDecedent = isFinalSnapshot() && person.relation === "被相続人";
+  const changedThisStep = scenario.events[snapshotIndex].changedPeople?.includes(personId) ?? false;
   const card = document.createElement(selectable ? "button" : "div");
   card.className = "person-card";
   card.dataset.person = personId;
@@ -352,6 +353,7 @@ function personCard(personId) {
 
   if (!isVisible(person)) card.classList.add("is-not-born");
   if (isDead(person)) card.classList.add("is-dead");
+  if (changedThisStep && !finalDecedent) card.classList.add("has-current-change");
   if (finalDecedent) card.classList.add("is-decedent-final");
 
   if (isRevealed && isFinalSnapshot()) {
@@ -382,6 +384,7 @@ function personCard(personId) {
 
   card.innerHTML = `
     ${selected && !isRevealed ? '<span class="selection-mark" aria-hidden="true">選択中</span>' : ""}
+    ${changedThisStep && !finalDecedent ? '<span class="change-mark">今回の変化</span>' : ""}
     ${finalDecedent ? '<span class="decedent-mark">相続開始</span>' : ""}
     <span class="person-name">${person.name}</span>
     <span class="person-relation">${person.relation}</span>
@@ -701,7 +704,7 @@ function render() {
   elements.stepLabel.textContent = `時点 ${snapshotIndex + 1} / ${scenario.events.length}｜${event.date} ${event.label}`;
   elements.snapshotNote.textContent = isFinalSnapshot()
     ? `${event.note} 家系図の人物カードを直接選び、法定相続人になる人を回答してください。`
-    : `${event.note} タイムラインから次の出来事へ進めます。`;
+    : `${event.note} 黄色の「今回の変化」が付いた人物を確認して、次の出来事へ進めます。`;
   renderScenarioButtons();
   renderStory();
   renderTimeline();

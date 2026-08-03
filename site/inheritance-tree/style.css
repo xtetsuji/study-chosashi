@@ -94,6 +94,7 @@ h1 span { color: var(--red); }
 .legend-mark { display: grid; width: 1rem; height: 1rem; place-items: center; border: 1px solid #91aaa4; border-radius: 50%; font-size: 0.65rem; font-style: normal; }
 .legend-mark--dead { border-style: dashed; }
 .legend-mark--heir { border-color: #f0aa93; background: #df6d4e; color: white; }
+.legend-mark--change { border-color: #f2cf67; background: #f2cf67; color: #173b3a; font-weight: 900; }
 .snapshot-note { margin: 1.25rem 0 0; padding: 0.8rem 1rem; border-left: 3px solid #e9896f; background: #214846; color: #d5dfdc; font-size: 0.82rem; line-height: 1.65; }
 
 .tree-stage { min-height: 360px; padding: 2.2rem 0 1rem; overflow-x: auto; }
@@ -132,6 +133,8 @@ h1 span { color: var(--red); }
 .person-card.is-not-born { display: none; }
 .person-card.is-dead { border-style: dashed; opacity: 0.65; }
 .person-card.is-dead::after { position: absolute; top: 0.3rem; right: 0.38rem; color: #efaa96; content: "×"; font-weight: 900; }
+.person-card.has-current-change { border: 3px solid #f2cf67; background: #31564f; opacity: 1; box-shadow: 0 0 0 5px rgba(242, 207, 103, 0.22), 0 0.7rem 1.5rem rgba(0, 0, 0, 0.16); animation: change-emphasis 700ms ease-out; }
+.person-card.has-current-change .person-state { color: #ffe6a1; }
 .person-card.is-decedent-final { border: 4px double #fff1e7; background: #713729; opacity: 1; box-shadow: 0 0 0 5px rgba(255, 241, 231, 0.2), 0 0.8rem 1.8rem rgba(0, 0, 0, 0.2); }
 .person-card.is-decedent-final .person-name { font-size: 1.15rem; }
 .person-card.is-decedent-final .person-relation { color: #ffe4da; font-weight: 800; }
@@ -147,6 +150,7 @@ h1 span { color: var(--red); }
 .person-card.is-wrong .person-state { color: #ffc3b2; }
 .person-card .person-share { margin-top: 0.3rem; color: #ffd7ca; font-size: 0.75rem; font-weight: 900; }
 .selection-mark { position: absolute; top: -0.75rem; left: 50%; z-index: 2; padding: 0.18rem 0.48rem; border-radius: 1rem; background: #77d1e4; color: #123a46; font-size: 0.58rem; font-weight: 900; line-height: 1.2; white-space: nowrap; transform: translateX(-50%); }
+.change-mark { position: absolute; top: -0.75rem; left: 50%; z-index: 2; padding: 0.18rem 0.48rem; border-radius: 1rem; background: #f2cf67; color: #173b3a; font-size: 0.58rem; font-weight: 900; line-height: 1.2; white-space: nowrap; transform: translateX(-50%); }
 .decedent-mark { position: absolute; top: -0.85rem; left: 50%; z-index: 2; padding: 0.22rem 0.58rem; border: 1px solid #fff1e7; border-radius: 1rem; background: #b64730; color: white; font-size: 0.6rem; font-weight: 900; line-height: 1.2; white-space: nowrap; transform: translateX(-50%); }
 .event-badge { display: block; max-width: 12rem; margin: 0.5rem auto 0; color: #efaa96; font-size: 0.62rem; text-align: center; }
 
@@ -255,7 +259,14 @@ footer { padding: 2rem 0 0; color: #727a76; font-size: 0.7rem; line-height: 1.7;
   .law-grid p { min-height: auto; }
 }
 
+@keyframes change-emphasis {
+  0% { transform: scale(0.96); box-shadow: 0 0 0 0 rgba(242, 207, 103, 0.5); }
+  60% { transform: scale(1.03); box-shadow: 0 0 0 8px rgba(242, 207, 103, 0.28), 0 0.7rem 1.5rem rgba(0, 0, 0, 0.16); }
+  100% { transform: scale(1); box-shadow: 0 0 0 5px rgba(242, 207, 103, 0.22), 0 0.7rem 1.5rem rgba(0, 0, 0, 0.16); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .person-card { transition: none; }
+  .person-card.has-current-change { animation: none; }
   *, *::before, *::after { scroll-behavior: auto !important; }
 }
