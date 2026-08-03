@@ -161,6 +161,16 @@ h1 span { color: var(--red); }
 .split-family-couple::before { left: 25%; }
 .couple-line { width: 1.4rem; }
 
+.sibling-row-tree { min-width: 760px; padding: 2.2rem 1rem 0; }
+.sibling-generation { position: relative; display: grid; grid-template-columns: 1fr 1.8fr 1fr; align-items: start; width: min(820px, 100%); margin-inline: auto; padding-top: 1.25rem; }
+.sibling-generation::before { position: absolute; top: 0; right: 13.15%; left: 13.15%; border-top: 1px solid #789590; content: ""; }
+.sibling-generation::after { position: absolute; top: -2.2rem; left: 50%; height: 2.2rem; border-left: 1px solid #789590; content: ""; }
+.sibling-unit { position: relative; display: flex; justify-content: center; min-width: 0; }
+.sibling-unit::before { position: absolute; top: -1.25rem; left: 50%; height: 1.25rem; border-left: 1px solid #789590; content: ""; }
+.sibling-couple { display: flex; align-items: center; }
+.sibling-decedent-unit { justify-content: flex-start; padding-left: calc(50% - 3.6rem); }
+.sibling-row-tree .descendants { min-width: max-content; }
+
 .question-panel, .result-panel { margin-top: 1rem; padding: clamp(1.1rem, 3vw, 1.8rem); background: var(--paper); color: var(--ink); }
 .question-panel { display: grid; grid-template-columns: 1fr 1.25fr auto; gap: 1.2rem; align-items: center; }
 .question-panel h3, .result-panel h3 { font-size: clamp(1.25rem, 3vw, 1.8rem); }
@@ -235,6 +245,7 @@ footer { padding: 2rem 0 0; color: #727a76; font-size: 0.7rem; line-height: 1.7;
   .person-card { width: 6.25rem; }
   .family-branch { min-width: 8.5rem; }
   .split-family-tree { padding-inline: 0.5rem; }
+  .sibling-row-tree { padding-inline: 0.5rem; }
   .law-grid { grid-template-columns: 1fr; }
   .law-grid p { min-height: auto; }
 }

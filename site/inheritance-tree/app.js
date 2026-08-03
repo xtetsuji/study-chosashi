@@ -156,6 +156,7 @@ const scenarios = [
       yu: { name: "悠", relation: "甥", parent: "osamu", diedStep: 2 },
       minato: { name: "湊", relation: "甥の子", parent: "yu" },
     },
+    treeLayout: "siblings-row",
     root: ["hiroshi", "sumiko"],
     candidateHeading: "第3順位｜兄弟姉妹の枝",
     branches: [
@@ -464,12 +465,48 @@ function renderSplitParentUnionsTree(scenario) {
   elements.treeStage.append(familyTree);
 }
 
+function renderSiblingsRowTree() {
+  const siblingTree = document.createElement("div");
+  siblingTree.className = "sibling-row-tree";
+
+  const generation = document.createElement("div");
+  generation.className = "sibling-generation";
+
+  const sisterUnit = document.createElement("div");
+  sisterUnit.className = "sibling-unit";
+  sisterUnit.append(descendantUnit("reiko"));
+
+  const decedentUnit = document.createElement("div");
+  decedentUnit.className = "sibling-unit sibling-decedent-unit";
+  const decedentCouple = document.createElement("div");
+  decedentCouple.className = "sibling-couple";
+  decedentCouple.append(personCard("hiroshi"));
+  const spouseLine = document.createElement("span");
+  spouseLine.className = "couple-line";
+  spouseLine.innerHTML = '<span class="visually-hidden">浩と澄子の夫婦関係</span>';
+  decedentCouple.append(spouseLine, personCard("sumiko"));
+  decedentUnit.append(decedentCouple);
+
+  const brotherUnit = document.createElement("div");
+  brotherUnit.className = "sibling-unit";
+  brotherUnit.append(descendantUnit("osamu"));
+
+  generation.append(sisterUnit, decedentUnit, brotherUnit);
+  siblingTree.append(generation);
+  elements.treeStage.append(siblingTree);
+}
+
 function renderTree() {
   const scenario = currentScenario();
   elements.treeStage.replaceChildren();
 
   if (scenario.treeLayout === "split-parent-unions") {
     renderSplitParentUnionsTree(scenario);
+    return;
+  }
+
+  if (scenario.treeLayout === "siblings-row") {
+    renderSiblingsRowTree();
     return;
   }
 
