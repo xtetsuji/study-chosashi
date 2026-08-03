@@ -248,6 +248,7 @@ const scenarios = [
       hikari: { name: "光", relation: "養子の子（縁組後出生）", parent: "taro", bornStep: 2 },
       jun: { name: "淳", relation: "千代の弟" },
     },
+    treeLayout: "adoption-siblings-row",
     root: ["chiyo"],
     candidateHeading: "子の枝と、下位順位の候補",
     branches: [
@@ -502,6 +503,43 @@ function renderSiblingsRowTree() {
   elements.treeStage.append(siblingTree);
 }
 
+function renderAdoptionSiblingsRowTree() {
+  const siblingTree = document.createElement("div");
+  siblingTree.className = "sibling-row-tree adoption-sibling-row-tree";
+
+  const generation = document.createElement("div");
+  generation.className = "sibling-generation adoption-sibling-generation";
+
+  const decedentUnit = document.createElement("div");
+  decedentUnit.className = "sibling-unit";
+  const adoptionLineage = document.createElement("div");
+  adoptionLineage.className = "adoption-lineage-unit";
+  adoptionLineage.append(personCard("chiyo"));
+
+  const adoptionDescendants = document.createElement("div");
+  adoptionDescendants.className = "descendants adoption-descendants";
+  const beforeAdoption = snapshotIndex < 1;
+  if (beforeAdoption) adoptionDescendants.classList.add("is-inactive");
+  adoptionDescendants.append(descendantUnit("taro"));
+  adoptionLineage.append(adoptionDescendants);
+
+  if (beforeAdoption) {
+    const badge = document.createElement("span");
+    badge.className = "event-badge";
+    badge.textContent = "養子縁組の出来事で千代の枝につながります";
+    adoptionLineage.append(badge);
+  }
+  decedentUnit.append(adoptionLineage);
+
+  const brotherUnit = document.createElement("div");
+  brotherUnit.className = "sibling-unit";
+  brotherUnit.append(personCard("jun"));
+
+  generation.append(decedentUnit, brotherUnit);
+  siblingTree.append(generation);
+  elements.treeStage.append(siblingTree);
+}
+
 function renderTree() {
   const scenario = currentScenario();
   elements.treeStage.replaceChildren();
@@ -513,6 +551,11 @@ function renderTree() {
 
   if (scenario.treeLayout === "siblings-row") {
     renderSiblingsRowTree();
+    return;
+  }
+
+  if (scenario.treeLayout === "adoption-siblings-row") {
+    renderAdoptionSiblingsRowTree();
     return;
   }
 

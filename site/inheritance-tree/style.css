@@ -179,6 +179,11 @@ h1 span { color: var(--red); }
 .sibling-couple { display: flex; align-items: center; }
 .sibling-decedent-unit { justify-content: flex-start; padding-left: calc(50% - 3.6rem); }
 .sibling-row-tree .descendants { min-width: max-content; }
+.adoption-sibling-generation { grid-template-columns: 1fr 1fr; width: min(620px, 100%); }
+.adoption-sibling-generation::before { right: 25%; left: 25%; }
+.adoption-lineage-unit > .person-card { margin-inline: auto; }
+.adoption-descendants.is-inactive { opacity: 0.62; }
+.adoption-descendants.is-inactive::before { border-left-style: dashed; }
 
 .question-panel, .result-panel { margin-top: 1rem; padding: clamp(1.1rem, 3vw, 1.8rem); background: var(--paper); color: var(--ink); }
 .question-panel { display: grid; grid-template-columns: 1fr 1.25fr auto; gap: 1.2rem; align-items: center; }
