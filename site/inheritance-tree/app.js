@@ -300,6 +300,8 @@ const elements = {
   resultKicker: byId("result-kicker"),
   resultTitle: byId("result-title"),
   retryButton: byId("retry-button"),
+  shareChartBar: byId("share-chart-bar"),
+  shareChartLegend: byId("share-chart-legend"),
   shareGrid: byId("share-grid"),
   reasoning: byId("reasoning"),
   notHeirs: byId("not-heirs"),
@@ -694,6 +696,42 @@ function selectedAnswerIsCorrect() {
   return heirIds.length === selectedPeople.size && heirIds.every((id) => selectedPeople.has(id));
 }
 
+function shareToRatio(share) {
+  if (share === "全部") return 1;
+  const [numerator, denominator] = share.split("/").map(Number);
+  return numerator / denominator;
+}
+
+function renderShareChart(scenario) {
+  elements.shareChartBar.replaceChildren();
+  elements.shareChartLegend.replaceChildren();
+
+  Object.entries(scenario.heirs).forEach(([personId, share], index) => {
+    const person = scenario.people[personId];
+    const ratio = shareToRatio(share.share);
+    const tone = `share-tone-${(index % 4) + 1}`;
+
+    const segment = document.createElement("span");
+    segment.className = `share-chart-segment ${tone}`;
+    if (ratio < 0.22) segment.classList.add("is-compact");
+    segment.style.flexGrow = String(ratio);
+    segment.innerHTML = `
+      <span class="share-chart-number">${index + 1}</span>
+      <span class="share-chart-segment-label"><strong>${person.name}</strong><small>${share.share}</small></span>
+    `;
+    elements.shareChartBar.append(segment);
+
+    const legendItem = document.createElement("div");
+    legendItem.className = "share-chart-legend-item";
+    legendItem.innerHTML = `
+      <span class="share-chart-number ${tone}" aria-hidden="true">${index + 1}</span>
+      <span><strong>${person.name}</strong><small>${person.relation}</small></span>
+      <b>${share.share}</b>
+    `;
+    elements.shareChartLegend.append(legendItem);
+  });
+}
+
 function renderResult() {
   const scenario = currentScenario();
   const isCorrect = selectedAnswerIsCorrect();
@@ -704,6 +742,8 @@ function renderResult() {
   elements.resultTitle.textContent = isCorrect
     ? "順位と代襲関係を正しく判定できました。"
     : "「✓ 法定相続人」と表示された人物が正解です。";
+
+  renderShareChart(scenario);
 
   elements.shareGrid.innerHTML = Object.entries(scenario.heirs)
     .map(([personId, share]) => `

@@ -206,6 +206,30 @@ h1 span { color: var(--red); }
 .result-heading { display: flex; justify-content: space-between; gap: 1rem; align-items: start; }
 .result-kicker { margin: 0 0 0.35rem; color: var(--red); font-size: 0.7rem; font-weight: 900; letter-spacing: 0.12em; }
 .result-guide { margin: 0.55rem 0 0; color: var(--muted); font-size: 0.72rem; line-height: 1.6; }
+.share-chart { margin-top: 1.25rem; padding: 1rem; border: 1px solid var(--rule); background: #f8f4ec; }
+.share-chart-heading { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+.share-chart-heading h4 { margin: 0; font-size: 0.82rem; }
+.share-chart-heading span { color: var(--muted); font-size: 0.68rem; font-weight: 800; }
+.share-chart-bar { display: flex; min-height: 4.8rem; margin-top: 0.75rem; overflow: hidden; border: 2px solid var(--ink); background: white; }
+.share-chart-segment { position: relative; display: flex; min-width: 0; flex-basis: 0; gap: 0.45rem; align-items: center; justify-content: center; padding: 0.5rem; color: white; }
+.share-chart-segment + .share-chart-segment { border-left: 2px solid white; }
+.share-chart-segment .share-chart-number { flex: 0 0 auto; }
+.share-chart-segment-label { display: grid; min-width: 0; }
+.share-chart-segment-label strong { overflow: hidden; font-size: 0.75rem; text-overflow: ellipsis; white-space: nowrap; }
+.share-chart-segment-label small { font-size: 0.68rem; font-weight: 900; }
+.share-chart-segment.is-compact { padding-inline: 0.2rem; }
+.share-chart-segment.is-compact .share-chart-segment-label { display: none; }
+.share-chart-number { display: grid; width: 1.35rem; height: 1.35rem; place-items: center; border: 1px solid currentColor; border-radius: 50%; font-size: 0.62rem; font-weight: 900; }
+.share-tone-1 { background: #a94430; color: white; }
+.share-tone-2 { background: #286b67; color: white; }
+.share-tone-3 { background: #9a6b1f; color: white; }
+.share-tone-4 { background: #665487; color: white; }
+.share-chart-legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: 0.45rem 1rem; margin-top: 0.75rem; }
+.share-chart-legend-item { display: grid; grid-template-columns: auto 1fr auto; gap: 0.45rem; align-items: center; min-width: 0; font-size: 0.7rem; }
+.share-chart-legend-item > span:not(.share-chart-number) { display: grid; min-width: 0; }
+.share-chart-legend-item strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.share-chart-legend-item small { color: var(--muted); font-size: 0.6rem; }
+.share-chart-legend-item b { color: var(--red); font-family: serif; font-size: 1rem; }
 .share-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: 0.6rem; margin-top: 1.25rem; }
 .share-card { display: grid; min-height: 6.5rem; padding: 0.9rem; border: 1px solid var(--rule); background: #f8f4ec; }
 .share-card span { color: var(--muted); font-size: 0.7rem; }
