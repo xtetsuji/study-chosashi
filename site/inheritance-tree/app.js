@@ -191,14 +191,19 @@ const scenarios = [
     events: [
       { date: "1985", label: "きょうだい", note: "一郎と次郎は父母の双方が同じ兄弟です。" },
       { date: "1995", label: "半血の妹", note: "一郎には、父だけを同じくする妹・美緒もいます。" },
+      { date: "2024", label: "父母が死亡", note: "一郎の父と母は、一郎より先に死亡しました。" },
       { date: "2026", label: "相続開始", note: "一郎が死亡しました。全血と半血の重みを使って相続分を計算します。" },
     ],
     people: {
-      ichiro: { name: "一郎", relation: "被相続人", diedStep: 2 },
+      father: { name: "父", relation: "一郎・次郎・美緒の父", diedStep: 2 },
+      mother: { name: "母", relation: "一郎・次郎の母", diedStep: 2 },
+      otherMother: { name: "母（氏名不詳）", relation: "美緒の母・一郎とは親族関係なし" },
+      ichiro: { name: "一郎", relation: "被相続人", diedStep: 3 },
       kaori: { name: "香織", relation: "配偶者" },
       jiro: { name: "次郎", relation: "全血の弟" },
       mio: { name: "美緒", relation: "半血の妹", bornStep: 1 },
     },
+    treeLayout: "split-parent-unions",
     root: ["ichiro", "kaori"],
     candidateHeading: "第3順位｜兄弟姉妹",
     branches: [
@@ -401,9 +406,72 @@ function descendantUnit(personId) {
   return unit;
 }
 
+function renderSplitParentUnionsTree(scenario) {
+  const familyTree = document.createElement("div");
+  familyTree.className = "split-family-tree";
+
+  const parents = document.createElement("div");
+  parents.className = "split-family-parents";
+  parents.append(personCard("mother"));
+
+  const firstUnion = document.createElement("span");
+  firstUnion.className = "partner-line";
+  firstUnion.innerHTML = '<span class="visually-hidden">母と父の夫婦関係</span>';
+  parents.append(firstUnion, personCard("father"));
+
+  const secondUnion = document.createElement("span");
+  secondUnion.className = "partner-line partner-line--other";
+  secondUnion.innerHTML = '<span class="visually-hidden">父と氏名不詳の母の関係</span>';
+  parents.append(secondUnion, personCard("otherMother"));
+  familyTree.append(parents);
+
+  const branches = document.createElement("div");
+  branches.className = "split-family-branches";
+
+  const fullBloodBranch = document.createElement("section");
+  fullBloodBranch.className = "split-family-branch";
+  fullBloodBranch.innerHTML = '<span class="branch-label">父母の双方が同じ｜重み2</span>';
+  const fullBloodChildren = document.createElement("div");
+  fullBloodChildren.className = "split-family-children";
+
+  const decedentCouple = document.createElement("div");
+  decedentCouple.className = "split-family-child split-family-couple";
+  decedentCouple.append(personCard("ichiro"));
+  const coupleLine = document.createElement("span");
+  coupleLine.className = "couple-line";
+  coupleLine.innerHTML = '<span class="visually-hidden">一郎と香織の夫婦関係</span>';
+  decedentCouple.append(coupleLine, personCard("kaori"));
+
+  const fullSibling = document.createElement("div");
+  fullSibling.className = "split-family-child";
+  fullSibling.append(personCard("jiro"));
+  fullBloodChildren.append(decedentCouple, fullSibling);
+  fullBloodBranch.append(fullBloodChildren);
+
+  const halfBloodBranch = document.createElement("section");
+  halfBloodBranch.className = "split-family-branch split-family-branch--half";
+  halfBloodBranch.innerHTML = '<span class="branch-label">父のみ同じ｜重み1</span>';
+  const halfBloodChildren = document.createElement("div");
+  halfBloodChildren.className = "split-family-children split-family-children--single";
+  const halfSibling = document.createElement("div");
+  halfSibling.className = "split-family-child";
+  halfSibling.append(personCard("mio"));
+  halfBloodChildren.append(halfSibling);
+  halfBloodBranch.append(halfBloodChildren);
+
+  branches.append(fullBloodBranch, halfBloodBranch);
+  familyTree.append(branches);
+  elements.treeStage.append(familyTree);
+}
+
 function renderTree() {
   const scenario = currentScenario();
   elements.treeStage.replaceChildren();
+
+  if (scenario.treeLayout === "split-parent-unions") {
+    renderSplitParentUnionsTree(scenario);
+    return;
+  }
 
   const root = document.createElement("div");
   root.className = "tree-root";

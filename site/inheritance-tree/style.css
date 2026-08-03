@@ -142,6 +142,22 @@ h1 span { color: var(--red); }
 .selection-mark { position: absolute; top: -0.75rem; left: 50%; z-index: 2; padding: 0.18rem 0.48rem; border-radius: 1rem; background: #77d1e4; color: #123a46; font-size: 0.58rem; font-weight: 900; line-height: 1.2; white-space: nowrap; transform: translateX(-50%); }
 .event-badge { display: block; max-width: 12rem; margin: 0.5rem auto 0; color: #efaa96; font-size: 0.62rem; text-align: center; }
 
+.split-family-tree { min-width: 680px; padding: 0 1rem; }
+.split-family-tree .person-card { width: 6rem; }
+.split-family-parents { display: grid; grid-template-columns: 1fr 3rem 1fr 3rem 1fr; align-items: center; width: min(680px, 100%); margin-inline: auto; }
+.split-family-parents > .person-card { margin-inline: auto; }
+.partner-line, .couple-line { position: relative; display: block; border-top: 2px solid #789590; }
+.partner-line::after { position: absolute; top: -1px; left: 50%; height: 8rem; border-left: 1px solid #789590; content: ""; }
+.split-family-branches { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; width: min(780px, 100%); margin: 3.35rem auto 0; }
+.split-family-branch { min-width: 0; padding: 0.8rem; border: 1px solid #57736e; background: rgba(255, 255, 255, 0.025); }
+.split-family-branch--half { border-style: dashed; }
+.split-family-children { position: relative; display: flex; justify-content: center; gap: 1.3rem; margin-top: 0.8rem; padding-top: 1rem; border-top: 1px solid #789590; }
+.split-family-children--single { width: 50%; margin-inline: auto; }
+.split-family-child { position: relative; display: flex; align-items: center; justify-content: center; }
+.split-family-child::before { position: absolute; top: -1rem; left: 50%; height: 1rem; border-left: 1px solid #789590; content: ""; }
+.split-family-couple::before { left: 25%; }
+.couple-line { width: 1.4rem; }
+
 .question-panel, .result-panel { margin-top: 1rem; padding: clamp(1.1rem, 3vw, 1.8rem); background: var(--paper); color: var(--ink); }
 .question-panel { display: grid; grid-template-columns: 1fr 1.25fr auto; gap: 1.2rem; align-items: center; }
 .question-panel h3, .result-panel h3 { font-size: clamp(1.25rem, 3vw, 1.8rem); }
@@ -215,6 +231,7 @@ footer { padding: 2rem 0 0; color: #727a76; font-size: 0.7rem; line-height: 1.7;
   .tree-stage { margin-inline: -0.75rem; padding-inline: 0.5rem; }
   .person-card { width: 6.25rem; }
   .family-branch { min-width: 8.5rem; }
+  .split-family-tree { padding-inline: 0.5rem; }
   .law-grid { grid-template-columns: 1fr; }
   .law-grid p { min-height: auto; }
 }
