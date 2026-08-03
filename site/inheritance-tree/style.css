@@ -168,6 +168,8 @@ h1 span { color: var(--red); }
 .selection-mark { position: absolute; top: -0.75rem; left: 50%; z-index: 2; padding: 0.18rem 0.48rem; border-radius: 1rem; background: #77d1e4; color: #123a46; font-size: 0.58rem; font-weight: 900; line-height: 1.2; white-space: nowrap; transform: translateX(-50%); }
 .change-mark { position: absolute; top: -0.75rem; left: 50%; z-index: 2; padding: 0.18rem 0.48rem; border-radius: 1rem; background: #f2cf67; color: #173b3a; font-size: 0.58rem; font-weight: 900; line-height: 1.2; white-space: nowrap; transform: translateX(-50%); }
 .decedent-mark { position: absolute; top: -0.85rem; left: 50%; z-index: 2; padding: 0.22rem 0.58rem; border: 1px solid #fff1e7; border-radius: 1rem; background: #b64730; color: white; font-size: 0.6rem; font-weight: 900; line-height: 1.2; white-space: nowrap; transform: translateX(-50%); }
+.capacity-mark { position: absolute; bottom: -0.75rem; left: 50%; z-index: 2; padding: 0.18rem 0.48rem; border: 1px solid #77d1e4; border-radius: 1rem; background: #183f4a; color: #d7f6fb; font-size: 0.55rem; font-weight: 900; line-height: 1.2; white-space: nowrap; transform: translateX(-50%); }
+.person-card.is-duplicate-person { outline: 2px dotted rgba(119, 209, 228, 0.55); outline-offset: -6px; }
 .event-badge { display: block; max-width: 12rem; margin: 0.5rem auto 0; color: #efaa96; font-size: 0.62rem; text-align: center; }
 
 .split-family-tree { min-width: 680px; padding: 0 1rem; }
@@ -203,6 +205,10 @@ h1 span { color: var(--red); }
 .direct-ascendant-tree { min-width: 24rem; padding: 0 1rem; }
 .direct-ascendant-tree > .person-card { margin-inline: auto; }
 .direct-ascendant-descendants { margin-top: 1.4rem; }
+.dual-capacity-guide { display: flex; width: min(38rem, calc(100% - 1rem)); margin: 1rem auto 0; padding: 0.65rem 0.8rem; flex-wrap: wrap; justify-content: center; gap: 0.5rem 1rem; border: 1px solid #4f7e82; background: #183f42; color: #cde3df; font-size: 0.68rem; line-height: 1.5; text-align: center; }
+.dual-capacity-guide strong { color: #8dd9e8; }
+.dual-capacity-branches .family-branch { min-width: 11rem; }
+.dual-capacity-adopted-branch:not(.is-inactive) { border-color: #4f7e82; }
 
 .question-panel, .result-panel { margin-top: 1rem; padding: clamp(1.1rem, 3vw, 1.8rem); background: var(--paper); color: var(--ink); }
 .question-panel { display: grid; grid-template-columns: 1fr 1.25fr auto; gap: 1.2rem; align-items: center; }

@@ -419,6 +419,7 @@ const scenarios = [
       megumi2: { name: "恵", relation: "子" },
       riku2: { name: "陸", relation: "孫・泰三の養子", relationBeforeConnection: "孫", parent: "daichi", connectionStep: 1 },
     },
+    treeLayout: "dual-capacity",
     root: ["taizo"],
     candidateHeading: "第1順位｜子の資格と代襲者の資格",
     branches: [
@@ -592,9 +593,10 @@ function isFinalSnapshot() {
   return snapshotIndex === currentScenario().events.length - 1;
 }
 
-function personCard(personId) {
+function personCard(personId, options = {}) {
   const scenario = currentScenario();
   const person = scenario.people[personId];
+  const { instanceKey = "", capacityLabel = "", capacityShare = "" } = options;
   const relation = person.connectionStep !== undefined && snapshotIndex < person.connectionStep
     ? person.relationBeforeConnection ?? person.relation
     : person.relation;
@@ -613,6 +615,8 @@ function personCard(personId) {
   const card = document.createElement(selectable ? "button" : "div");
   card.className = "person-card";
   card.dataset.person = personId;
+  if (instanceKey) card.dataset.instance = instanceKey;
+  if (capacityLabel) card.classList.add("is-duplicate-person");
 
   if (selectable) {
     card.type = "button";
@@ -621,13 +625,13 @@ function personCard(personId) {
     card.setAttribute("aria-pressed", String(selected));
     card.setAttribute(
       "aria-label",
-      `${person.name}（${relation}）を${selected ? "選択解除" : "法定相続人として選択"}`,
+      `${person.name}（${relation}${capacityLabel ? `、${capacityLabel}、同一人物` : ""}）を${selected ? "選択解除" : "法定相続人として選択"}`,
     );
-    card.addEventListener("click", () => togglePersonSelection(personId, "card"));
+    card.addEventListener("click", () => togglePersonSelection(personId, "card", undefined, instanceKey));
     card.addEventListener("keydown", (event) => {
       if (event.key !== "Enter" && event.key !== " ") return;
       event.preventDefault();
-      togglePersonSelection(personId, "card");
+      togglePersonSelection(personId, "card", undefined, instanceKey);
     });
   }
 
@@ -671,13 +675,14 @@ function personCard(personId) {
               : "対象外"
           : "生存";
   const share = isRevealed && scenario.heirs[personId]
-    ? `<span class="person-share">${scenario.heirs[personId].share}</span>`
+    ? `<span class="person-share">${capacityShare || scenario.heirs[personId].share}</span>`
     : "";
 
   card.innerHTML = `
     ${selected && !isRevealed ? '<span class="selection-mark" aria-hidden="true">選択中</span>' : ""}
     ${changedThisStep && !finalDecedent ? '<span class="change-mark">今回の変化</span>' : ""}
     ${finalDecedent ? `<span class="decedent-mark">${person.diedStep === snapshotIndex ? "相続開始" : "被相続人"}</span>` : ""}
+    ${capacityLabel ? `<span class="capacity-mark">${capacityLabel}</span>` : ""}
     <span class="person-name">${person.name}</span>
     <span class="person-relation">${relation}</span>
     <span class="person-state">${state}</span>
@@ -843,6 +848,79 @@ function renderDirectAscendantTree() {
   elements.treeStage.append(ascendantTree);
 }
 
+function renderDualCapacityTree(scenario) {
+  const root = document.createElement("div");
+  root.className = "tree-root";
+  root.append(personCard("taizo"));
+  elements.treeStage.append(root);
+
+  const guide = document.createElement("div");
+  guide.className = "dual-capacity-guide";
+  guide.innerHTML = snapshotIndex < scenario.people.riku2.connectionStep
+    ? "<strong>現在の陸は1人です</strong><span>まだ大地の子としてだけ家系図に現れています。</span>"
+    : "<strong>2枚の陸は同一人物です</strong><span>①大地の子・代襲者として ＋ ②泰三の養子として</span>";
+  elements.treeStage.append(guide);
+
+  const heading = document.createElement("div");
+  heading.className = "candidate-heading";
+  heading.textContent = scenario.candidateHeading;
+  elements.treeStage.append(heading);
+
+  const branches = document.createElement("div");
+  branches.className = "tree-branches dual-capacity-branches";
+
+  const megumiBranch = document.createElement("section");
+  megumiBranch.className = "family-branch";
+  megumiBranch.innerHTML = '<span class="branch-label">恵｜子の資格</span>';
+  const megumiPeople = document.createElement("div");
+  megumiPeople.className = "branch-people";
+  megumiPeople.append(personCard("megumi2"));
+  megumiBranch.append(megumiPeople);
+
+  const daichiBranch = document.createElement("section");
+  daichiBranch.className = "family-branch";
+  daichiBranch.innerHTML = '<span class="branch-label">大地の枝｜陸が代襲</span>';
+  const daichiPeople = document.createElement("div");
+  daichiPeople.className = "branch-people";
+  const daichiUnit = document.createElement("div");
+  daichiUnit.className = "descendant-unit";
+  daichiUnit.append(personCard("daichi"));
+  const representation = document.createElement("div");
+  representation.className = "descendants";
+  representation.append(personCard("riku2", {
+    instanceKey: "representation",
+    capacityLabel: "同一人物①｜代襲",
+    capacityShare: "1/3",
+  }));
+  daichiUnit.append(representation);
+  daichiPeople.append(daichiUnit);
+  daichiBranch.append(daichiPeople);
+
+  const adoptedBranch = document.createElement("section");
+  adoptedBranch.className = "family-branch dual-capacity-adopted-branch";
+  const beforeAdoption = snapshotIndex < scenario.people.riku2.connectionStep;
+  if (beforeAdoption) adoptedBranch.classList.add("is-inactive");
+  adoptedBranch.innerHTML = `<span class="branch-label">${beforeAdoption ? "まだ養子関係なし" : "陸｜泰三の養子"}</span>`;
+  const adoptedPeople = document.createElement("div");
+  adoptedPeople.className = "branch-people";
+  if (beforeAdoption) {
+    const badge = document.createElement("span");
+    badge.className = "event-badge";
+    badge.textContent = "養子縁組後に同一人物の陸が現れます";
+    adoptedPeople.append(badge);
+  } else {
+    adoptedPeople.append(personCard("riku2", {
+      instanceKey: "adopted-child",
+      capacityLabel: "同一人物②｜養子",
+      capacityShare: "1/3",
+    }));
+  }
+  adoptedBranch.append(adoptedPeople);
+
+  branches.append(megumiBranch, daichiBranch, adoptedBranch);
+  elements.treeStage.append(branches);
+}
+
 function renderTree() {
   const scenario = currentScenario();
   elements.treeStage.replaceChildren();
@@ -864,6 +942,11 @@ function renderTree() {
 
   if (scenario.treeLayout === "direct-ascendant") {
     renderDirectAscendantTree();
+    return;
+  }
+
+  if (scenario.treeLayout === "dual-capacity") {
+    renderDualCapacityTree(scenario);
     return;
   }
 
@@ -980,7 +1063,7 @@ function updateQuestionHelp() {
     : "家系図の人物カード、または下の選択肢から選べます。";
 }
 
-function togglePersonSelection(personId, source, forceSelected) {
+function togglePersonSelection(personId, source, forceSelected, instanceKey = "") {
   if (!isFinalSnapshot() || isRevealed) return;
   const shouldSelect = forceSelected ?? !selectedPeople.has(personId);
   if (shouldSelect) selectedPeople.add(personId);
@@ -991,7 +1074,8 @@ function togglePersonSelection(personId, source, forceSelected) {
   updateQuestionHelp();
 
   if (source === "card") {
-    elements.treeStage.querySelector(`[data-person="${personId}"]`)?.focus();
+    const instanceSelector = instanceKey ? `[data-instance="${instanceKey}"]` : "";
+    elements.treeStage.querySelector(`[data-person="${personId}"]${instanceSelector}`)?.focus();
   } else {
     elements.answerOptions.querySelector(`input[value="${personId}"]`)?.focus();
   }
