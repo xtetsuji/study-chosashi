@@ -1,0 +1,146 @@
+:root {
+  color: #172b2a;
+  background: #f4f0e8;
+  font-family: "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background:
+    linear-gradient(rgba(23, 43, 42, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 43, 42, 0.045) 1px, transparent 1px),
+    #f4f0e8;
+  background-size: 32px 32px;
+}
+
+a { color: inherit; }
+
+.site-header,
+.site-footer,
+main {
+  width: min(1120px, calc(100% - 3rem));
+  margin-inline: auto;
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(23, 43, 42, 0.22);
+}
+
+.site-header p,
+.site-footer { color: #65716c; font-size: 0.78rem; letter-spacing: 0.08em; }
+
+.brand {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: grid;
+  width: 2.3rem;
+  height: 2.3rem;
+  place-items: center;
+  border-radius: 50%;
+  background: #c94d32;
+  color: white;
+  font-family: serif;
+}
+
+.hero { padding: clamp(5rem, 12vw, 9rem) 0 clamp(4rem, 9vw, 7rem); }
+
+.eyebrow {
+  margin: 0 0 1rem;
+  color: #b5442c;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+h1, h2, h3 { margin: 0; font-family: "Yu Mincho", "Hiragino Mincho ProN", serif; }
+
+h1 {
+  max-width: 920px;
+  font-size: clamp(3rem, 8vw, 6.8rem);
+  font-weight: 600;
+  letter-spacing: -0.06em;
+  line-height: 1.08;
+}
+
+h1 em { color: #c94d32; font-style: normal; }
+
+.hero-copy {
+  max-width: 630px;
+  margin: 2.5rem 0 0 auto;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 2;
+}
+
+.tools-section { padding: 2rem 0 5rem; }
+
+.section-heading { display: flex; gap: 1.5rem; align-items: flex-start; margin-bottom: 2rem; }
+.section-heading .eyebrow { margin-bottom: 0.35rem; }
+.section-heading h2 { font-size: clamp(1.8rem, 4vw, 2.7rem); }
+.section-number { margin: 0; color: #c94d32; font-family: serif; font-size: 2rem; }
+
+.tool-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 1rem; }
+
+.tool-card {
+  display: flex;
+  min-height: 430px;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  flex-direction: column;
+  border: 1px solid #c9c3b8;
+  background: rgba(255, 253, 248, 0.9);
+  text-decoration: none;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.tool-card--featured { background: #173b3a; color: #fffdf8; }
+.tool-card:hover, .tool-card:focus-visible { transform: translateY(-5px); box-shadow: 0 1.5rem 3rem rgba(32, 43, 39, 0.12); }
+.tool-meta { display: flex; justify-content: space-between; color: #6f7773; font-size: 0.72rem; }
+.tool-card--featured .tool-meta { color: #b9c9c4; }
+
+.status { padding: 0.25rem 0.6rem; border: 1px solid currentColor; border-radius: 2rem; }
+.status--prototype { color: #ef9b83; }
+
+.tool-card h3 { margin-top: auto; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.15; }
+.tool-card p { max-width: 32rem; margin: 1.25rem 0; color: #58645f; line-height: 1.75; }
+.tool-card--featured p { color: #cbd6d2; }
+.card-link { font-size: 0.9rem; font-weight: 800; }
+
+.mini-diagram, .number-sample { display: flex; align-items: center; justify-content: center; min-height: 130px; }
+.mini-diagram { gap: 0.7rem; }
+.person { display: grid; width: 3rem; height: 3rem; place-items: center; border: 1px solid #81a29d; border-radius: 50%; }
+.land { padding: 1rem; border: 1px dashed #ef9b83; color: #ef9b83; }
+.arrow { color: #81a29d; font-size: 1.5rem; }
+.number-sample { gap: 0.5rem; color: #c94d32; font-family: serif; font-size: clamp(2rem, 6vw, 4rem); }
+.number-sample span:not(:last-child)::after { content: "/"; margin-left: 0.5rem; color: #c9c3b8; }
+
+.notice { display: flex; gap: 2rem; padding: 1.5rem 0; border-top: 1px solid #c9c3b8; border-bottom: 1px solid #c9c3b8; }
+.notice p { margin: 0; color: #65716c; line-height: 1.6; }
+.site-footer { display: flex; justify-content: space-between; padding: 2rem 0 3rem; text-transform: uppercase; }
+
+@media (max-width: 720px) {
+  .site-header, .site-footer, main { width: min(100% - 1.5rem, 1120px); }
+  .site-header p { display: none; }
+  .tool-grid { grid-template-columns: 1fr; }
+  .tool-card { min-height: 390px; }
+  .hero-copy { margin-left: 0; }
+  .notice { display: block; }
+  .notice p { margin-top: 0.75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tool-card { transition: none; }
+}

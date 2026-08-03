@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="土地家屋調査士試験の知識を、短い反復と動く図解で身につける学習ツール集"
+    />
+    <link rel="stylesheet" href="./assets/site.css" />
+    <title>調査士スタディ・ラボ</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="調査士スタディ・ラボ トップ">
+        <span class="brand-mark" aria-hidden="true">測</span>
+        <span>調査士スタディ・ラボ</span>
+      </a>
+      <p>小さく試して、確かに覚える。</p>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <p class="eyebrow">LAND &amp; LAW LEARNING TOOLS</p>
+        <h1 id="hero-title">条文の向こう側を、<br /><em>動かして理解する。</em></h1>
+        <p class="hero-copy">
+          土地家屋調査士試験の知識を、短い反復と動く図解で身につけるための
+          個人制作ツール集です。気になる教材から、すぐに始められます。
+        </p>
+      </section>
+
+      <section class="tools-section" aria-labelledby="tools-title">
+        <div class="section-heading">
+          <p class="section-number">01</p>
+          <div>
+            <p class="eyebrow">TOOLS</p>
+            <h2 id="tools-title">公開中の教材</h2>
+          </div>
+        </div>
+
+        <div class="tool-grid">
+          <a class="tool-card tool-card--featured" href="./civil-rights-transitions/">
+            <div class="tool-meta">
+              <span class="status status--prototype">試作版</span>
+              <span>民法・物権</span>
+            </div>
+            <div class="mini-diagram" aria-hidden="true">
+              <span class="person">A</span>
+              <span class="arrow">→</span>
+              <span class="land">土地</span>
+              <span class="arrow arrow--split">↗</span>
+              <span class="person">B / C</span>
+            </div>
+            <h3>二重譲渡<br />権利変動アニメーター</h3>
+            <p>売買と登記を順に動かして、「誰が誰に対抗できるか」を時点ごとに確かめます。</p>
+            <span class="card-link">試してみる <span aria-hidden="true">→</span></span>
+          </a>
+
+          <a class="tool-card" id="period-flashcards-link" href="./period-flashcards/">
+            <div class="tool-meta">
+              <span class="status">学習用</span>
+              <span>不動産登記法ほか</span>
+            </div>
+            <div class="number-sample" aria-hidden="true">
+              <span>10</span><span>30</span><span>50</span>
+            </div>
+            <h3>期間<br />フラッシュカード</h3>
+            <p>保存期間などの数字知識を、全問ランダムのフラッシュカードで反復します。</p>
+            <span class="card-link">問題を解く <span aria-hidden="true">→</span></span>
+          </a>
+        </div>
+      </section>
+
+      <aside class="notice">
+        <strong>このサイトについて</strong>
+        <p>個人の試験学習用です。正確な内容は、最新の法令・通達・公式資料も確認してください。</p>
+      </aside>
+    </main>
+
+    <footer class="site-footer">
+      <span>© xtetsuji</span>
+      <span>Study Chosashi</span>
+    </footer>
+    <script>
+      // site/index.htmlを直接開く場合だけ、リポジトリ内のビルド成果物へ案内する。
+      // GitHub Pagesやローカルサーバーでは、公開用の相対URLをそのまま使う。
+      if (window.location.protocol === "file:") {
+        document.querySelector("#period-flashcards-link").href =
+          "../period-flashcards/dist/index.html";
+      }
+    </script>
+  </body>
+</html>
