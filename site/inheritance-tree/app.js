@@ -644,10 +644,7 @@ function renderTimeline() {
     elements.timeline.append(item);
   });
   elements.previousStepButton.disabled = snapshotIndex === 0;
-  elements.nextStepButton.hidden = isFinalSnapshot();
-  elements.nextStepButton.textContent = snapshotIndex === scenario.events.length - 2
-    ? "相続開始へ進む →"
-    : "次の出来事へ →";
+  elements.nextStepButton.disabled = isFinalSnapshot();
 }
 
 function renderAnswerOptions() {
