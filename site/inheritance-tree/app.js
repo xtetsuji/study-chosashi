@@ -426,7 +426,14 @@ const scenarios = [
       { label: "恵の枝", roots: ["megumi2"] },
       { label: "大地の枝｜陸が代襲", roots: ["daichi"] },
     ],
-    answerOrder: ["megumi2", "daichi", "riku2"],
+    answerChoices: [
+      { key: "megumi2", personId: "megumi2" },
+      { key: "daichi", personId: "daichi" },
+      { key: "riku2:representation", personId: "riku2", label: "陸①", detail: "大地の代襲者として" },
+      { key: "riku2:adopted-child", personId: "riku2", label: "陸②", detail: "泰三の養子として" },
+    ],
+    correctChoiceKeys: ["megumi2", "riku2:representation", "riku2:adopted-child"],
+    answerByCapacity: true,
     heirs: {
       megumi2: { share: "1/3", note: "恵自身の子としての取り分" },
       riku2: { share: "2/3", note: "養子として1/3＋大地の代襲者として1/3" },
@@ -546,6 +553,7 @@ const elements = {
   snapshotNote: byId("snapshot-note"),
   treeStage: byId("tree-stage"),
   questionPanel: byId("question-panel"),
+  questionTitle: byId("question-title"),
   questionHelp: byId("question-help"),
   answerOptions: byId("answer-options"),
   checkButton: byId("check-button"),
@@ -593,18 +601,35 @@ function isFinalSnapshot() {
   return snapshotIndex === currentScenario().events.length - 1;
 }
 
+function answerChoicesFor(scenario) {
+  return scenario.answerChoices
+    ?? scenario.answerOrder.map((personId) => ({ key: personId, personId }));
+}
+
+function choiceIsCorrect(scenario, choiceKey) {
+  if (scenario.correctChoiceKeys) return scenario.correctChoiceKeys.includes(choiceKey);
+  const choice = answerChoicesFor(scenario).find(({ key }) => key === choiceKey);
+  return Boolean(choice && scenario.heirs[choice.personId]);
+}
+
 function personCard(personId, options = {}) {
   const scenario = currentScenario();
   const person = scenario.people[personId];
-  const { instanceKey = "", capacityLabel = "", capacityShare = "" } = options;
+  const {
+    instanceKey = "",
+    capacityLabel = "",
+    capacityShare = "",
+    choiceKey = personId,
+  } = options;
   const relation = person.connectionStep !== undefined && snapshotIndex < person.connectionStep
     ? person.relationBeforeConnection ?? person.relation
     : person.relation;
   const selectable = isFinalSnapshot()
     && !isRevealed
-    && scenario.answerOrder.includes(personId)
+    && answerChoicesFor(scenario).some(({ key }) => key === choiceKey)
     && isVisible(person);
-  const selected = selectedPeople.has(personId);
+  const selected = selectedPeople.has(choiceKey);
+  const correctChoice = choiceIsCorrect(scenario, choiceKey);
   const finalDecedent = isFinalSnapshot() && person.relation === "被相続人";
   const changedThisStep = scenario.events[snapshotIndex].changedPeople?.includes(personId) ?? false;
   const excluded = isExcluded(person);
@@ -615,6 +640,7 @@ function personCard(personId, options = {}) {
   const card = document.createElement(selectable ? "button" : "div");
   card.className = "person-card";
   card.dataset.person = personId;
+  card.dataset.choice = choiceKey;
   if (instanceKey) card.dataset.instance = instanceKey;
   if (capacityLabel) card.classList.add("is-duplicate-person");
 
@@ -627,11 +653,11 @@ function personCard(personId, options = {}) {
       "aria-label",
       `${person.name}（${relation}${capacityLabel ? `、${capacityLabel}、同一人物` : ""}）を${selected ? "選択解除" : "法定相続人として選択"}`,
     );
-    card.addEventListener("click", () => togglePersonSelection(personId, "card", undefined, instanceKey));
+    card.addEventListener("click", () => togglePersonSelection(personId, "card", undefined, instanceKey, choiceKey));
     card.addEventListener("keydown", (event) => {
       if (event.key !== "Enter" && event.key !== " ") return;
       event.preventDefault();
-      togglePersonSelection(personId, "card", undefined, instanceKey);
+      togglePersonSelection(personId, "card", undefined, instanceKey, choiceKey);
     });
   }
 
@@ -645,10 +671,10 @@ function personCard(personId, options = {}) {
   if (finalDecedent) card.classList.add("is-decedent-final");
 
   if (isRevealed && isFinalSnapshot()) {
-    if (scenario.heirs[personId]) {
+    if (correctChoice) {
       card.classList.add("is-heir");
-      if (!selectedPeople.has(personId)) card.classList.add("is-missed");
-    } else if (selectedPeople.has(personId)) {
+      if (!selected) card.classList.add("is-missed");
+    } else if (selected) {
       card.classList.add("is-wrong");
     }
   }
@@ -665,16 +691,16 @@ function personCard(personId, options = {}) {
         ? legalStatus
       : !isRevealed && fetal
         ? "胎児"
-      : isRevealed && scenario.heirs[personId]
+      : isRevealed && correctChoice
         ? "✓ 法定相続人"
         : isRevealed
-          ? selectedPeople.has(personId)
+          ? selected
             ? `選択したが対象外${legalStatus ? `（${legalStatus}）` : ""}`
             : legalStatus
               ? `対象外（${legalStatus}）`
               : "対象外"
           : "生存";
-  const share = isRevealed && scenario.heirs[personId]
+  const share = isRevealed && correctChoice
     ? `<span class="person-share">${capacityShare || scenario.heirs[personId].share}</span>`
     : "";
 
@@ -889,6 +915,7 @@ function renderDualCapacityTree(scenario) {
   representation.className = "descendants";
   representation.append(personCard("riku2", {
     instanceKey: "representation",
+    choiceKey: "riku2:representation",
     capacityLabel: "同一人物①｜代襲",
     capacityShare: "1/3",
   }));
@@ -911,6 +938,7 @@ function renderDualCapacityTree(scenario) {
   } else {
     adoptedPeople.append(personCard("riku2", {
       instanceKey: "adopted-child",
+      choiceKey: "riku2:adopted-child",
       capacityLabel: "同一人物②｜養子",
       capacityShare: "1/3",
     }));
@@ -1041,33 +1069,41 @@ function renderTimeline() {
 function renderAnswerOptions() {
   const scenario = currentScenario();
   elements.answerOptions.replaceChildren();
-  scenario.answerOrder.forEach((personId) => {
+  answerChoicesFor(scenario).forEach((choice) => {
+    const { key, personId } = choice;
     const person = scenario.people[personId];
     if (!isVisible(person)) return;
     const label = document.createElement("label");
     label.className = "answer-choice";
     label.innerHTML = `
-      <input type="checkbox" value="${personId}" ${selectedPeople.has(personId) ? "checked" : ""} ${isRevealed ? "disabled" : ""} />
-      <span>${person.name}<small>（${person.relation}）</small></span>
+      <input type="checkbox" value="${key}" ${selectedPeople.has(key) ? "checked" : ""} ${isRevealed ? "disabled" : ""} />
+      <span>${choice.label ?? person.name}<small>（${choice.detail ?? person.relation}）</small></span>
     `;
     label.querySelector("input").addEventListener("change", (event) => {
-      togglePersonSelection(personId, "checkbox", event.target.checked);
+      togglePersonSelection(personId, "checkbox", event.target.checked, "", key);
     });
     elements.answerOptions.append(label);
   });
 }
 
 function updateQuestionHelp() {
+  const scenario = currentScenario();
+  if (scenario.answerByCapacity) {
+    elements.questionHelp.textContent = selectedPeople.size
+      ? `${selectedPeople.size}つの資格を選択中です。水色の人物カードが、現在選んでいる資格です。`
+      : "同じ人物でも、相続する資格ごとに人物カードまたは選択肢から選んでください。";
+    return;
+  }
   elements.questionHelp.textContent = selectedPeople.size
     ? `${selectedPeople.size}人を選択中です。水色の人物カードが、現在選んでいる人です。`
     : "家系図の人物カード、または下の選択肢から選べます。";
 }
 
-function togglePersonSelection(personId, source, forceSelected, instanceKey = "") {
+function togglePersonSelection(personId, source, forceSelected, instanceKey = "", choiceKey = personId) {
   if (!isFinalSnapshot() || isRevealed) return;
-  const shouldSelect = forceSelected ?? !selectedPeople.has(personId);
-  if (shouldSelect) selectedPeople.add(personId);
-  else selectedPeople.delete(personId);
+  const shouldSelect = forceSelected ?? !selectedPeople.has(choiceKey);
+  if (shouldSelect) selectedPeople.add(choiceKey);
+  else selectedPeople.delete(choiceKey);
 
   renderTree();
   renderAnswerOptions();
@@ -1075,15 +1111,23 @@ function togglePersonSelection(personId, source, forceSelected, instanceKey = ""
 
   if (source === "card") {
     const instanceSelector = instanceKey ? `[data-instance="${instanceKey}"]` : "";
-    elements.treeStage.querySelector(`[data-person="${personId}"]${instanceSelector}`)?.focus();
+    elements.treeStage.querySelector(`[data-choice="${choiceKey}"]${instanceSelector}`)?.focus();
   } else {
-    elements.answerOptions.querySelector(`input[value="${personId}"]`)?.focus();
+    elements.answerOptions.querySelector(`input[value="${choiceKey}"]`)?.focus();
   }
 }
 
 function selectedAnswerIsCorrect() {
-  const heirIds = Object.keys(currentScenario().heirs);
-  return heirIds.length === selectedPeople.size && heirIds.every((id) => selectedPeople.has(id));
+  const scenario = currentScenario();
+  const correctChoiceKeys = scenario.correctChoiceKeys ?? Object.keys(scenario.heirs);
+  return correctChoiceKeys.length === selectedPeople.size
+    && correctChoiceKeys.every((key) => selectedPeople.has(key));
+}
+
+function hasMissedOneDualCapacity() {
+  const scenario = currentScenario();
+  if (!scenario.answerByCapacity) return false;
+  return selectedPeople.has("riku2:representation") !== selectedPeople.has("riku2:adopted-child");
 }
 
 function shareToFraction(share) {
@@ -1159,7 +1203,9 @@ function renderResult() {
   elements.resultKicker.textContent = isCorrect ? "正解です" : "家系図で見直しましょう";
   elements.resultTitle.textContent = isCorrect
     ? "順位と代襲関係を正しく判定できました。"
-    : "「✓ 法定相続人」と表示された人物が正解です。";
+    : hasMissedOneDualCapacity()
+      ? "陸が相続人になることは判定できましたが、もう一つの資格を見落としています。"
+      : "「✓ 法定相続人」と表示された人物・資格が正解です。";
 
   renderShareChart(scenario);
 
@@ -1190,6 +1236,9 @@ function renderQuestion() {
   const final = isFinalSnapshot();
   elements.questionPanel.hidden = !final;
   if (!final) return;
+  elements.questionTitle.textContent = currentScenario().answerByCapacity
+    ? "法定相続人になる人・資格をすべて選んでください"
+    : "法定相続人になる人を全員選んでください";
   renderAnswerOptions();
   elements.checkButton.disabled = isRevealed;
   if (isRevealed) elements.questionHelp.textContent = "答えと理由を家系図の下に表示しています。";
@@ -1244,7 +1293,9 @@ elements.checkButton.addEventListener("click", () => {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   elements.snapshotNote.textContent = selectedAnswerIsCorrect()
     ? "正解です。オレンジの枠と「✓ 法定相続人」の表示で、相続人と相続分を確認してください。"
-    : "答え合わせを表示しました。「✓ 法定相続人」と表示された人物と、選んだ人物を見比べてください。";
+    : hasMissedOneDualCapacity()
+      ? "陸の2枚は同一人物ですが、代襲者と養子の両方の資格をそれぞれ選ぶ必要があります。"
+      : "答え合わせを表示しました。「✓ 法定相続人」と表示された人物・資格と、選んだ内容を見比べてください。";
   elements.treeStage.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
 });
 
