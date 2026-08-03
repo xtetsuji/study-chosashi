@@ -300,6 +300,7 @@ const elements = {
   resultKicker: byId("result-kicker"),
   resultTitle: byId("result-title"),
   retryButton: byId("retry-button"),
+  shareChartTotal: byId("share-chart-total"),
   shareChartBar: byId("share-chart-bar"),
   shareChartLegend: byId("share-chart-legend"),
   shareGrid: byId("share-grid"),
@@ -696,28 +697,53 @@ function selectedAnswerIsCorrect() {
   return heirIds.length === selectedPeople.size && heirIds.every((id) => selectedPeople.has(id));
 }
 
-function shareToRatio(share) {
-  if (share === "全部") return 1;
+function shareToFraction(share) {
+  if (share === "全部") return { numerator: 1, denominator: 1 };
   const [numerator, denominator] = share.split("/").map(Number);
-  return numerator / denominator;
+  return { numerator, denominator };
+}
+
+function greatestCommonDivisor(left, right) {
+  let a = left;
+  let b = right;
+  while (b !== 0) [a, b] = [b, a % b];
+  return a;
+}
+
+function leastCommonMultiple(left, right) {
+  return (left * right) / greatestCommonDivisor(left, right);
 }
 
 function renderShareChart(scenario) {
   elements.shareChartBar.replaceChildren();
   elements.shareChartLegend.replaceChildren();
+  const heirEntries = Object.entries(scenario.heirs);
+  const commonDenominator = heirEntries
+    .map(([, share]) => shareToFraction(share.share).denominator)
+    .reduce(leastCommonMultiple, 1);
+  elements.shareChartTotal.textContent = `全体 ＝ ${commonDenominator}/${commonDenominator}`;
 
-  Object.entries(scenario.heirs).forEach(([personId, share], index) => {
+  heirEntries.forEach(([personId, share], index) => {
     const person = scenario.people[personId];
-    const ratio = shareToRatio(share.share);
+    const fraction = shareToFraction(share.share);
+    const ratio = fraction.numerator / fraction.denominator;
+    const commonNumerator = fraction.numerator * (commonDenominator / fraction.denominator);
+    const commonShare = `${commonNumerator}/${commonDenominator}`;
+    const showOriginalShare = commonShare !== share.share;
     const tone = `share-tone-${(index % 4) + 1}`;
 
     const segment = document.createElement("span");
     segment.className = `share-chart-segment ${tone}`;
     if (ratio < 0.22) segment.classList.add("is-compact");
+    if (ratio < 0.3) segment.classList.add("has-no-original-label");
     segment.style.flexGrow = String(ratio);
     segment.innerHTML = `
       <span class="share-chart-number">${index + 1}</span>
-      <span class="share-chart-segment-label"><strong>${person.name}</strong><small>${share.share}</small></span>
+      <span class="share-chart-segment-label">
+        <strong>${person.name}</strong>
+        <small>${commonShare}</small>
+        ${showOriginalShare ? `<em class="share-chart-original">＝ ${share.share}</em>` : ""}
+      </span>
     `;
     elements.shareChartBar.append(segment);
 
@@ -726,7 +752,10 @@ function renderShareChart(scenario) {
     legendItem.innerHTML = `
       <span class="share-chart-number ${tone}" aria-hidden="true">${index + 1}</span>
       <span><strong>${person.name}</strong><small>${person.relation}</small></span>
-      <b>${share.share}</b>
+      <span class="share-chart-values">
+        <b>${commonShare}</b>
+        ${showOriginalShare ? `<small>＝ ${share.share}</small>` : ""}
+      </span>
     `;
     elements.shareChartLegend.append(legendItem);
   });

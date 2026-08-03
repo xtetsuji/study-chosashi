@@ -217,6 +217,8 @@ h1 span { color: var(--red); }
 .share-chart-segment-label { display: grid; min-width: 0; }
 .share-chart-segment-label strong { overflow: hidden; font-size: 0.75rem; text-overflow: ellipsis; white-space: nowrap; }
 .share-chart-segment-label small { font-size: 0.68rem; font-weight: 900; }
+.share-chart-original { font-size: 0.55rem; font-style: normal; opacity: 0.82; white-space: nowrap; }
+.share-chart-segment.has-no-original-label .share-chart-original { display: none; }
 .share-chart-segment.is-compact { padding-inline: 0.2rem; }
 .share-chart-segment.is-compact .share-chart-segment-label { display: none; }
 .share-chart-number { display: grid; width: 1.35rem; height: 1.35rem; place-items: center; border: 1px solid currentColor; border-radius: 50%; font-size: 0.62rem; font-weight: 900; }
@@ -229,7 +231,9 @@ h1 span { color: var(--red); }
 .share-chart-legend-item > span:not(.share-chart-number) { display: grid; min-width: 0; }
 .share-chart-legend-item strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .share-chart-legend-item small { color: var(--muted); font-size: 0.6rem; }
+.share-chart-values { justify-items: end; }
 .share-chart-legend-item b { color: var(--red); font-family: serif; font-size: 1rem; }
+.share-chart-values small { white-space: nowrap; }
 .share-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: 0.6rem; margin-top: 1.25rem; }
 .share-card { display: grid; min-height: 6.5rem; padding: 0.9rem; border: 1px solid var(--rule); background: #f8f4ec; }
 .share-card span { color: var(--muted); font-size: 0.7rem; }
