@@ -1296,7 +1296,8 @@ elements.checkButton.addEventListener("click", () => {
     : hasMissedOneDualCapacity()
       ? "陸の2枚は同一人物ですが、代襲者と養子の両方の資格をそれぞれ選ぶ必要があります。"
       : "答え合わせを表示しました。「✓ 法定相続人」と表示された人物・資格と、選んだ内容を見比べてください。";
-  elements.treeStage.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+  elements.resultTitle.focus({ preventScroll: true });
+  elements.resultTitle.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
 });
 
 elements.retryButton.addEventListener("click", () => {
