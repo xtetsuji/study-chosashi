@@ -317,9 +317,31 @@ function isFinalSnapshot() {
 function personCard(personId) {
   const scenario = currentScenario();
   const person = scenario.people[personId];
-  const card = document.createElement("div");
+  const selectable = isFinalSnapshot()
+    && !isRevealed
+    && scenario.answerOrder.includes(personId)
+    && isVisible(person);
+  const selected = selectedPeople.has(personId);
+  const card = document.createElement(selectable ? "button" : "div");
   card.className = "person-card";
   card.dataset.person = personId;
+
+  if (selectable) {
+    card.type = "button";
+    card.classList.add("is-selectable");
+    card.classList.toggle("is-selected", selected);
+    card.setAttribute("aria-pressed", String(selected));
+    card.setAttribute(
+      "aria-label",
+      `${person.name}（${person.relation}）を${selected ? "選択解除" : "法定相続人として選択"}`,
+    );
+    card.addEventListener("click", () => togglePersonSelection(personId, "card"));
+    card.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      togglePersonSelection(personId, "card");
+    });
+  }
 
   if (!isVisible(person)) card.classList.add("is-not-born");
   if (isDead(person)) card.classList.add("is-dead");
@@ -333,20 +355,25 @@ function personCard(personId) {
     }
   }
 
-  const state = isDead(person)
-    ? "死亡"
-    : isRevealed && scenario.heirs[personId]
-      ? "✓ 法定相続人"
-      : isRevealed
-        ? selectedPeople.has(personId)
-          ? "選択したが対象外"
-          : "対象外"
-        : "生存";
+  const state = selected && !isRevealed
+    ? isDead(person)
+      ? "● 選択済み（死亡）"
+      : "● 選択済み"
+    : isDead(person)
+      ? "死亡"
+      : isRevealed && scenario.heirs[personId]
+        ? "✓ 法定相続人"
+        : isRevealed
+          ? selectedPeople.has(personId)
+            ? "選択したが対象外"
+            : "対象外"
+          : "生存";
   const share = isRevealed && scenario.heirs[personId]
     ? `<span class="person-share">${scenario.heirs[personId].share}</span>`
     : "";
 
   card.innerHTML = `
+    ${selected && !isRevealed ? '<span class="selection-mark" aria-hidden="true">選択中</span>' : ""}
     <span class="person-name">${person.name}</span>
     <span class="person-relation">${person.relation}</span>
     <span class="person-state">${state}</span>
@@ -482,14 +509,33 @@ function renderAnswerOptions() {
       <span>${person.name}<small>（${person.relation}）</small></span>
     `;
     label.querySelector("input").addEventListener("change", (event) => {
-      if (event.target.checked) selectedPeople.add(personId);
-      else selectedPeople.delete(personId);
-      elements.questionHelp.textContent = selectedPeople.size
-        ? `${selectedPeople.size}人を選択中です。`
-        : "人物を選択してから答え合わせをします。";
+      togglePersonSelection(personId, "checkbox", event.target.checked);
     });
     elements.answerOptions.append(label);
   });
+}
+
+function updateQuestionHelp() {
+  elements.questionHelp.textContent = selectedPeople.size
+    ? `${selectedPeople.size}人を選択中です。水色の人物カードが、現在選んでいる人です。`
+    : "家系図の人物カード、または下の選択肢から選べます。";
+}
+
+function togglePersonSelection(personId, source, forceSelected) {
+  if (!isFinalSnapshot() || isRevealed) return;
+  const shouldSelect = forceSelected ?? !selectedPeople.has(personId);
+  if (shouldSelect) selectedPeople.add(personId);
+  else selectedPeople.delete(personId);
+
+  renderTree();
+  renderAnswerOptions();
+  updateQuestionHelp();
+
+  if (source === "card") {
+    elements.treeStage.querySelector(`[data-person="${personId}"]`)?.focus();
+  } else {
+    elements.answerOptions.querySelector(`input[value="${personId}"]`)?.focus();
+  }
 }
 
 function selectedAnswerIsCorrect() {
@@ -537,11 +583,8 @@ function renderQuestion() {
   if (!final) return;
   renderAnswerOptions();
   elements.checkButton.disabled = isRevealed;
-  elements.questionHelp.textContent = isRevealed
-    ? "答えと理由を家系図の下に表示しています。"
-    : selectedPeople.size
-      ? `${selectedPeople.size}人を選択中です。`
-      : "人物を選択してから答え合わせをします。";
+  if (isRevealed) elements.questionHelp.textContent = "答えと理由を家系図の下に表示しています。";
+  else updateQuestionHelp();
 }
 
 function render() {
@@ -549,7 +592,7 @@ function render() {
   const event = scenario.events[snapshotIndex];
   elements.stepLabel.textContent = `時点 ${snapshotIndex + 1} / ${scenario.events.length}｜${event.date} ${event.label}`;
   elements.snapshotNote.textContent = isFinalSnapshot()
-    ? `${event.note} 家系図を見て、法定相続人になる人を選んでください。`
+    ? `${event.note} 家系図の人物カードを直接選び、法定相続人になる人を回答してください。`
     : `${event.note} タイムラインから次の出来事へ進めます。`;
   renderScenarioButtons();
   renderStory();
