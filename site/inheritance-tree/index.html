@@ -7,7 +7,7 @@
       name="description"
       content="家族の出来事を時系列で追い、法定相続人と法定相続分を家系図で学ぶ試作教材"
     />
-    <link rel="stylesheet" href="./style.css?v=20" />
+    <link rel="stylesheet" href="./style.css?v=22" />
     <title>相続ツリー・ラボ｜法定相続人と法定相続分</title>
   </head>
   <body>
@@ -101,6 +101,14 @@
         <div class="tree-stage" id="tree-stage" aria-live="polite"></div>
 
         <div class="question-panel" id="question-panel">
+          <div class="answer-mode-switch" role="group" aria-label="回答モード">
+            <button class="answer-mode-button" id="heirs-mode-button" type="button" aria-pressed="true">
+              <strong>相続人だけ</strong><small>人物を選ぶ</small>
+            </button>
+            <button class="answer-mode-button" id="shares-mode-button" type="button" aria-pressed="false">
+              <strong>相続人＋相続分</strong><small>分数まで入力</small>
+            </button>
+          </div>
           <div>
             <p class="eyebrow">YOUR ANSWER</p>
             <h3 id="question-title">法定相続人になる人を全員選んでください</h3>
@@ -110,6 +118,16 @@
             <legend class="visually-hidden">法定相続人になる人</legend>
           </fieldset>
           <button class="primary-button" id="check-button" type="button">答え合わせをする</button>
+          <section class="share-answer-panel" id="share-answer-panel" aria-labelledby="share-answer-title" hidden>
+            <div class="share-answer-heading">
+              <div>
+                <h4 id="share-answer-title">選んだ人の法定相続分</h4>
+                <p>約分前の分数でも回答できます。二重資格は同一人物の取り分を合算します。</p>
+              </div>
+              <p class="share-answer-total" id="share-answer-total" aria-live="polite"></p>
+            </div>
+            <div class="share-answer-list" id="share-answer-list"></div>
+          </section>
         </div>
 
         <div class="result-panel" id="result-panel" aria-live="polite" hidden>
@@ -191,6 +209,6 @@
         この教材は、一般則を単純化して理解するための試験学習用プロトタイプです。個別事案への法的助言ではありません。
       </footer>
     </main>
-    <script src="./app.js?v=21"></script>
+    <script src="./app.js?v=22"></script>
   </body>
 </html>

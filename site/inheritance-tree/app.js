@@ -535,6 +535,8 @@ const scenarios = [
 let scenarioIndex = 0;
 let snapshotIndex = 0;
 let selectedPeople = new Set();
+let enteredShares = new Map();
+let answerMode = "heirs";
 let isRevealed = false;
 
 const byId = (id) => document.getElementById(id);
@@ -555,7 +557,12 @@ const elements = {
   questionPanel: byId("question-panel"),
   questionTitle: byId("question-title"),
   questionHelp: byId("question-help"),
+  heirsModeButton: byId("heirs-mode-button"),
+  sharesModeButton: byId("shares-mode-button"),
   answerOptions: byId("answer-options"),
+  shareAnswerPanel: byId("share-answer-panel"),
+  shareAnswerList: byId("share-answer-list"),
+  shareAnswerTotal: byId("share-answer-total"),
   checkButton: byId("check-button"),
   resultPanel: byId("result-panel"),
   resultKicker: byId("result-kicker"),
@@ -571,6 +578,12 @@ const elements = {
 
 function currentScenario() {
   return scenarios[scenarioIndex];
+}
+
+function clearAnswerState() {
+  selectedPeople = new Set();
+  enteredShares = new Map();
+  isRevealed = false;
 }
 
 function isVisible(person) {
@@ -1055,8 +1068,7 @@ function renderTimeline() {
     button.innerHTML = `<strong>${event.date}｜${event.label}</strong><small>${event.note}</small>`;
     button.addEventListener("click", () => {
       snapshotIndex = index;
-      selectedPeople = new Set();
-      isRevealed = false;
+      clearAnswerState();
       render();
     });
     item.append(button);
@@ -1086,8 +1098,126 @@ function renderAnswerOptions() {
   });
 }
 
+function selectedPersonIdsForShares(scenario) {
+  return answerChoicesFor(scenario).reduce((personIds, choice) => {
+    if (selectedPeople.has(choice.key) && !personIds.includes(choice.personId)) {
+      personIds.push(choice.personId);
+    }
+    return personIds;
+  }, []);
+}
+
+function enteredFractionFor(personId) {
+  const answer = enteredShares.get(personId);
+  if (!answer || answer.numerator === "" || answer.denominator === "") return null;
+  const numerator = Number(answer.numerator);
+  const denominator = Number(answer.denominator);
+  if (!Number.isInteger(numerator) || numerator < 0 || !Number.isInteger(denominator) || denominator <= 0) {
+    return null;
+  }
+  return { numerator, denominator };
+}
+
+function shareInputIsCorrect(personId) {
+  const expectedShare = currentScenario().heirs[personId]?.share;
+  const entered = enteredFractionFor(personId);
+  if (!expectedShare || !entered) return false;
+  const expected = shareToFraction(expectedShare);
+  return entered.numerator * expected.denominator === expected.numerator * entered.denominator;
+}
+
+function updateShareAnswerTotal() {
+  const personIds = selectedPersonIdsForShares(currentScenario());
+  const fractions = personIds.map(enteredFractionFor);
+  elements.shareAnswerTotal.classList.remove("is-complete");
+  if (!personIds.length || fractions.some((fraction) => !fraction)) {
+    elements.shareAnswerTotal.textContent = "入力合計 —";
+    return;
+  }
+
+  let total = { numerator: 0, denominator: 1 };
+  fractions.forEach((fraction) => {
+    total = {
+      numerator: total.numerator * fraction.denominator + fraction.numerator * total.denominator,
+      denominator: total.denominator * fraction.denominator,
+    };
+    const divisor = greatestCommonDivisor(total.numerator, total.denominator);
+    total.numerator /= divisor;
+    total.denominator /= divisor;
+  });
+  elements.shareAnswerTotal.textContent = `入力合計 ${total.numerator}/${total.denominator}`;
+  elements.shareAnswerTotal.classList.toggle("is-complete", total.numerator === total.denominator);
+}
+
+function renderShareAnswerPanel() {
+  const scenario = currentScenario();
+  elements.shareAnswerPanel.hidden = answerMode !== "shares";
+  elements.shareAnswerList.replaceChildren();
+  if (answerMode !== "shares") return;
+
+  const personIds = selectedPersonIdsForShares(scenario);
+  if (!personIds.length) {
+    const empty = document.createElement("p");
+    empty.className = "share-answer-empty";
+    empty.textContent = "法定相続人だと思う人物を選ぶと、ここに相続分の入力欄が現れます。";
+    elements.shareAnswerList.append(empty);
+    updateShareAnswerTotal();
+    return;
+  }
+
+  personIds.forEach((personId) => {
+    const person = scenario.people[personId];
+    const answer = enteredShares.get(personId) ?? { numerator: "", denominator: "" };
+    const row = document.createElement("div");
+    row.className = "share-answer-row";
+    if (isRevealed) row.classList.add(shareInputIsCorrect(personId) ? "is-correct" : "is-wrong");
+    const detail = scenario.answerByCapacity && personId === "riku2"
+      ? "2つの資格による取り分を合算"
+      : person.relation;
+    const result = isRevealed
+      ? scenario.heirs[personId]
+        ? shareInputIsCorrect(personId)
+          ? "✓ 相続分も正解です"
+          : `正解は ${scenario.heirs[personId].share}`
+        : "この人物は法定相続人ではありません"
+      : "";
+    row.innerHTML = `
+      <span class="share-answer-person"><strong>${person.name}</strong><small>${detail}</small></span>
+      <span class="fraction-input">
+        <input type="number" min="0" max="99" step="1" inputmode="numeric" data-field="numerator" value="${answer.numerator}" aria-label="${person.name}の相続分の分子" ${isRevealed ? "disabled" : ""} />
+        <span class="fraction-divider" aria-hidden="true">／</span>
+        <input type="number" min="1" max="99" step="1" inputmode="numeric" data-field="denominator" value="${answer.denominator}" aria-label="${person.name}の相続分の分母" ${isRevealed ? "disabled" : ""} />
+      </span>
+      ${result ? `<span class="fraction-result">${result}</span>` : ""}
+    `;
+    row.querySelectorAll("input").forEach((input) => {
+      input.addEventListener("input", (event) => {
+        const nextAnswer = { ...(enteredShares.get(personId) ?? { numerator: "", denominator: "" }) };
+        nextAnswer[event.target.dataset.field] = event.target.value;
+        enteredShares.set(personId, nextAnswer);
+        updateShareAnswerTotal();
+      });
+    });
+    elements.shareAnswerList.append(row);
+  });
+  updateShareAnswerTotal();
+}
+
+function renderAnswerModeSwitch() {
+  elements.heirsModeButton.setAttribute("aria-pressed", String(answerMode === "heirs"));
+  elements.sharesModeButton.setAttribute("aria-pressed", String(answerMode === "shares"));
+  elements.heirsModeButton.disabled = isRevealed;
+  elements.sharesModeButton.disabled = isRevealed;
+}
+
 function updateQuestionHelp() {
   const scenario = currentScenario();
+  if (answerMode === "shares") {
+    elements.questionHelp.textContent = scenario.answerByCapacity
+      ? "陸は資格ごとに選び、相続分は2つの資格による取り分を合算して入力します。"
+      : "相続人を選ぶと相続分の入力欄が現れます。分子と分母を入力してください。";
+    return;
+  }
   if (scenario.answerByCapacity) {
     elements.questionHelp.textContent = selectedPeople.size
       ? `${selectedPeople.size}つの資格を選択中です。水色の人物カードが、現在選んでいる資格です。`
@@ -1107,6 +1237,7 @@ function togglePersonSelection(personId, source, forceSelected, instanceKey = ""
 
   renderTree();
   renderAnswerOptions();
+  renderShareAnswerPanel();
   updateQuestionHelp();
 
   if (source === "card") {
@@ -1117,11 +1248,20 @@ function togglePersonSelection(personId, source, forceSelected, instanceKey = ""
   }
 }
 
-function selectedAnswerIsCorrect() {
+function selectedHeirsAreCorrect() {
   const scenario = currentScenario();
   const correctChoiceKeys = scenario.correctChoiceKeys ?? Object.keys(scenario.heirs);
   return correctChoiceKeys.length === selectedPeople.size
     && correctChoiceKeys.every((key) => selectedPeople.has(key));
+}
+
+function enteredSharesAreCorrect() {
+  if (answerMode !== "shares") return true;
+  return Object.keys(currentScenario().heirs).every(shareInputIsCorrect);
+}
+
+function selectedAnswerIsCorrect() {
+  return selectedHeirsAreCorrect() && enteredSharesAreCorrect();
 }
 
 function hasMissedOneDualCapacity() {
@@ -1197,12 +1337,21 @@ function renderShareChart(scenario) {
 function renderResult() {
   const scenario = currentScenario();
   const isCorrect = selectedAnswerIsCorrect();
+  const heirsCorrect = selectedHeirsAreCorrect();
   elements.resultPanel.hidden = !isRevealed;
   if (!isRevealed) return;
 
-  elements.resultKicker.textContent = isCorrect ? "正解です" : "家系図で見直しましょう";
+  elements.resultKicker.textContent = isCorrect
+    ? "正解です"
+    : heirsCorrect && answerMode === "shares"
+      ? "相続人の選択は正解です"
+      : "家系図で見直しましょう";
   elements.resultTitle.textContent = isCorrect
-    ? "順位と代襲関係を正しく判定できました。"
+    ? answerMode === "shares"
+      ? "法定相続人と法定相続分を正しく判定できました。"
+      : "順位と代襲関係を正しく判定できました。"
+    : heirsCorrect && answerMode === "shares"
+      ? "法定相続分を見直しましょう。"
     : hasMissedOneDualCapacity()
       ? "陸が相続人になることは判定できましたが、もう一つの資格を見落としています。"
       : "「✓ 法定相続人」と表示された人物・資格が正解です。";
@@ -1236,10 +1385,17 @@ function renderQuestion() {
   const final = isFinalSnapshot();
   elements.questionPanel.hidden = !final;
   if (!final) return;
-  elements.questionTitle.textContent = currentScenario().answerByCapacity
-    ? "法定相続人になる人・資格をすべて選んでください"
-    : "法定相続人になる人を全員選んでください";
+  elements.questionTitle.textContent = answerMode === "shares"
+    ? "法定相続人と、その法定相続分を回答してください"
+    : currentScenario().answerByCapacity
+      ? "法定相続人になる人・資格をすべて選んでください"
+      : "法定相続人になる人を全員選んでください";
+  renderAnswerModeSwitch();
   renderAnswerOptions();
+  renderShareAnswerPanel();
+  elements.checkButton.textContent = answerMode === "shares"
+    ? "相続人と相続分を答え合わせ"
+    : "答え合わせをする";
   elements.checkButton.disabled = isRevealed;
   if (isRevealed) elements.questionHelp.textContent = "答えと理由を家系図の下に表示しています。";
   else updateQuestionHelp();
@@ -1263,8 +1419,7 @@ function render() {
 function selectScenario(index) {
   scenarioIndex = index;
   snapshotIndex = 0;
-  selectedPeople = new Set();
-  isRevealed = false;
+  clearAnswerState();
   render();
   elements.storyTitle.focus?.();
 }
@@ -1277,13 +1432,22 @@ elements.randomButton.addEventListener("click", () => {
 
 function moveToSnapshot(index) {
   snapshotIndex = Math.max(0, Math.min(index, currentScenario().events.length - 1));
-  selectedPeople = new Set();
-  isRevealed = false;
+  clearAnswerState();
   render();
 }
 
 elements.previousStepButton.addEventListener("click", () => moveToSnapshot(snapshotIndex - 1));
 elements.nextStepButton.addEventListener("click", () => moveToSnapshot(snapshotIndex + 1));
+elements.heirsModeButton.addEventListener("click", () => {
+  if (isRevealed) return;
+  answerMode = "heirs";
+  renderQuestion();
+});
+elements.sharesModeButton.addEventListener("click", () => {
+  if (isRevealed) return;
+  answerMode = "shares";
+  renderQuestion();
+});
 
 elements.checkButton.addEventListener("click", () => {
   isRevealed = true;
@@ -1293,6 +1457,8 @@ elements.checkButton.addEventListener("click", () => {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   elements.snapshotNote.textContent = selectedAnswerIsCorrect()
     ? "正解です。オレンジの枠と「✓ 法定相続人」の表示で、相続人と相続分を確認してください。"
+    : selectedHeirsAreCorrect() && answerMode === "shares"
+      ? "法定相続人の選択は正解です。入力した相続分と、結果欄の正しい相続分を見比べてください。"
     : hasMissedOneDualCapacity()
       ? "陸の2枚は同一人物ですが、代襲者と養子の両方の資格をそれぞれ選ぶ必要があります。"
       : "答え合わせを表示しました。「✓ 法定相続人」と表示された人物・資格と、選んだ内容を見比べてください。";
@@ -1301,8 +1467,7 @@ elements.checkButton.addEventListener("click", () => {
 });
 
 elements.retryButton.addEventListener("click", () => {
-  selectedPeople = new Set();
-  isRevealed = false;
+  clearAnswerState();
   renderTree();
   renderQuestion();
   renderResult();
