@@ -270,6 +270,133 @@ const scenarios = [
       ["順位", "光が第1順位の代襲相続人になるため、第3順位の淳には移りません。"],
     ],
   },
+  {
+    id: "exclusion-and-representation",
+    category: "廃除",
+    title: "廃除された子の枝を孫が代襲する",
+    summary: "子が廃除によって相続権を失った場合でも、その子の枝は孫へ続くことを確認します。",
+    facts: [
+      ["被相続人", "和也（かずや）"],
+      ["家族", "配偶者・子2人・孫1人"],
+      ["廃除", "子・玲奈について審判が確定"],
+    ],
+    events: [
+      { date: "2010", label: "家族", note: "和也には、配偶者の智子と2人の子・翔、玲奈がいます。", changedPeople: ["kazuya", "tomoko", "sho", "rena"] },
+      { date: "2018", label: "孫の出生", note: "玲奈の子として空が生まれました。", changedPeople: ["sora"] },
+      { date: "2024", label: "廃除の審判", note: "玲奈について、家庭裁判所の廃除の審判が確定したものとします。", changedPeople: ["rena"] },
+      { date: "2026", label: "相続開始", note: "和也が死亡しました。玲奈の枝を空が代襲するかを判定します。", changedPeople: ["kazuya"] },
+    ],
+    people: {
+      kazuya: { name: "和也", relation: "被相続人", diedStep: 3 },
+      tomoko: { name: "智子", relation: "配偶者" },
+      sho: { name: "翔", relation: "子" },
+      rena: { name: "玲奈", relation: "子・廃除", excludedStep: 2 },
+      sora: { name: "空", relation: "孫", parent: "rena", bornStep: 1 },
+    },
+    root: ["kazuya", "tomoko"],
+    candidateHeading: "第1順位｜子どもの枝",
+    branches: [
+      { label: "翔の枝", roots: ["sho"] },
+      { label: "玲奈の枝", roots: ["rena"] },
+    ],
+    answerOrder: ["tomoko", "sho", "rena", "sora"],
+    heirs: {
+      tomoko: { share: "1/2", note: "配偶者の取り分" },
+      sho: { share: "1/4", note: "翔の枝の取り分" },
+      sora: { share: "1/4", note: "廃除された玲奈の枝を代襲" },
+    },
+    nonHeirs: {
+      rena: "廃除によって相続権を失っています。ただし、玲奈の子・空は玲奈を代襲します。",
+    },
+    reasoning: [
+      ["廃除", "玲奈は廃除によって相続権を失うため、自身は相続人になりません。"],
+      ["代襲", "廃除は民法887条2項の代襲原因に含まれるため、玲奈の子・空が玲奈の枝を代襲します。"],
+      ["相続分", "配偶者が1/2、子の枝全体が1/2。翔の枝と玲奈の枝を各1/4とします。"],
+    ],
+  },
+  {
+    id: "renunciation-no-representation",
+    category: "相続放棄",
+    title: "相続放棄では孫が代襲しない",
+    summary: "子が相続放棄した場合、その子の子どもへ枝が続かない点を、廃除の事例と比較します。",
+    facts: [
+      ["被相続人", "直樹（なおき）"],
+      ["家族", "配偶者・子2人・孫1人"],
+      ["相続放棄", "子・美奈が家庭裁判所へ申述"],
+    ],
+    events: [
+      { date: "2010", label: "家族", note: "直樹には、配偶者の彩と2人の子・航太、美奈がいます。", changedPeople: ["naoki", "aya", "kota", "mina"] },
+      { date: "2018", label: "孫の出生", note: "美奈の子として悠人が生まれました。", changedPeople: ["yuto"] },
+      { date: "2026", label: "相続開始", note: "直樹が死亡しました。この時点では美奈も第1順位の相続人候補です。", changedPeople: ["naoki"] },
+      { date: "2026", label: "相続放棄", note: "美奈の相続放棄の申述が家庭裁判所に受理されたものとします。", changedPeople: ["mina"] },
+    ],
+    people: {
+      naoki: { name: "直樹", relation: "被相続人", diedStep: 2 },
+      aya: { name: "彩", relation: "配偶者" },
+      kota: { name: "航太", relation: "子" },
+      mina: { name: "美奈", relation: "子・相続放棄", renouncedStep: 3 },
+      yuto: { name: "悠人", relation: "孫", parent: "mina", bornStep: 1 },
+    },
+    root: ["naoki", "aya"],
+    candidateHeading: "第1順位｜子どもの枝",
+    branches: [
+      { label: "航太の枝", roots: ["kota"] },
+      { label: "美奈の枝", roots: ["mina"] },
+    ],
+    answerOrder: ["aya", "kota", "mina", "yuto"],
+    heirs: {
+      aya: { share: "1/2", note: "配偶者の取り分" },
+      kota: { share: "1/2", note: "相続放棄後に残る唯一の子" },
+    },
+    nonHeirs: {
+      mina: "相続放棄により、初めから相続人でなかったものとみなされます。",
+      yuto: "相続放棄は代襲原因ではないため、美奈を代襲しません。",
+    },
+    reasoning: [
+      ["放棄の効力", "美奈は相続放棄により、初めから相続人でなかったものとみなされます。"],
+      ["代襲なし", "民法887条2項は死亡・欠格・廃除を代襲原因としていますが、相続放棄は含みません。悠人は代襲しません。"],
+      ["相続分", "配偶者の彩が1/2、相続する唯一の子・航太が子全体の1/2を取得します。"],
+    ],
+  },
+  {
+    id: "renunciation-moves-to-ascendant",
+    category: "順位移動",
+    title: "唯一の子が放棄すると直系尊属へ移る",
+    summary: "第1順位の子が相続放棄し、孫が代襲しない結果、第2順位の母が相続人になる事例です。",
+    facts: [
+      ["被相続人", "春子（はるこ）"],
+      ["家族", "母・子・孫（配偶者なし）"],
+      ["相続放棄", "唯一の子・圭太が放棄"],
+    ],
+    events: [
+      { date: "2015", label: "家族", note: "春子には、母・富美、子・圭太、孫・七海がいます。父と配偶者はいません。", changedPeople: ["haruko", "fumi", "keita", "nanami"] },
+      { date: "2026", label: "相続開始", note: "春子が死亡しました。この時点では唯一の子・圭太が第1順位です。", changedPeople: ["haruko"] },
+      { date: "2026", label: "相続放棄", note: "圭太の相続放棄の申述が家庭裁判所に受理されたものとします。", changedPeople: ["keita"] },
+    ],
+    people: {
+      fumi: { name: "富美", relation: "母・第2順位" },
+      haruko: { name: "春子", relation: "被相続人", diedStep: 1 },
+      keita: { name: "圭太", relation: "子・相続放棄", parent: "haruko", renouncedStep: 2 },
+      nanami: { name: "七海", relation: "孫", parent: "keita" },
+    },
+    treeLayout: "direct-ascendant",
+    root: ["haruko"],
+    candidateHeading: "第1順位から第2順位への移動",
+    branches: [],
+    answerOrder: ["fumi", "keita", "nanami"],
+    heirs: {
+      fumi: { share: "全部", note: "相続する唯一の直系尊属" },
+    },
+    nonHeirs: {
+      keita: "相続放棄により、初めから相続人でなかったものとみなされます。",
+      nanami: "相続放棄は代襲原因ではないため、圭太を代襲しません。",
+    },
+    reasoning: [
+      ["第1順位", "圭太は相続放棄により、初めから相続人でなかったものとみなされます。七海も代襲しません。"],
+      ["順位移動", "第1順位の相続人がいなくなったため、民法889条により第2順位の直系尊属を検討します。"],
+      ["結論", "配偶者はおらず、最も近い直系尊属は母・富美だけなので、富美が全部を相続します。"],
+    ],
+  },
 ];
 
 let scenarioIndex = 0;
@@ -320,6 +447,14 @@ function isDead(person) {
   return person.diedStep !== undefined && person.diedStep <= snapshotIndex;
 }
 
+function isExcluded(person) {
+  return person.excludedStep !== undefined && person.excludedStep <= snapshotIndex;
+}
+
+function hasRenounced(person) {
+  return person.renouncedStep !== undefined && person.renouncedStep <= snapshotIndex;
+}
+
 function isFinalSnapshot() {
   return snapshotIndex === currentScenario().events.length - 1;
 }
@@ -334,6 +469,9 @@ function personCard(personId) {
   const selected = selectedPeople.has(personId);
   const finalDecedent = isFinalSnapshot() && person.relation === "被相続人";
   const changedThisStep = scenario.events[snapshotIndex].changedPeople?.includes(personId) ?? false;
+  const excluded = isExcluded(person);
+  const renounced = hasRenounced(person);
+  const legalStatus = excluded ? "廃除" : renounced ? "相続放棄" : "";
   const card = document.createElement(selectable ? "button" : "div");
   card.className = "person-card";
   card.dataset.person = personId;
@@ -357,6 +495,8 @@ function personCard(personId) {
 
   if (!isVisible(person)) card.classList.add("is-not-born");
   if (isDead(person)) card.classList.add("is-dead");
+  if (excluded) card.classList.add("is-excluded");
+  if (renounced) card.classList.add("is-renounced");
   if (changedThisStep && !finalDecedent) card.classList.add("has-current-change");
   if (finalDecedent) card.classList.add("is-decedent-final");
 
@@ -370,17 +510,23 @@ function personCard(personId) {
   }
 
   const state = selected && !isRevealed
-    ? isDead(person)
-      ? "● 選択済み（死亡）"
-      : "● 選択済み"
+    ? legalStatus
+      ? `● 選択済み（${legalStatus}）`
+      : isDead(person)
+        ? "● 選択済み（死亡）"
+        : "● 選択済み"
     : isDead(person)
       ? "死亡"
+      : !isRevealed && legalStatus
+        ? legalStatus
       : isRevealed && scenario.heirs[personId]
         ? "✓ 法定相続人"
         : isRevealed
           ? selectedPeople.has(personId)
-            ? "選択したが対象外"
-            : "対象外"
+            ? `選択したが対象外${legalStatus ? `（${legalStatus}）` : ""}`
+            : legalStatus
+              ? `対象外（${legalStatus}）`
+              : "対象外"
           : "生存";
   const share = isRevealed && scenario.heirs[personId]
     ? `<span class="person-share">${scenario.heirs[personId].share}</span>`
@@ -389,7 +535,7 @@ function personCard(personId) {
   card.innerHTML = `
     ${selected && !isRevealed ? '<span class="selection-mark" aria-hidden="true">選択中</span>' : ""}
     ${changedThisStep && !finalDecedent ? '<span class="change-mark">今回の変化</span>' : ""}
-    ${finalDecedent ? '<span class="decedent-mark">相続開始</span>' : ""}
+    ${finalDecedent ? `<span class="decedent-mark">${person.diedStep === snapshotIndex ? "相続開始" : "被相続人"}</span>` : ""}
     <span class="person-name">${person.name}</span>
     <span class="person-relation">${person.relation}</span>
     <span class="person-state">${state}</span>
@@ -543,6 +689,18 @@ function renderAdoptionSiblingsRowTree() {
   elements.treeStage.append(siblingTree);
 }
 
+function renderDirectAscendantTree() {
+  const ascendantTree = document.createElement("div");
+  ascendantTree.className = "direct-ascendant-tree";
+  ascendantTree.append(personCard("fumi"));
+
+  const descendants = document.createElement("div");
+  descendants.className = "descendants direct-ascendant-descendants";
+  descendants.append(descendantUnit("haruko"));
+  ascendantTree.append(descendants);
+  elements.treeStage.append(ascendantTree);
+}
+
 function renderTree() {
   const scenario = currentScenario();
   elements.treeStage.replaceChildren();
@@ -559,6 +717,11 @@ function renderTree() {
 
   if (scenario.treeLayout === "adoption-siblings-row") {
     renderAdoptionSiblingsRowTree();
+    return;
+  }
+
+  if (scenario.treeLayout === "direct-ascendant") {
+    renderDirectAscendantTree();
     return;
   }
 
