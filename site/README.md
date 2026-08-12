@@ -24,6 +24,7 @@ study-chosashi/
 │   ├── index.html                     # 教材一覧
 │   ├── assets/                        # トップページの共通素材
 │   ├── civil-rights-transitions/      # 権利変動教材の試作
+│   ├── cancellation-third-parties/    # 取消し前後の第三者を比べる試作教材
 │   ├── stair-floor-area/               # 階段床面積の算入判定
 │   ├── dust-chute-floor-area/          # 垂直設備の床面積算入
 │   └── inheritance-tree/              # 法定相続人・法定相続分の試作教材
@@ -39,6 +40,7 @@ study-chosashi/
 /
 ├── period-flashcards/
 ├── civil-rights-transitions/
+├── cancellation-third-parties/
 ├── stair-floor-area/
 ├── dust-chute-floor-area/
 └── inheritance-tree/
@@ -111,7 +113,7 @@ study-chosashi/
 
 ## 今後の優先順位
 
-1. GitHubへpushし、トップページと5教材をPagesで公開する
+1. GitHubへpushし、トップページと6教材をPagesで公開する
 2. スマートフォン表示、キーボード操作、アクセシビリティを確認する
 3. 権利変動アニメーターに確認問題を追加する
 4. 試作を使って学習効果を確かめてから題材を増やす
@@ -154,7 +156,7 @@ Viteアプリはリポジトリ名を含むURLでも素材を正しく読める�
 
 ## 今回の範囲
 
-トップページ、二重譲渡権利変動アニメーター、相続ツリー・ラボ、
+トップページ、二重譲渡権利変動アニメーター、取消し前後の第三者シーケンス、相続ツリー・ラボ、
 階段床面積・算入ビジュアライザーの試作、
 ダストシュート床面積ビジュアライザーの試作、
 既存の期間フラッシュカード、

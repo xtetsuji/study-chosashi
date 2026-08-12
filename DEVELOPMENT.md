@@ -25,6 +25,7 @@ pnpm --dir period-flashcards install
 
 ```bash
 pnpm --dir period-flashcards build
+node --test tests/cancellation-third-parties.test.js
 node scripts/build-site.mjs
 ```
 
@@ -123,6 +124,7 @@ TypeScriptやパッケージ依存が必要な場合は、`period-flashcards/` �
 ```text
 /
 ├── civil-rights-transitions/
+├── cancellation-third-parties/
 ├── inheritance-tree/
 ├── stair-floor-area/
 ├── dust-chute-floor-area/
