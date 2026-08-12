@@ -137,11 +137,12 @@
           <button class="advanced-close" id="advanced-close" type="button">発展を閉じる</button>
         </div>
         <p class="advanced-intro">
-          Bから取得したCが、さらにDへ売却しました。最初に見るのは、Dも取消し前に登場していたかです。
+          Bから取得したCが、さらにDへ売却しました。取消しの線がB→CとC→Dのどこに入るかを比べます。
         </p>
-        <div class="d-timing" role="group" aria-label="Dが取得した時期">
-          <button type="button" data-d-timing="before" aria-pressed="true">取消し前にC→D</button>
-          <button type="button" data-d-timing="after" aria-pressed="false">取消し後にC→D</button>
+        <div class="d-timing" role="group" aria-label="取消しが起きる時期">
+          <button type="button" data-d-timing="before" aria-pressed="true">C→Dの後に取消し</button>
+          <button type="button" data-d-timing="between" aria-pressed="false">B→CとC→Dの間に取消し</button>
+          <button type="button" data-d-timing="after" aria-pressed="false">B→Cの前に取消し</button>
         </div>
         <div class="protection-controls" aria-label="CとDの状態">
           <fieldset>
@@ -220,11 +221,15 @@
             反対に、Cが保護されなくても、取消し前に独立した利害関係を得たD自身が善意・無過失なら、Dを民法96条3項の第三者として検討します。
           </p>
           <p>
+            B→CとC→Dの間で取り消した場合は、まず取消し前第三者Cが96条3項で保護されるかを判断します。
+            Cが保護されればDはその地位を承継し、Cが保護されなければ、取消し後に登場したDとAを177条の登記の先後で比較する整理を採用しています。
+          </p>
+          <p>
             この部分は条文そのものではなく、第三者保護の効果と転得者の範囲に関する通説的な解釈です。
             参考：<a href="https://kato-seminar.jp/wp-content/uploads/2026/03/%E7%B7%8F%E3%81%BE%E3%81%8F%E3%82%8A%E8%AB%96%E8%A8%BC%E9%9B%86%E3%80%8C%E6%B0%91%E6%B3%95%E3%80%8D2026sample.pdf" target="_blank" rel="noreferrer">民法論証集の論点一覧（取消し前第三者・転得者）</a>
           </p>
         </details>
-        <p class="checked-date">内容確認基準日：2026年8月12日</p>
+        <p class="checked-date">内容確認基準日：2026年8月13日</p>
       </section>
 
       <footer>

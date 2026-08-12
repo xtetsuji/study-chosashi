@@ -224,6 +224,7 @@ const elements = {
   relation: byId("relation-value"),
   cRole: byId("c-role"),
   cActor: document.querySelector(".actor-head--c"),
+  cActorState: document.querySelector(".actor-head--c strong"),
   cancelMoment: byId("cancel-moment"),
   decision: byId("decision"),
   back: byId("back-button"),
@@ -331,6 +332,7 @@ function getEventResult(current) {
  */
 function renderAdvanced() {
   const isBefore = dTiming === "before";
+  const isBetween = dTiming === "between";
   const outcome = resolveAdvancedOutcome({
     timing: dTiming,
     cIsProtected,
@@ -344,7 +346,14 @@ function renderAdvanced() {
         { label: "C → D　転売", from: "c", to: "d", dEvent: true },
         { label: "A → B　取消し", from: "a", to: "b", cancel: true },
       ]
-    : [
+    : isBetween
+      ? [
+          { label: "A → B　詐欺による売買", from: "a", to: "b" },
+          { label: "B → C　転売", from: "b", to: "c" },
+          { label: "A → B　取消し", from: "a", to: "b", cancel: true },
+          { label: "C → D　転売", from: "c", to: "d", dEvent: true },
+        ]
+      : [
         { label: "A → B　詐欺による売買", from: "a", to: "b" },
         { label: "A → B　取消し", from: "a", to: "b", cancel: true },
         { label: "B → C　転売", from: "b", to: "c" },
@@ -384,6 +393,22 @@ function renderAdvanced() {
       <p>${body}</p>
       <p class="advanced-route">保護ルート：${outcome.route}</p>
       <p class="advanced-caution">CからDへの承継は、96条3項により保護された者が確定的に権利を取得するとする通説的な整理によります。</p>`;
+  } else if (isBetween) {
+    const cRouteApplies = outcome.code === "between_via_c";
+    const winnerIsA = outcome.protectedParty === "A";
+    elements.advancedAnswer.innerHTML = cRouteApplies
+      ? `
+        <p class="advanced-answer__label">取消しの線より上にC、下にDがいる</p>
+        <h3>Dは保護されたCの地位を承継する</h3>
+        <p>Cは取消し前第三者として96条3項で保護され、確定的に取得した権利をDへ移します。D自身の善意・無過失や登記の先後は、この結論を左右しません。</p>
+        <p class="advanced-route">第1段階：Cを96条3項で保護 → 第2段階：Dが承継</p>
+        <p class="advanced-caution">CからDへの承継は、保護されたCが確定的に権利を取得するとする通説的な整理によります。</p>`
+      : `
+        <p class="advanced-answer__label">取消しの線より上にC、下にDがいる</p>
+        <h3>${winnerIsA ? "AがDへ所有権復帰を対抗できる" : "DがAへ取得を対抗できる"}</h3>
+        <p>Cは96条3項で保護されないため、取消し時点ではAへの所有権復帰がCとの関係でも認められます。その後にDが登場するので、この基本事例では${winnerIsA ? "Aの復帰登記" : "Dまでの移転登記"}が先かを177条で比較します。</p>
+        <p class="advanced-route">第1段階：Cは非保護 → 第2段階：${winnerIsA ? "A" : "D"}が先に登記</p>
+        <p class="advanced-caution">Dの善意・無過失は結論を左右しません。単なる悪意を超える背信的悪意者は、この教材では除外しています。</p>`;
   } else {
     const winnerIsA = outcome.protectedParty === "A";
     elements.advancedAnswer.innerHTML = `
@@ -394,7 +419,7 @@ function renderAdvanced() {
       <p class="advanced-caution">177条では単なる悪意も原則として排除されませんが、背信的悪意者は別です。この教材では背信的悪意者を除外しています。</p>`;
   }
 
-  elements.advancedRegistration.hidden = isBefore;
+  elements.advancedRegistration.hidden = isBefore || (isBetween && cIsProtected);
   elements.advancedActorC.dataset.state = cIsProtected ? "善無" : "非保護";
   elements.advancedActorD.dataset.state = dIsProtected ? "善無" : "非保護";
   elements.advancedActorC.classList.toggle("is-unprotected", !cIsProtected);
@@ -532,6 +557,14 @@ function render() {
   elements.relation.textContent = current.relation;
   elements.cRole.textContent = scenario.cRole;
   elements.cActor.classList.toggle("is-absent", scenarioKey === "after" && step < 4);
+  const cState = scenarioKey === "before" && step === scenario.events.length - 1 && result
+    ? (result === "protected" ? "善無" : "非保護")
+    : null;
+  if (cState) elements.cActorState.dataset.state = cState;
+  else elements.cActorState.removeAttribute("data-state");
+  if (cState) elements.cActorState.setAttribute("aria-label", `C、${cState === "善無" ? "善意・無過失" : "保護要件を満たさない"}`);
+  else elements.cActorState.removeAttribute("aria-label");
+  elements.cActorState.classList.toggle("is-unprotected", cState === "非保護");
   const effectFlow = current.effectOutcome
     ? `<div class="effect-flow" aria-label="取消しの効果の二段階">
         <span><b>1</b>取消しにより<br />所有権復帰の効果が発生</span>

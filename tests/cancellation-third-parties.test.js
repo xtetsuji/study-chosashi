@@ -37,6 +37,21 @@ test("取消し後はC・Dの善意無過失によらず登記先行者が決ま
   }
 });
 
+test("B→CとC→Dの間の取消しはCの保護後に登記の先後を判定する", () => {
+  for (const dIsProtected of [true, false]) {
+    const viaC = resolveAdvancedOutcome({ timing: "between", cIsProtected: true, dIsProtected, winner: "a" });
+    assert.equal(viaC.code, "between_via_c");
+    assert.equal(viaC.protectedParty, "D");
+
+    const aWins = resolveAdvancedOutcome({ timing: "between", cIsProtected: false, dIsProtected, winner: "a" });
+    const dWins = resolveAdvancedOutcome({ timing: "between", cIsProtected: false, dIsProtected, winner: "d" });
+    assert.equal(aWins.code, "between_a_registered_first");
+    assert.equal(aWins.protectedParty, "A");
+    assert.equal(dWins.code, "between_d_registered_first");
+    assert.equal(dWins.protectedParty, "D");
+  }
+});
+
 test("URL状態を復元できる", () => {
   const state = readUrlState(
     "?scenario=after&step=5&result=c&advanced=1&dTiming=after&cState=unprotected&dState=protected&dWinner=a",
@@ -62,6 +77,15 @@ test("不正なURL状態は安全な範囲へ丸める", () => {
   assert.equal(state.advancedOpen, false);
 });
 
+test("中間タイミングをURL状態から復元できる", () => {
+  const state = readUrlState(
+    "?scenario=before&step=5&result=protected&advanced=1&dTiming=between&cState=unprotected&dState=protected&dWinner=a",
+    { before: 5, after: 5 },
+  );
+  assert.equal(state.dTiming, "between");
+  assert.equal(state.advancedWinner, "a");
+});
+
 test("表示状態を共有用クエリーへ変換する", () => {
   const search = buildUrlSearch({
     scenario: "before",
@@ -76,6 +100,21 @@ test("表示状態を共有用クエリーへ変換する", () => {
   assert.equal(search, "?scenario=before&step=5&result=protected&advanced=1&dTiming=before&cState=protected&dState=unprotected");
 });
 
+test("中間タイミングでCが非保護なら登記先行者もURLへ保存する", () => {
+  const search = buildUrlSearch({
+    scenario: "before",
+    step: 5,
+    result: "unprotected",
+    advancedOpen: true,
+    dTiming: "between",
+    cIsProtected: false,
+    dIsProtected: true,
+    advancedWinner: "a",
+  });
+  assert.match(search, /dTiming=between/);
+  assert.match(search, /dWinner=a/);
+});
+
 test("キーボード操作と動き抑制に必要なHTML・CSSを維持する", () => {
   const root = path.resolve(__dirname, "../site/cancellation-third-parties");
   const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
@@ -86,6 +125,7 @@ test("キーボード操作と動き抑制に必要なHTML・CSSを維持する"
   assert.ok(staticButtons.length > 0);
   assert.ok(staticButtons.every((button) => /type="button"/.test(button)));
   assert.match(app, /type="button"/);
+  assert.match(html, /data-d-timing="between"/);
   assert.match(html, /aria-live="polite"/);
   assert.match(css, /@media \(max-width: 720px\)/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
