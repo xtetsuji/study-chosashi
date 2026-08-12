@@ -1,8 +1,9 @@
 /**
  * @typedef {"before" | "after"} ScenarioKey
+ * @typedef {"before" | "between" | "after"} AdvancedTiming
  * @typedef {"protected" | "unprotected" | "a" | "c" | null} ScenarioResult
  * @typedef {"a" | "d"} AdvancedWinner
- * @typedef {"both_routes" | "via_c" | "via_d" | "no_route" | "a_registered_first" | "d_registered_first"} AdvancedOutcomeCode
+ * @typedef {"both_routes" | "via_c" | "via_d" | "no_route" | "between_via_c" | "between_a_registered_first" | "between_d_registered_first" | "a_registered_first" | "d_registered_first"} AdvancedOutcomeCode
  */
 
 /**
@@ -19,7 +20,7 @@
  * @property {number} step 表示中のステップ番号
  * @property {ScenarioResult} result 基本事例で選択された結論
  * @property {boolean} advancedOpen 発展問題を開いているか
- * @property {ScenarioKey} dTiming Dが取消し前・後のどちらに登場するか
+ * @property {AdvancedTiming} dTiming Dが取消し前・途中・後のどこで登場するか
  * @property {boolean} cIsProtected Cが善意・無過失か
  * @property {boolean} dIsProtected Dが善意・無過失か
  * @property {AdvancedWinner} advancedWinner 取消し後の発展問題で先に登記した者
@@ -27,7 +28,7 @@
 
 /**
  * @typedef {Object} CancellationLogicApi
- * @property {(input: {timing: ScenarioKey, cIsProtected: boolean, dIsProtected: boolean, winner: AdvancedWinner}) => AdvancedOutcome} resolveAdvancedOutcome 発展問題の結論を返す
+ * @property {(input: {timing: AdvancedTiming, cIsProtected: boolean, dIsProtected: boolean, winner: AdvancedWinner}) => AdvancedOutcome} resolveAdvancedOutcome 発展問題の結論を返す
  * @property {(search: string, lastSteps: Record<ScenarioKey, number>) => LessonState} readUrlState URLから教材の状態を復元する
  * @property {(state: LessonState) => string} buildUrlSearch 教材の状態をクエリ文字列へ変換する
  */
@@ -54,7 +55,7 @@ function createCancellationLogic() {
    * CからDへの転売を含む発展問題の結論を判定する。
    *
    * @param {Object} input 判定に必要な状態
-   * @param {ScenarioKey} input.timing Dが取消し前・後のどちらに登場するか
+   * @param {AdvancedTiming} input.timing Dが取消し前・途中・後のどこで登場するか
    * @param {boolean} input.cIsProtected Cが善意・無過失か
    * @param {boolean} input.dIsProtected Dが善意・無過失か
    * @param {AdvancedWinner} input.winner 取消し後の事例で先に登記した者
@@ -66,6 +67,18 @@ function createCancellationLogic() {
       if (cIsProtected) return { code: "via_c", protectedParty: "D", route: "Cからの承継", subjectiveStateDecisive: true };
       if (dIsProtected) return { code: "via_d", protectedParty: "D", route: "D自身", subjectiveStateDecisive: true };
       return { code: "no_route", protectedParty: "A", route: "なし", subjectiveStateDecisive: true };
+    }
+
+    if (timing === "between") {
+      if (cIsProtected) {
+        return { code: "between_via_c", protectedParty: "D", route: "保護されたCからの承継", subjectiveStateDecisive: true };
+      }
+      return {
+        code: winner === "a" ? "between_a_registered_first" : "between_d_registered_first",
+        protectedParty: winner === "a" ? "A" : "D",
+        route: "Cが非保護のため登記の先後",
+        subjectiveStateDecisive: true,
+      };
     }
 
     return {
@@ -98,7 +111,7 @@ function createCancellationLogic() {
       step,
       result,
       advancedOpen: result !== null && params.get("advanced") === "1",
-      dTiming: params.get("dTiming") === "after" ? "after" : "before",
+      dTiming: ["before", "between", "after"].includes(params.get("dTiming")) ? params.get("dTiming") : "before",
       cIsProtected: params.get("cState") !== "unprotected",
       dIsProtected: params.get("dState") !== "unprotected",
       advancedWinner: params.get("dWinner") === "a" ? "a" : "d",
@@ -121,7 +134,9 @@ function createCancellationLogic() {
       params.set("dTiming", state.dTiming);
       params.set("cState", state.cIsProtected ? "protected" : "unprotected");
       params.set("dState", state.dIsProtected ? "protected" : "unprotected");
-      if (state.dTiming === "after") params.set("dWinner", state.advancedWinner);
+      if (state.dTiming === "after" || (state.dTiming === "between" && !state.cIsProtected)) {
+        params.set("dWinner", state.advancedWinner);
+      }
     }
     return `?${params.toString()}`;
   }
