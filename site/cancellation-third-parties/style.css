@@ -53,6 +53,8 @@ h1 span { color: var(--red); }
 .lesson-topline { display: flex; align-items: start; justify-content: space-between; gap: 1rem; }
 .lesson h2 { font-size: clamp(1.7rem, 4vw, 2.8rem); }
 .text-button { border: 0; border-bottom: 1px solid #89a29e; background: transparent; color: #c9d5d1; cursor: pointer; }
+.lesson-actions { position: relative; display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: flex-end; }
+.lesson-actions #share-status { position: absolute; top: 2rem; right: 0; color: #d4eea1; font-size: 0.68rem; font-weight: 800; }
 .legend { display: flex; flex-wrap: wrap; gap: 0.65rem 1.4rem; margin-top: 1.5rem; color: #c9d5d1; font-size: 0.72rem; }
 .legend-item { display: inline-flex; gap: 0.45rem; align-items: center; }
 .legend-item i { display: inline-block; width: 1.7rem; height: 0.48rem; border-radius: 1rem; background: currentColor; }
@@ -216,6 +218,9 @@ h1 span { color: var(--red); }
 .law-note { padding: clamp(1.5rem, 4vw, 3rem); border: 1px solid #c9c2b6; background: var(--panel); }
 .law-note ul { margin: 1.5rem 0; padding-left: 1.4rem; line-height: 1.9; }
 .law-note > p { color: var(--muted); font-size: 0.82rem; line-height: 1.8; }
+.scholar-note { margin-top: 1.2rem; padding: 0.9rem 1rem; border: 1px dashed #b8b1a6; background: #f5f0e7; }
+.scholar-note summary { color: var(--red); font-size: 0.85rem; font-weight: 900; cursor: pointer; }
+.scholar-note p { color: var(--muted); font-size: 0.8rem; line-height: 1.8; }
 .law-note .checked-date { color: var(--red); font-weight: 800; }
 footer { padding: 2rem 0 0; color: #727a76; font-size: 0.72rem; text-align: center; }
 
@@ -224,6 +229,9 @@ footer { padding: 2rem 0 0; color: #727a76; font-size: 0.72rem; text-align: cent
   .app-header, .scenario-picker { grid-template-columns: 1fr; gap: 1.25rem; }
   .assumption { grid-template-columns: 1fr; gap: 0.25rem; }
   .segmented { grid-template-columns: 1fr; }
+  .lesson-topline { display: block; }
+  .lesson-actions { margin-top: 1rem; justify-content: flex-start; }
+  .lesson-actions #share-status { right: auto; left: 0; }
   .sequence { min-height: 430px; }
   .actor-head { width: 28%; }
   .actor-head strong { width: 2.8rem; height: 2.8rem; }

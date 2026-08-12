@@ -172,14 +172,21 @@ const scenarios = {
   },
 };
 
-let scenarioKey = "before";
-let step = 0;
-let result = null;
+const { resolveAdvancedOutcome, readUrlState, buildUrlSearch } = window.CancellationThirdPartyLogic;
+const initialState = readUrlState(window.location.search, {
+  before: scenarios.before.events.length - 1,
+  after: scenarios.after.events.length - 1,
+});
+
+let scenarioKey = initialState.scenario;
+let step = initialState.step;
+let result = initialState.result;
 let playTimer = null;
-let dTiming = "before";
-let cIsProtected = true;
-let dIsProtected = true;
-let advancedWinner = "d";
+let dTiming = initialState.dTiming;
+let cIsProtected = initialState.cIsProtected;
+let dIsProtected = initialState.dIsProtected;
+let advancedWinner = initialState.advancedWinner;
+let urlSyncEnabled = false;
 
 const byId = (id) => document.getElementById(id);
 const elements = {
@@ -199,6 +206,8 @@ const elements = {
   next: byId("next-button"),
   play: byId("play-button"),
   reset: byId("reset-button"),
+  share: byId("share-button"),
+  shareStatus: byId("share-status"),
   advancedEntry: byId("advanced-entry"),
   advancedOpen: byId("advanced-open"),
   advancedPanel: byId("advanced-panel"),
@@ -222,6 +231,42 @@ function stopPlaying() {
   elements.play.textContent = "▶ 自動再生";
 }
 
+function syncUrlState() {
+  const search = buildUrlSearch({
+    scenario: scenarioKey,
+    step,
+    result,
+    advancedOpen: !elements.advancedPanel.hidden,
+    dTiming,
+    cIsProtected,
+    dIsProtected,
+    advancedWinner,
+  });
+  const url = new URL(window.location.href);
+  url.search = search;
+  window.history.replaceState(null, "", url.href);
+}
+
+async function copyCurrentUrl() {
+  syncUrlState();
+  const url = window.location.href;
+  try {
+    await navigator.clipboard.writeText(url);
+  } catch {
+    const input = document.createElement("input");
+    input.value = url;
+    input.setAttribute("readonly", "");
+    input.style.position = "fixed";
+    input.style.opacity = "0";
+    document.body.append(input);
+    input.select();
+    document.execCommand("copy");
+    input.remove();
+  }
+  elements.shareStatus.textContent = "コピーしました";
+  window.setTimeout(() => { elements.shareStatus.textContent = ""; }, 1800);
+}
+
 function getEventResult(current) {
   if (!result) return current;
   if (scenarioKey === "before") {
@@ -236,6 +281,12 @@ function getEventResult(current) {
 
 function renderAdvanced() {
   const isBefore = dTiming === "before";
+  const outcome = resolveAdvancedOutcome({
+    timing: dTiming,
+    cIsProtected,
+    dIsProtected,
+    winner: advancedWinner,
+  });
   const items = isBefore
     ? [
         { label: "A → B　詐欺による売買", from: "a", to: "b" },
@@ -264,32 +315,27 @@ function renderAdvanced() {
   if (isBefore) {
     let heading;
     let body;
-    let route;
-    if (cIsProtected && dIsProtected) {
+    if (outcome.code === "both_routes") {
       heading = "Dは保護される";
       body = "CもDも善意・無過失です。D自身が96条3項の第三者として保護されるうえ、保護されたCの地位を承継するルートもあります。";
-      route = "保護ルート：C・Dの両方";
-    } else if (cIsProtected) {
+    } else if (outcome.code === "via_c") {
       heading = "DはCの保護された地位を承継する";
       body = "D自身が善意・無過失でなくても、Cは96条3項により確定的に保護されています。通説的な整理では、DはCからその権利を承継します。";
-      route = "保護ルート：Cからの承継";
-    } else if (dIsProtected) {
+    } else if (outcome.code === "via_d") {
       heading = "Cは保護されなくても、Dは保護される";
       body = "Dは取消し前に独立した法律上の利害関係を取得しています。D自身が善意・無過失なら、96条3項の第三者として保護され得ます。";
-      route = "保護ルート：D自身";
     } else {
       heading = "C・Dとも96条3項では保護されない";
       body = "CもDも善意・無過失の要件を満たしません。Aは取消しの効果をDに対抗でき、所有権復帰を主張できます。";
-      route = "保護ルート：なし";
     }
     elements.advancedAnswer.innerHTML = `
       <p class="advanced-answer__label">取消しの線より上にC・Dがいる</p>
       <h3>${heading}</h3>
       <p>${body}</p>
-      <p class="advanced-route">${route}</p>
+      <p class="advanced-route">保護ルート：${outcome.route}</p>
       <p class="advanced-caution">CからDへの承継は、96条3項により保護された者が確定的に権利を取得するとする通説的な整理によります。</p>`;
   } else {
-    const winnerIsA = advancedWinner === "a";
+    const winnerIsA = outcome.protectedParty === "A";
     elements.advancedAnswer.innerHTML = `
       <p class="advanced-answer__label">取消しの線より下にC・Dがいる</p>
       <h3>${winnerIsA ? "AがDへ所有権復帰を対抗できる" : "DがAへ取得を対抗できる"}</h3>
@@ -316,6 +362,7 @@ function renderAdvanced() {
   elements.advancedWinnerButtons.forEach((button) => {
     button.setAttribute("aria-pressed", String(button.dataset.advancedWinner === advancedWinner));
   });
+  if (urlSyncEnabled) syncUrlState();
 }
 
 function partyFromValue(value) {
@@ -434,6 +481,7 @@ function render() {
   elements.scenarioButtons.forEach((button) => {
     button.setAttribute("aria-pressed", String(button.dataset.scenario === scenarioKey));
   });
+  if (urlSyncEnabled) syncUrlState();
 }
 
 function reset() {
@@ -467,17 +515,20 @@ elements.back.addEventListener("click", () => {
 });
 
 elements.reset.addEventListener("click", reset);
+elements.share.addEventListener("click", copyCurrentUrl);
 
 elements.advancedOpen.addEventListener("click", () => {
   const willOpen = elements.advancedPanel.hidden;
   elements.advancedPanel.hidden = !willOpen;
   elements.advancedOpen.setAttribute("aria-expanded", String(willOpen));
   if (willOpen) renderAdvanced();
+  else if (urlSyncEnabled) syncUrlState();
 });
 
 elements.advancedClose.addEventListener("click", () => {
   elements.advancedPanel.hidden = true;
   elements.advancedOpen.setAttribute("aria-expanded", "false");
+  if (urlSyncEnabled) syncUrlState();
   elements.advancedOpen.focus();
 });
 
@@ -531,3 +582,10 @@ elements.play.addEventListener("click", () => {
 });
 
 render();
+if (initialState.advancedOpen && !elements.advancedEntry.hidden) {
+  elements.advancedPanel.hidden = false;
+  elements.advancedOpen.setAttribute("aria-expanded", "true");
+  renderAdvanced();
+}
+urlSyncEnabled = true;
+syncUrlState();
