@@ -172,6 +172,24 @@ const scenarios = {
   },
 };
 
+/**
+ * @typedef {Object} ScenarioEvent
+ * @property {string} title ステップの見出し
+ * @property {string} label シーケンス図に表示する出来事
+ * @property {string} from 出来事の起点となる当事者
+ * @property {string} to 出来事の終点となる当事者
+ * @property {string} owner 実体上の所有関係
+ * @property {string} registry 登記名義
+ * @property {string} rule 適用条文または判断ルール
+ * @property {string} relation 問題となる当事者間の関係
+ * @property {string} conclusion その時点の結論
+ * @property {string} detail 結論の補足説明
+ * @property {string} next 次の操作を示す文言
+ * @property {boolean} [cancel] 取消しが起きるステップか
+ * @property {"before" | "after"} [decision] 選択問題の種類
+ * @property {string} [effectOutcome] 取消しの効果が第三者へ及ぶかの表示
+ */
+
 const { resolveAdvancedOutcome, readUrlState, buildUrlSearch } = window.CancellationThirdPartyLogic;
 const initialState = readUrlState(window.location.search, {
   before: scenarios.before.events.length - 1,
@@ -188,6 +206,12 @@ let dIsProtected = initialState.dIsProtected;
 let advancedWinner = initialState.advancedWinner;
 let urlSyncEnabled = false;
 
+/**
+ * 指定したIDを持つ要素を取得する。
+ *
+ * @param {string} id 取得する要素のID
+ * @returns {HTMLElement | null} 該当する要素。存在しない場合は`null`
+ */
 const byId = (id) => document.getElementById(id);
 const elements = {
   title: byId("lesson-title"),
@@ -224,6 +248,11 @@ const elements = {
   scenarioButtons: [...document.querySelectorAll("[data-scenario]")],
 };
 
+/**
+ * 自動再生を停止し、再生ボタンを初期表示へ戻す。
+ *
+ * @returns {void}
+ */
 function stopPlaying() {
   if (playTimer) window.clearInterval(playTimer);
   playTimer = null;
@@ -231,6 +260,11 @@ function stopPlaying() {
   elements.play.textContent = "▶ 自動再生";
 }
 
+/**
+ * 現在の教材状態を、ページ遷移を起こさずURLへ反映する。
+ *
+ * @returns {void}
+ */
 function syncUrlState() {
   const search = buildUrlSearch({
     scenario: scenarioKey,
@@ -247,6 +281,11 @@ function syncUrlState() {
   window.history.replaceState(null, "", url.href);
 }
 
+/**
+ * 現在の教材状態を含むURLをクリップボードへコピーする。
+ *
+ * @returns {Promise<void>}
+ */
 async function copyCurrentUrl() {
   syncUrlState();
   const url = window.location.href;
@@ -267,6 +306,12 @@ async function copyCurrentUrl() {
   window.setTimeout(() => { elements.shareStatus.textContent = ""; }, 1800);
 }
 
+/**
+ * 学習者が選んだ回答を現在のステップ表示へ反映する。
+ *
+ * @param {ScenarioEvent} current 回答反映前のステップ情報
+ * @returns {ScenarioEvent} 所有関係・登記・説明へ回答を反映したステップ情報
+ */
 function getEventResult(current) {
   if (!result) return current;
   if (scenarioKey === "before") {
@@ -279,6 +324,11 @@ function getEventResult(current) {
     : { ...current, owner: "C（Aに対抗できる）", registry: "C", relation: "C → A　取得を対抗できる", conclusion: "Cが先に移転登記を備え、Aへ取得を対抗できます。", detail: "Aは取消しによる所有権復帰をCに対抗できません。単なる悪意だけでは結論は変わりません。" };
 }
 
+/**
+ * CからDへの転売を含む発展問題のシーケンス図と判定結果を描画する。
+ *
+ * @returns {void}
+ */
 function renderAdvanced() {
   const isBefore = dTiming === "before";
   const outcome = resolveAdvancedOutcome({
@@ -365,6 +415,12 @@ function renderAdvanced() {
   if (urlSyncEnabled) syncUrlState();
 }
 
+/**
+ * 所有者・登記名義の表示文から対応する当事者コードを取り出す。
+ *
+ * @param {string} value 所有関係または登記名義の表示文
+ * @returns {"a" | "b" | "c" | null} 当事者コード。判定できない場合は`null`
+ */
 function partyFromValue(value) {
   if (value.startsWith("A")) return "a";
   if (value.startsWith("B")) return "b";
@@ -372,6 +428,12 @@ function partyFromValue(value) {
   return null;
 }
 
+/**
+ * 実体上の所有関係と登記名義を示す状態トークンを生成する。
+ *
+ * @param {ScenarioEvent} event 表示対象のステップ情報
+ * @returns {string} 状態トークンのHTML文字列
+ */
 function stateTokens(event) {
   const tokens = [];
   if (event.owner.includes("A と C")) {
@@ -386,6 +448,12 @@ function stateTokens(event) {
   return tokens.join("");
 }
 
+/**
+ * 現在の進行状況に合わせて基本事例のシーケンス図を描画する。
+ *
+ * @param {ScenarioEvent[]} events 表示する基本事例の全ステップ
+ * @returns {void}
+ */
 function renderEvents(events) {
   elements.events.innerHTML = events.map((event, index) => {
     if (index === 0) return "";
@@ -405,6 +473,12 @@ function renderEvents(events) {
   }).join("");
 }
 
+/**
+ * 最終ステップの判断ボタンを描画し、回答操作を設定する。
+ *
+ * @param {ScenarioEvent} current 表示中のステップ情報
+ * @returns {void}
+ */
 function renderDecision(current) {
   if (!current.decision) {
     elements.decision.hidden = true;
@@ -439,6 +513,11 @@ function renderDecision(current) {
   });
 }
 
+/**
+ * 現在の事例・ステップ・回答に基づいて教材画面全体を描画する。
+ *
+ * @returns {void}
+ */
 function render() {
   const scenario = scenarios[scenarioKey];
   const baseEvent = scenario.events[step];
@@ -484,6 +563,11 @@ function render() {
   if (urlSyncEnabled) syncUrlState();
 }
 
+/**
+ * 現在の基本事例を先頭ステップへ戻し、回答と発展問題を閉じる。
+ *
+ * @returns {void}
+ */
 function reset() {
   stopPlaying();
   step = 0;
