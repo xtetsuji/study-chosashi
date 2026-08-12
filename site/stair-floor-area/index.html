@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="階段部分を上階床面積へ算入するか、吹抜けと手すりの状態から判断する図解ドリル"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <title>階段床面積・算入ビジュアライザー</title>
+  </head>
+  <body>
+    <main class="app-shell">
+      <nav class="back-nav"><a href="../">← 学習ツール一覧</a></nav>
+
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">表示登記・床面積</p>
+          <h1>階段床面積<br /><span>算入ビジュアライザー</span></h1>
+        </div>
+        <p class="intro">
+          条件を自由に動かして観察し、クイズでも確認。階段部分を上階の床面積へ算入するか判断します。
+        </p>
+      </header>
+
+      <section class="principle" aria-labelledby="principle-title">
+        <p class="principle__number" aria-hidden="true">115</p>
+        <div>
+          <p class="eyebrow">判断の出発点</p>
+          <h2 id="principle-title">壁などの区画で囲まれた部分が原則</h2>
+          <p>
+            吹抜けは例外的に不算入です。そこで、階段と吹抜けの間に「壁の用をなす区画」があるかを観察します。
+          </p>
+        </div>
+      </section>
+
+      <section class="mode-section" aria-labelledby="mode-title">
+        <div>
+          <p class="eyebrow">LEARNING MODE</p>
+          <h2 id="mode-title">動かして観察、または問題で確認</h2>
+        </div>
+        <div class="mode-switch" role="group" aria-label="学習モード">
+          <button type="button" id="observe-mode-button" data-mode="observe" aria-pressed="true">観察モード</button>
+          <button type="button" id="quiz-mode-button" data-mode="quiz" aria-pressed="false">クイズモード</button>
+        </div>
+      </section>
+
+      <section class="case-section" aria-label="学習条件">
+        <div id="explore-selector">
+          <div class="section-heading section-heading--explore">
+            <div>
+              <p class="eyebrow">FREE EXPLORATION</p>
+              <h2 id="case-heading">条件を自由に動かす</h2>
+            </div>
+            <p>変更すると図と判定がすぐに変わります</p>
+          </div>
+          <div class="explore-controls">
+            <label class="void-control" for="void-toggle">
+              <span>
+                <strong>階段脇に吹抜けがある</strong>
+                <small>チェックを外すと、上階床が続く状態になります。</small>
+              </span>
+              <input id="void-toggle" type="checkbox" checked />
+            </label>
+            <fieldset class="side-controls">
+              <legend>階段脇（吹抜け側）の区画</legend>
+              <label><input type="radio" name="stair-side" value="wall" /><span>壁</span></label>
+              <label><input type="radio" name="stair-side" value="waist" checked /><span>腰壁手すり</span></label>
+              <label><input type="radio" name="stair-side" value="grid" /><span>格子手すり</span></label>
+            </fieldset>
+          </div>
+          <p class="scope-note">反対側には壁があるものとし、事務連絡の6類型の範囲で比較します。</p>
+        </div>
+
+        <div id="quiz-selector" hidden>
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">6 CASES</p>
+            <h2>事例を選ぶ</h2>
+          </div>
+          <p id="progress">事例 1 / 6</p>
+        </div>
+        <div class="case-tabs" id="case-tabs" role="tablist" aria-label="階段の6事例"></div>
+        </div>
+      </section>
+
+      <section class="study-stage" aria-labelledby="case-title">
+        <div class="diagram-column">
+          <div class="diagram-heading">
+            <div>
+              <p class="case-kicker" id="case-kicker">事例1</p>
+              <h2 id="case-title">両面が壁で囲まれている階段</h2>
+            </div>
+            <span class="condition-badge" id="void-badge">吹抜けなし</span>
+          </div>
+
+          <div class="floor-plan" id="floor-plan" aria-label="2階平面の模式図">
+            <div class="plan-caption">2階平面・模式図</div>
+            <div class="room-zone counted-zone">
+              <span>上階床</span>
+              <small>常に算入</small>
+            </div>
+            <div class="stair-zone" id="stair-zone">
+              <div class="stair-fill" aria-hidden="true"></div>
+              <div class="stair-lines" aria-hidden="true"></div>
+              <span class="stair-label">階段部分</span>
+              <span class="up-arrow" aria-hidden="true">↑</span>
+              <div class="fixed-wall" aria-hidden="true"></div>
+              <div class="stair-side" id="stair-side" aria-hidden="true"></div>
+            </div>
+            <div class="adjacent-zone counted-zone" id="adjacent-zone">
+              <span id="adjacent-label">上階床</span>
+              <small id="adjacent-note">床が続く</small>
+            </div>
+            <span class="side-label" id="side-label">壁</span>
+          </div>
+
+          <div class="legend" aria-label="図の凡例">
+            <span><i class="legend__hatch"></i>床面積に算入</span>
+            <span><i class="legend__plain"></i>未判定／不算入</span>
+          </div>
+          <p class="diagram-note">構造の違いを比較するための模式図です。寸法や縮尺は実際の建物を表しません。</p>
+        </div>
+
+        <div class="answer-column">
+          <p class="eyebrow" id="answer-eyebrow">LIVE RESULT</p>
+          <h2 id="answer-title">条件に応じた判定</h2>
+          <div class="answer-buttons" id="answer-buttons">
+            <button type="button" data-answer="include">算入する</button>
+            <button type="button" data-answer="exclude">算入しない</button>
+          </div>
+
+          <div class="feedback" id="feedback" aria-live="polite" hidden>
+            <p class="feedback__verdict" id="verdict"></p>
+            <p class="feedback__result" id="result"></p>
+            <ol class="reasoning">
+              <li><span>原則</span><p id="rule-text"></p></li>
+              <li><span>当てはめ</span><p id="application-text"></p></li>
+              <li><span>結論</span><p id="conclusion-text"></p></li>
+            </ol>
+          </div>
+
+          <button class="next-button" id="next-button" type="button" hidden>次の事例へ →</button>
+        </div>
+      </section>
+
+      <section class="source-note" aria-labelledby="source-title">
+        <p class="eyebrow">LEGAL BASIS</p>
+        <h2 id="source-title">根拠と教材の範囲</h2>
+        <div class="source-grid">
+          <div>
+            <h3>不動産登記規則第115条</h3>
+            <p>
+              建物の床面積は、各階ごとに壁その他の区画の中心線で囲まれた部分の水平投影面積により定めます。
+            </p>
+            <a href="https://laws.e-gov.go.jp/law/417M60000010018#Mp-At_115" target="_blank" rel="noreferrer">e-Gov法令検索で確認 ↗</a>
+          </div>
+          <div>
+            <h3>令和4年6月23日事務連絡</h3>
+            <p>
+              「建物の床面積の算定における階段部分の上階床面積への算入等の取扱いについて」の別紙1にある6事例を、独自の模式図で再構成しています。
+            </p>
+            <a href="https://miyagi-chousashi.jp/core/wp-content/uploads/2022/06/2022R092%E5%88%A5%E6%B7%BB.pdf" target="_blank" rel="noreferrer">事務連絡の写しを確認 ↗</a>
+          </div>
+        </div>
+        <p class="source-meta">内容確認基準日：2026年8月12日</p>
+      </section>
+
+      <footer>
+        この教材は試験学習用の単純化した模式図です。事務連絡も、具体的事案では個々の構造に応じて判断するとしています。法的助言ではありません。
+      </footer>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>

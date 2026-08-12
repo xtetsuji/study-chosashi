@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="ダストシュートや煙突の位置を動かし、各階床面積への算入範囲を学ぶ図解教材"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <title>ダストシュート床面積ビジュアライザー</title>
+  </head>
+  <body>
+    <main class="app-shell">
+      <nav class="back-nav"><a href="../">← 学習ツール一覧</a></nav>
+
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">表示登記・垂直設備</p>
+          <h1>ダストシュート<br /><span>床面積ビジュアライザー</span></h1>
+        </div>
+        <p class="intro">
+          設備を建物の内外へ動かして、床のない縦穴を各階床面積へどう算入するか観察します。
+        </p>
+      </header>
+
+      <section class="rule-banner" aria-labelledby="rule-title">
+        <p class="rule-banner__number" aria-hidden="true">82<span>⑩</span></p>
+        <div>
+          <p class="eyebrow">判断の鍵</p>
+          <h2 id="rule-title">「床があるか」ではなく「建物内部にあるか」</h2>
+          <p>建物内部のダストシュート・煙突の部分は、各階床面積に算入します。一部が外側へ及んでも取扱いは変わりません。</p>
+        </div>
+      </section>
+
+      <section class="control-section" aria-labelledby="control-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">MOVE &amp; OBSERVE</p>
+            <h2 id="control-title">設備と位置を選ぶ</h2>
+          </div>
+          <button class="play-button" id="play-button" type="button" aria-pressed="false">▶ 3状態を再生</button>
+        </div>
+
+        <div class="controls">
+          <fieldset>
+            <legend>設備</legend>
+            <label><input type="radio" name="equipment" value="chute" checked /><span>ダストシュート</span></label>
+            <label><input type="radio" name="equipment" value="chimney" /><span>煙突</span></label>
+          </fieldset>
+          <fieldset class="position-controls">
+            <legend>建物との位置関係</legend>
+            <label><input type="radio" name="position" value="inside" checked /><span><b>1</b>全部内部</span></label>
+            <label><input type="radio" name="position" value="straddle" /><span><b>2</b>一部張出し</span></label>
+            <label><input type="radio" name="position" value="outside" /><span><b>3</b>全部外部</span></label>
+          </fieldset>
+        </div>
+      </section>
+
+      <section class="visualizer" aria-labelledby="state-title">
+        <div class="section-view">
+          <div class="view-heading">
+            <div>
+              <p class="eyebrow">SECTION</p>
+              <h2>建物断面</h2>
+            </div>
+            <span>外壁線 →</span>
+          </div>
+
+          <div class="building-scene" id="building-scene" data-position="inside" data-equipment="chute" aria-label="3階建物とダストシュートの断面模式図">
+            <div class="outside-label">建物外部</div>
+            <div class="building">
+              <div class="floor"><strong>3階</strong><span>各階床</span></div>
+              <div class="floor"><strong>2階</strong><span>各階床</span></div>
+              <div class="floor"><strong>1階</strong><span>各階床</span></div>
+            </div>
+            <div
+              class="shaft"
+              id="draggable-shaft"
+              role="slider"
+              tabindex="0"
+              aria-label="設備の位置"
+              aria-describedby="drag-instruction"
+              aria-valuemin="1"
+              aria-valuemax="3"
+              aria-valuenow="1"
+              aria-valuetext="全部内部"
+            >
+              <span class="shaft__cap"></span>
+              <span class="shaft__body"></span>
+              <span class="shaft__label" id="shaft-label">ダスト<br />シュート</span>
+              <span class="shaft__handle" aria-hidden="true">↔</span>
+              <span class="shaft__opening shaft__opening--3"></span>
+              <span class="shaft__opening shaft__opening--2"></span>
+              <span class="shaft__opening shaft__opening--1"></span>
+            </div>
+            <div class="boundary-label">建物内部</div>
+          </div>
+          <p class="scene-caption" id="scene-caption">ダストシュートの全部が外壁線の内側にあります。</p>
+          <p class="drag-instruction" id="drag-instruction">設備本体を左右へドラッグできます。キーボードでは左右矢印キーで動かせます。</p>
+        </div>
+
+        <div class="plan-view">
+          <div class="view-heading">
+            <div>
+              <p class="eyebrow">FLOOR PLANS</p>
+              <h2>各階平面</h2>
+            </div>
+            <span class="legend"><i></i>算入範囲</span>
+          </div>
+
+          <div class="floor-plans" id="floor-plans" data-position="inside">
+            <article class="mini-plan"><h3>3階</h3><div><span class="mini-shaft">設備</span><i>外壁線</i></div><p>設備部分を算入</p></article>
+            <article class="mini-plan"><h3>2階</h3><div><span class="mini-shaft">設備</span><i>外壁線</i></div><p>設備部分を算入</p></article>
+            <article class="mini-plan"><h3>1階</h3><div><span class="mini-shaft">設備</span><i>外壁線</i></div><p>設備部分を算入</p></article>
+          </div>
+
+          <div class="result" aria-live="polite">
+            <p class="result__status" id="result-status">現在の判定｜各階に算入</p>
+            <h2 id="state-title">設備部分の全部を、各階床面積に算入</h2>
+            <ol>
+              <li><span>原則</span><p>各階ごとに壁その他の区画で囲まれた水平投影面積を算定します。</p></li>
+              <li><span>特則</span><p id="special-rule">建物内部のダストシュートは、床がなくても各階床面積へ算入します。</p></li>
+              <li><span>結論</span><p id="conclusion">全部が内部にあるため、設備部分の全部を各階へ算入します。</p></li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <aside class="memory-note">
+        <strong>ひっかけポイント</strong>
+        <p>一部が外側へ張り出しても、「外側部分だけ不算入」にはなりません。内部にある設備の一部が外側へ及ぶ場合は、張出部分を含む設備全体を算入します。</p>
+      </aside>
+
+      <section class="source-note" aria-labelledby="source-title">
+        <p class="eyebrow">LEGAL BASIS</p>
+        <h2 id="source-title">根拠と出題実績</h2>
+        <div class="source-grid">
+          <div>
+            <h3>不動産登記事務取扱手続準則82条10号</h3>
+            <p>建物内部に煙突またはダストシュートがある場合、その一部が外側へ及ぶものを含め、設備部分を各階床面積に算入します。全部が外側にあるときは算入しません。</p>
+            <a href="https://www.moj.go.jp/content/001394394.pdf" target="_blank" rel="noreferrer">法務省の準則を確認 ↗</a>
+          </div>
+          <div>
+            <h3>令和4年度 午後第12問</h3>
+            <p>一部が外部へまたがるダストシュートについて、建物内部側だけを算入するとした肢の正誤が問われました。本教材は問題図を転載せず、独自の模式図で再構成しています。</p>
+            <a href="https://www.moj.go.jp/content/001383847.pdf" target="_blank" rel="noreferrer">法務省の試験問題を確認 ↗</a>
+          </div>
+        </div>
+        <p class="source-meta">内容確認基準日：2026年8月12日</p>
+      </section>
+
+      <footer>この教材は準則上の取扱いを理解するための試験学習用模式図であり、個別事案への法的助言ではありません。</footer>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>

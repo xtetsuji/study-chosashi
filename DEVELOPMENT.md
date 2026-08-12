@@ -124,6 +124,8 @@ TypeScriptやパッケージ依存が必要な場合は、`period-flashcards/` �
 /
 ├── civil-rights-transitions/
 ├── inheritance-tree/
+├── stair-floor-area/
+├── dust-chute-floor-area/
 └── period-flashcards/
 ```
 

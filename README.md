@@ -8,6 +8,8 @@
 - `period-flashcards/`: 保存期間などの数字知識を反復するフラッシュカード
 - `site/civil-rights-transitions/`: 不動産の二重譲渡と登記の関係を動かして学ぶ試作教材
 - `site/inheritance-tree/`: 法定相続人と法定相続分を家系図で学ぶ試作教材
+- `site/stair-floor-area/`: 階段部分の上階床面積への算入を図で学ぶ試作教材
+- `site/dust-chute-floor-area/`: ダストシュート・煙突の各階床面積への算入を学ぶ試作教材
 - `kakomon/`: 過去問データと、その整備に使うスクリプト
 - `site/`: GitHub Pagesで公開する学習コンテンツの入口と公開計画
 
