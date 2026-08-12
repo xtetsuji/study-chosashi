@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="詐欺による不動産売買の取消しと、取消し前・取消し後の第三者の違いをシーケンス図で学ぶ教材"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <title>取消し前・取消し後 第三者シーケンス</title>
+  </head>
+  <body>
+    <main class="app-shell">
+      <nav><a href="../">← 学習ツール一覧</a></nav>
+
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">民法96条3項・121条・177条</p>
+          <h1>取消しの瞬間を、<br /><span>止めて見る。</span></h1>
+        </div>
+        <p class="intro">
+          時間を一つずつ進め、実体上の所有者と登記名義を別々に追います。
+          分かれ目は、取消しの瞬間に第三者Cがいるかどうかです。
+        </p>
+      </header>
+
+      <section class="assumption" aria-label="事例の前提">
+        <strong>事例の前提</strong>
+        <span>
+          Aが詐欺を理由に、Bとの甲土地の売買を取り消します。不動産についての判例・通説上の基本的な整理を扱い、例外は必要な範囲だけ表示します。
+        </span>
+      </section>
+
+      <section class="scenario-picker" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">CHOOSE A SEQUENCE</p>
+          <h2 id="scenario-title">第三者Cは、いつ登場する？</h2>
+        </div>
+        <div class="segmented" role="group" aria-label="取消し前後の選択">
+          <button type="button" data-scenario="before" aria-pressed="true">
+            <strong>取消し前第三者</strong>
+            <span>取消し時点でCがいる</span>
+          </button>
+          <button type="button" data-scenario="after" aria-pressed="false">
+            <strong>取消し後第三者</strong>
+            <span>取消し時点ではCがいない</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="lesson" aria-labelledby="lesson-title">
+        <div class="lesson-topline">
+          <div>
+            <p class="step-label" id="step-label">STEP 0 / 5</p>
+            <h2 id="lesson-title">最初の状態</h2>
+          </div>
+          <button class="text-button" id="reset-button" type="button">最初に戻す</button>
+        </div>
+
+        <div class="legend" aria-label="図の凡例">
+          <span class="legend-item legend-item--owner"><i aria-hidden="true"></i>実体上の所有権</span>
+          <span class="legend-item legend-item--registry"><i aria-hidden="true"></i>登記名義</span>
+          <span class="legend-item legend-item--cancel"><i aria-hidden="true"></i>取消しの効果</span>
+        </div>
+
+        <div class="sequence" id="sequence" aria-live="polite">
+          <div class="actor-head actor-head--a"><strong>A</strong><span>被害者・売主</span></div>
+          <div class="actor-head actor-head--b"><strong>B</strong><span>詐欺者・買主</span></div>
+          <div class="actor-head actor-head--c"><strong>C</strong><span id="c-role">第三者</span></div>
+
+          <div class="lane lane--a" aria-hidden="true"></div>
+          <div class="lane lane--b" aria-hidden="true"></div>
+          <div class="lane lane--c" aria-hidden="true"></div>
+          <div class="cancel-moment" id="cancel-moment" aria-hidden="true"><span>取消しの瞬間</span></div>
+          <ol class="events" id="events" aria-label="出来事の時系列"></ol>
+        </div>
+
+        <section class="snapshot" aria-labelledby="snapshot-title">
+          <div>
+            <p class="snapshot-kicker">この時点の状態</p>
+            <h3 id="snapshot-title">甲土地</h3>
+          </div>
+          <dl>
+            <div class="snapshot-owner">
+              <dt>実体上の所有権</dt>
+              <dd id="owner-value">A</dd>
+            </div>
+            <div class="snapshot-registry">
+              <dt>登記名義</dt>
+              <dd id="registry-value">A</dd>
+            </div>
+            <div>
+              <dt>見るべき規律</dt>
+              <dd id="rule-value">まだ問題なし</dd>
+            </div>
+            <div class="snapshot-relation">
+              <dt>誰との関係か</dt>
+              <dd id="relation-value">―</dd>
+            </div>
+          </dl>
+        </section>
+
+        <div class="decision" id="decision" hidden></div>
+
+        <div class="explanation" id="explanation" aria-live="polite">
+          <p class="conclusion">Aが甲土地を所有し、登記名義もAです。</p>
+          <p>「売買」と「登記」が別々に動くことにも注目してください。</p>
+        </div>
+
+        <div class="controls">
+          <button class="secondary-button" id="back-button" type="button" disabled>一つ戻る</button>
+          <button class="play-button" id="play-button" type="button" aria-pressed="false">▶ 自動再生</button>
+          <button class="primary-button" id="next-button" type="button">AからBへ売買</button>
+        </div>
+      </section>
+
+      <section class="advanced-entry" id="advanced-entry" hidden>
+        <div>
+          <p class="eyebrow">NEXT QUESTION</p>
+          <h2>Cの次に、Dがいたら？</h2>
+          <p>基本編の時間軸を保ったまま、Cからの転得者Dを一人だけ追加します。</p>
+        </div>
+        <button id="advanced-open" type="button" aria-expanded="false" aria-controls="advanced-panel">発展：Dを登場させる</button>
+      </section>
+
+      <section class="advanced" id="advanced-panel" aria-labelledby="advanced-title" hidden>
+        <div class="advanced-heading">
+          <div>
+            <p class="eyebrow">ADVANCED SEQUENCE</p>
+            <h2 id="advanced-title">転得者Dも、取消しの線で仕分ける</h2>
+          </div>
+          <button class="advanced-close" id="advanced-close" type="button">発展を閉じる</button>
+        </div>
+        <p class="advanced-intro">
+          Bから取得したCが、さらにDへ売却しました。最初に見るのは、Dも取消し前に登場していたかです。
+        </p>
+        <div class="d-timing" role="group" aria-label="Dが取得した時期">
+          <button type="button" data-d-timing="before" aria-pressed="true">取消し前にC→D</button>
+          <button type="button" data-d-timing="after" aria-pressed="false">取消し後にC→D</button>
+        </div>
+        <div class="protection-controls" aria-label="CとDの状態">
+          <fieldset>
+            <legend>Cの状態</legend>
+            <div role="group" aria-label="Cの善意無過失">
+              <button type="button" data-c-protection="protected" aria-pressed="true">善意・無過失</button>
+              <button type="button" data-c-protection="unprotected" aria-pressed="false">それ以外</button>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Dの状態</legend>
+            <div role="group" aria-label="Dの善意無過失">
+              <button type="button" data-d-protection="protected" aria-pressed="true">善意・無過失</button>
+              <button type="button" data-d-protection="unprotected" aria-pressed="false">それ以外</button>
+            </div>
+          </fieldset>
+        </div>
+        <div class="advanced-registration" id="advanced-registration" hidden>
+          <p>取消し後は、どちらが先に登記を備えますか？</p>
+          <div role="group" aria-label="登記を先に備えた者">
+            <button type="button" data-advanced-winner="a" aria-pressed="false">Aが先に復帰登記</button>
+            <button type="button" data-advanced-winner="d" aria-pressed="true">Dが先に移転登記</button>
+          </div>
+        </div>
+        <div class="advanced-sequence" id="advanced-sequence" aria-live="polite">
+          <div class="advanced-actors" aria-hidden="true">
+            <strong>A</strong><strong>B</strong><strong class="c-actor" data-state="善無">C</strong><strong class="d-actor" data-state="善無">D</strong>
+          </div>
+          <i class="advanced-lane advanced-lane--a" aria-hidden="true"></i>
+          <i class="advanced-lane advanced-lane--b" aria-hidden="true"></i>
+          <i class="advanced-lane advanced-lane--c" aria-hidden="true"></i>
+          <i class="advanced-lane advanced-lane--d" aria-hidden="true"></i>
+          <ol id="advanced-events"></ol>
+        </div>
+        <div class="advanced-answer" id="advanced-answer" aria-live="polite"></div>
+      </section>
+
+      <section class="comparison" aria-labelledby="comparison-title">
+        <p class="eyebrow">THE DIFFERENCE</p>
+        <h2 id="comparison-title">同じ「A対C」でも、入口が違う</h2>
+        <div class="comparison-grid">
+          <article>
+            <span>取消し前第三者</span>
+            <strong>復帰効果はCに届くか</strong>
+            <p>取消しで復帰の効果が発生し、それをCに対抗できるかを民法96条3項で判断します。</p>
+          </article>
+          <article>
+            <span>取消し後第三者</span>
+            <strong>まず、登記の先後を見る</strong>
+            <p>不動産では、Aの復帰登記とCの移転登記を民法177条で比べます。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="law-note" aria-labelledby="law-title">
+        <p class="eyebrow">LEGAL BASIS &amp; SOURCES</p>
+        <h2 id="law-title">根拠と、この教材の範囲</h2>
+        <ul>
+          <li><strong>民法96条3項</strong>：詐欺による取消しと善意・無過失の第三者</li>
+          <li><strong>民法121条</strong>：取消しの遡及効</li>
+          <li><strong>民法177条</strong>：不動産物権変動の対抗要件</li>
+        </ul>
+        <p>
+          <a href="https://laws.e-gov.go.jp/law/129AC0000000089" target="_blank" rel="noreferrer">e-Gov法令検索「民法」</a>
+          ／
+          <a href="https://www.courts.go.jp/app/files/hanrei_jp/177/054177_hanrei.pdf" target="_blank" rel="noreferrer">最高裁昭和49年9月26日判決</a>
+          ／
+          <a href="https://www.courts.go.jp/app/files/hanrei_jp/426/052426_hanrei.pdf" target="_blank" rel="noreferrer">民法177条の第三者に関する最高裁判決</a>
+          ／
+          <a href="https://www.courts.go.jp/assets/hanrei/hanrei-pdf-16245.pdf" target="_blank" rel="noreferrer">取消し後の転得者と177条に関する裁判例</a>
+        </p>
+        <p class="checked-date">内容確認基準日：2026年8月12日</p>
+      </section>
+
+      <footer>
+        この教材は、詐欺による不動産売買を単純化した試験学習用の試作です。個別事案への法的助言ではありません。
+      </footer>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>

@@ -118,6 +118,7 @@ h1 em { color: #c94d32; font-style: normal; }
 .tool-card--wide .family-sample { grid-column: 2; grid-row: 2 / 5; }
 .tool-card--wide .area-sample { grid-column: 2; grid-row: 2 / 5; }
 .tool-card--wide .shaft-sample { grid-column: 2; grid-row: 2 / 5; }
+.tool-card--wide .cancel-sample { grid-column: 2; grid-row: 2 / 5; }
 .tool-card--wide h3, .tool-card--wide p, .tool-card--wide .card-link { grid-column: 1; }
 .tool-card--wide h3 { margin-top: 2.5rem; }
 .tool-card:hover, .tool-card:focus-visible { transform: translateY(-5px); box-shadow: 0 1.5rem 3rem rgba(32, 43, 39, 0.12); }
@@ -226,6 +227,23 @@ h1 em { color: #c94d32; font-style: normal; }
   writing-mode: vertical-rl;
 }
 .shaft-sample i { position: absolute; right: 0.65rem; bottom: 0.65rem; color: #68716d; font-size: 0.7rem; font-style: normal; font-weight: 800; }
+.cancel-sample {
+  position: relative;
+  display: grid;
+  min-height: 190px;
+  place-self: center stretch;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid #aeb8b3;
+  background: #173b3a;
+}
+.cancel-sample > div { display: flex; width: 82%; align-items: center; justify-content: space-between; color: #fffdf8; }
+.cancel-sample strong { display: grid; width: 2.7rem; height: 2.7rem; place-items: center; border: 1px solid #88a39e; border-radius: 50%; }
+.cancel-sample i { flex: 1; height: 1px; background: #88a39e; }
+.cancel-sample__owner, .cancel-sample__registry { position: absolute; height: 0.5rem; border-radius: 1rem; font-size: 0; }
+.cancel-sample__owner { top: 38%; left: 14%; width: 42%; background: #a9cd63; }
+.cancel-sample__registry { top: 54%; left: 46%; width: 40%; background: #ef8daf; }
+.cancel-sample em { position: absolute; right: 0; bottom: 1.4rem; left: 0; padding-top: 0.35rem; border-top: 2px dashed #e88b72; color: #f4a38c; font-size: 0.68rem; font-style: normal; font-weight: 800; text-align: center; }
 
 .notice { display: flex; gap: 2rem; padding: 1.5rem 0; border-top: 1px solid #c9c3b8; border-bottom: 1px solid #c9c3b8; }
 .notice p { margin: 0; color: #65716c; line-height: 1.6; }
@@ -240,6 +258,7 @@ h1 em { color: #c94d32; font-style: normal; }
   .tool-card--wide .family-sample { order: 1; }
   .tool-card--wide .area-sample { order: 1; }
   .tool-card--wide .shaft-sample { order: 1; }
+  .tool-card--wide .cancel-sample { order: 1; }
   .tool-card--wide .tool-meta { order: 0; }
   .tool-card--wide h3 { order: 2; margin-top: auto; }
   .tool-card--wide p { order: 3; }
