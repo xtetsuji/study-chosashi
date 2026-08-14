@@ -22,6 +22,12 @@ button {
   font: inherit;
 }
 
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #d45d3a;
+  outline-offset: 3px;
+}
+
 .app-shell {
   width: min(100% - 2rem, 760px);
   margin-inline: auto;
@@ -32,13 +38,35 @@ button {
   margin-bottom: 1.5rem;
 }
 
+.header-links {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
 .back-link {
   display: inline-block;
-  margin-bottom: 1.5rem;
   color: #245f3d;
   font-size: 0.9rem;
   font-weight: 700;
   text-decoration: none;
+}
+
+.app-header > .back-link {
+  margin-bottom: 1.5rem;
+}
+
+.change-mode {
+  border: 0;
+  background: transparent;
+  color: #245f3d;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+  cursor: pointer;
 }
 
 .back-link:hover,
@@ -63,12 +91,82 @@ h1 {
   line-height: 1.2;
 }
 
+.lead {
+  max-width: 42rem;
+  margin: 1rem 0 0;
+  color: #53625a;
+  line-height: 1.75;
+}
+
 .score {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   margin-top: 1rem;
   color: #53625a;
   font-size: 0.9rem;
+}
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.mode-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem 1rem;
+  padding: 1.35rem;
+  border: 2px solid #a6bdad;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.94);
+  color: #173d29;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 0.75rem 2rem rgba(30, 65, 44, 0.08);
+  transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+
+.mode-card:last-child {
+  grid-column: 1 / -1;
+}
+
+.mode-card:hover,
+.mode-card:focus-visible {
+  border-color: #287149;
+  background: #f7fbf8;
+  transform: translateY(-2px);
+}
+
+.mode-name {
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.mode-count {
+  align-self: center;
+  color: #b4442c;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.mode-description {
+  grid-column: 1 / -1;
+  color: #596760;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.study-note {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border-left: 4px solid #d45d3a;
+  background: rgba(255, 255, 255, 0.65);
+  color: #596760;
+  font-size: 0.85rem;
+  line-height: 1.65;
 }
 
 .card {
@@ -77,6 +175,25 @@ h1 {
   border-radius: 1.25rem;
   background: rgba(255, 255, 255, 0.94);
   box-shadow: 0 1.25rem 3rem rgba(30, 65, 44, 0.1);
+}
+
+.question-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.35rem;
+}
+
+.question-meta .category {
+  margin-bottom: 0;
+}
+
+.importance {
+  color: #9d3b28;
+  font-size: 0.75rem;
+  font-weight: 800;
+  white-space: nowrap;
 }
 
 h2 {
@@ -191,6 +308,12 @@ h2 {
   font-size: 0.85rem;
 }
 
+.source a {
+  color: #245f3d;
+  font-weight: 700;
+  text-underline-offset: 0.2rem;
+}
+
 .next-button {
   width: 100%;
   margin-top: 1rem;
@@ -221,6 +344,20 @@ footer {
     grid-template-columns: 1fr;
   }
 
+  .mode-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mode-card:last-child {
+    grid-column: auto;
+  }
+
+  .header-links {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
   .choice-button kbd,
   .keyboard-hint {
     display: none;
@@ -229,7 +366,8 @@ footer {
 
 @media (prefers-reduced-motion: reduce) {
   .choice-button,
-  .next-button {
+  .next-button,
+  .mode-card {
     transition: none;
   }
 }
