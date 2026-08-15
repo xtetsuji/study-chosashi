@@ -8,6 +8,10 @@ const source = fs.readFileSync(
   path.join(__dirname, "../site/registration-route/scenarios.js"),
   "utf8",
 );
+const quizSource = fs.readFileSync(
+  path.join(__dirname, "../site/registration-route/quiz-data.js"),
+  "utf8",
+);
 const indexSource = fs.readFileSync(
   path.join(__dirname, "../site/registration-route/index.html"),
   "utf8",
@@ -18,8 +22,10 @@ const styleSource = fs.readFileSync(
 );
 const context = { window: {} };
 vm.runInNewContext(source, context);
+vm.runInNewContext(quizSource, context);
 
 const scenarios = context.window.registrationRouteScenarios;
+const quizRoutes = context.window.registrationRouteQuizData.routes;
 const allowedCategories = new Set(["登録", "調査士会", "懲戒", "法人"]);
 const allowedNodes = new Set([
   "person",
@@ -184,6 +190,50 @@ test("条件付き経路のアニメーションは点線一周期分でルー�
   assert.match(
     styleSource,
     /@keyframes conditional-route-flow\s*{\s*to\s*{\s*stroke-dashoffset:\s*-31;/,
+  );
+});
+
+test("全経路にクイズの選択肢と点灯ノードがある", () => {
+  assert.deepEqual([...Object.keys(quizRoutes)].sort(), [...allowedRoutes].sort());
+  assert.equal(
+    new Set(Object.values(quizRoutes).map((route) => route.choice)).size,
+    allowedRoutes.size,
+  );
+
+  for (const [routeName, route] of Object.entries(quizRoutes)) {
+    assert.ok(route.choice, `${routeName}: 選択肢`);
+    assert.ok(route.nodes.length > 0, `${routeName}: 点灯ノード`);
+    for (const node of route.nodes) {
+      assert.ok(allowedNodes.has(node), `${routeName}: ${node}`);
+    }
+  }
+});
+
+test("各論点の完成図からクイズを一問生成できる", () => {
+  for (const scenario of scenarios) {
+    const finalRoutes = scenario.steps.at(-1).activeRoutes;
+    assert.ok(finalRoutes.length > 0, scenario.id);
+    assert.ok(finalRoutes.every((route) => quizRoutes[route]), scenario.id);
+    assert.ok(allowedRoutes.size - new Set(finalRoutes).size >= 2, scenario.id);
+  }
+});
+
+test("クイズ操作に必要な画面要素とデータ読込がある", () => {
+  for (const id of [
+    "learning-mode-button",
+    "quiz-mode-button",
+    "quiz-actions",
+    "quiz-next-button",
+    "quiz-panel",
+    "quiz-question",
+    "quiz-options",
+    "quiz-feedback",
+  ]) {
+    assert.match(indexSource, new RegExp(`id=["']${id}["']`), id);
+  }
+  assert.match(
+    indexSource,
+    /scenarios\.js[\s\S]*quiz-data\.js[\s\S]*app\.js/,
   );
 });
 

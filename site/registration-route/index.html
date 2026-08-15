@@ -39,6 +39,14 @@
           <h2 id="scenario-title">論点を選ぶ</h2>
         </div>
         <div class="scenario-control">
+          <div class="mode-switch" role="group" aria-label="学習方法を選択">
+            <button class="mode-button is-active" id="learning-mode-button" type="button" aria-pressed="true">
+              学習モード
+            </button>
+            <button class="mode-button" id="quiz-mode-button" type="button" aria-pressed="false">
+              クイズモード
+            </button>
+          </div>
           <label for="scenario-select">分野別に論点を選択</label>
           <div class="scenario-select-row">
             <div class="scenario-select-wrap">
@@ -60,12 +68,16 @@
             </div>
             <h2 id="lab-title">まず、固定配置を確認</h2>
           </div>
-          <div class="lab-actions">
+          <div class="lab-actions" id="learning-actions">
             <button class="reset-button" id="reset-button" type="button">最初に戻す</button>
             <div class="controls">
               <button class="secondary-button" id="back-button" type="button" disabled>一つ戻る</button>
               <button class="primary-button" id="next-button" type="button">入会手続を見る</button>
             </div>
+          </div>
+          <div class="quiz-actions" id="quiz-actions" hidden>
+            <span class="quiz-score" id="quiz-score" aria-live="polite">正解 0 / 回答 0</span>
+            <button class="primary-button" id="quiz-next-button" type="button" disabled>次の問題</button>
           </div>
         </div>
 
@@ -520,6 +532,13 @@
           </p>
         </div>
 
+        <section class="quiz-panel" id="quiz-panel" aria-labelledby="quiz-question" hidden>
+          <p class="quiz-kicker">完成図に含まれる経路を選択</p>
+          <h3 id="quiz-question"></h3>
+          <div class="quiz-options" id="quiz-options"></div>
+          <p class="quiz-feedback" id="quiz-feedback" aria-live="polite"></p>
+        </section>
+
         <div class="explanation" id="explanation" aria-live="polite">
           <p class="conclusion">五つの主体は、場面が変わっても同じ位置にあります。</p>
           <p>「一つ進む」を押して、この場面で使う経路だけを点灯させます。</p>
@@ -590,6 +609,7 @@
       </footer>
     </main>
     <script src="./scenarios.js"></script>
+    <script src="./quiz-data.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>
