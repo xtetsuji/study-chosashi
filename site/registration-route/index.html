@@ -28,8 +28,8 @@
       <section class="assumption" aria-label="現在収録している範囲">
         <strong>現在の収録</strong>
         <span>
-          登録手続、調査士会の報告義務、調査士・調査士法人の懲戒を扱います。
-          登録取消しなどは今後追加します。
+          登録・登録取消し、懲戒、違反調査、調査士法人の届出と解散監督を扱います。
+          法令上の経路と権限委任も段階を分けて表示します。
         </span>
       </section>
 
@@ -97,6 +97,12 @@
               <rect x="-54" y="-24" width="108" height="48" rx="8" />
               <text class="node-kicker" y="-5">公告媒体</text>
               <text class="node-title" y="15">官報</text>
+            </g>
+
+            <g class="court-node" data-node="court" transform="translate(450 36)" hidden>
+              <rect x="-68" y="-24" width="136" height="48" rx="8" />
+              <text class="node-kicker" y="-5">独立した監督機関</text>
+              <text class="node-title" y="15">地方裁判所</text>
             </g>
 
             <g class="node" data-node="federation" transform="translate(180 105)">
@@ -326,6 +332,68 @@
               y="34"
             >
               官報に公告
+            </text>
+
+            <path
+              class="route-line route-line--direct-federation"
+              data-route="direct-federation"
+              d="M 375 565 C 92 520, 18 285, 140 158"
+              marker-end="url(#arrow-muted)"
+            />
+            <text
+              class="route-label route-label--direct-federation"
+              data-label="direct-federation"
+              x="70"
+              y="355"
+            >
+              連合会へ直接届出
+            </text>
+
+            <path
+              class="route-line route-line--federation-bureau"
+              data-route="federation-bureau"
+              d="M 239 134 C 350 170, 455 255, 531 315"
+              marker-end="url(#arrow-muted)"
+            />
+            <text
+              class="route-label route-label--federation-bureau"
+              data-label="federation-bureau"
+              x="387"
+              y="225"
+            >
+              法務局長等へ通知
+            </text>
+
+            <path
+              class="route-line route-line--court-minister-request"
+              data-route="court-minister-request"
+              d="M 518 31 C 581 25, 626 48, 662 76"
+              marker-end="url(#arrow-muted)"
+            />
+            <text
+              class="route-label route-label--court-minister-request"
+              data-label="court-minister-request"
+              x="585"
+              y="44"
+              text-anchor="middle"
+            >
+              意見要求・調査嘱託
+            </text>
+
+            <path
+              class="route-line route-line--minister-court-opinion"
+              data-route="minister-court-opinion"
+              d="M 656 96 C 600 83, 555 66, 516 54"
+              marker-end="url(#arrow-muted)"
+            />
+            <text
+              class="route-label route-label--minister-court-opinion"
+              data-label="minister-court-opinion"
+              x="585"
+              y="82"
+              text-anchor="middle"
+            >
+              意見を述べる
             </text>
 
             <g class="outcome-panel" id="outcome-panel" transform="translate(28 448)" hidden>

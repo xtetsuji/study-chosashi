@@ -97,29 +97,35 @@ h1 span { color: #b64730; }
 .node circle,
 .old-association rect,
 .gazette-node rect,
-.review-board-node rect { fill: #173b3a; stroke: #6f8b86; stroke-width: 2; transition: fill 240ms ease, stroke 240ms ease, stroke-width 240ms ease; }
+.review-board-node rect,
+.court-node rect { fill: #173b3a; stroke: #6f8b86; stroke-width: 2; transition: fill 240ms ease, stroke 240ms ease, stroke-width 240ms ease; }
 .node text,
 .old-association text,
-.gazette-node text { fill: #d9e2df; font-size: 15px; font-weight: 800; text-anchor: middle; }
+.gazette-node text,
+.court-node text { fill: #d9e2df; font-size: 15px; font-weight: 800; text-anchor: middle; }
 .review-board-node text { fill: #d9e2df; font-size: 15px; font-weight: 800; text-anchor: start; }
 .node .node-kicker,
 .old-association .node-kicker,
 .gazette-node .node-kicker,
-.review-board-node .node-kicker { fill: #93aaa5; font-size: 10px; letter-spacing: 0.11em; }
+.review-board-node .node-kicker,
+.court-node .node-kicker { fill: #93aaa5; font-size: 10px; letter-spacing: 0.11em; }
 .node .node-title,
 .old-association .node-title,
 .gazette-node .node-title,
-.review-board-node .node-title { font-size: 17px; }
+.review-board-node .node-title,
+.court-node .node-title { font-size: 17px; }
 .review-board-node .inset-connector { fill: none; stroke: #6f8b86; stroke-dasharray: 3 5; stroke-width: 2; }
 .old-association .effect-label { fill: #f0aa91; font-size: 11px; }
 .node.is-active circle,
 .old-association.is-active rect,
 .gazette-node.is-active rect,
-.review-board-node.is-active rect { fill: #214846; stroke: #f08969; stroke-width: 5; }
+.review-board-node.is-active rect,
+.court-node.is-active rect { fill: #214846; stroke: #f08969; stroke-width: 5; }
 .node.is-active text,
 .old-association.is-active text,
 .gazette-node.is-active text,
-.review-board-node.is-active text { fill: #fffdf8; }
+.review-board-node.is-active text,
+.court-node.is-active text { fill: #fffdf8; }
 .review-board-node.is-active .inset-connector { stroke: #f08969; }
 .node.is-complete circle,
 .old-association.is-complete rect { fill: #f1d7a8; stroke: #f1d7a8; }
@@ -139,7 +145,11 @@ h1 span { color: #b64730; }
 .route-line--minister-gazette,
 .route-line--direct-minister,
 .route-line--bureau-investigation,
-.route-line--federation-gazette { stroke-linecap: round; }
+.route-line--federation-gazette,
+.route-line--direct-federation,
+.route-line--federation-bureau,
+.route-line--court-minister-request,
+.route-line--minister-court-opinion { stroke-linecap: round; }
 .route-line.is-active {
   opacity: 1;
   stroke: #ef805f;
@@ -226,6 +236,7 @@ footer { padding: 2rem 0 0; color: #727a76; font-size: 0.72rem; text-align: cent
   .node circle,
   .old-association rect,
   .gazette-node rect,
-  .review-board-node rect { transition: none; }
+  .review-board-node rect,
+  .court-node rect { transition: none; }
   .route-line.is-active { animation: none; stroke-dasharray: none; }
 }

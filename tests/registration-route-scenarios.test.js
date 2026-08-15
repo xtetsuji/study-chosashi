@@ -21,6 +21,7 @@ const allowedNodes = new Set([
   "minister",
   "gazette",
   "review-board",
+  "court",
 ]);
 const allowedRoutes = new Set([
   "membership",
@@ -36,6 +37,10 @@ const allowedRoutes = new Set([
   "person-bureau",
   "bureau-investigation",
   "federation-gazette",
+  "direct-federation",
+  "federation-bureau",
+  "court-minister-request",
+  "minister-court-opinion",
 ]);
 
 test("論点IDが重複せず、選択表示に必要な情報を持つ", () => {
