@@ -20,6 +20,7 @@ const elements = {
   reset: byId("reset-button"),
   memoryBadge: byId("memory-badge"),
   mapPanel: document.querySelector(".map-panel"),
+  conditionalRouteLegend: byId("conditional-route-legend"),
   associationKicker: byId("association-kicker"),
   associationLabel: byId("association-label"),
   personKicker: byId("person-kicker"),
@@ -117,9 +118,16 @@ function render() {
   elements.personKicker.textContent = state.personKicker || scenario.personKicker;
   elements.personLine1.textContent = personLines[0];
   elements.personLine2.textContent = personLines[1];
+  const routeConditions = {
+    ...(scenario.routeConditions || {}),
+    ...(state.routeConditions || {}),
+  };
   document.querySelectorAll("[data-label]").forEach((label) => {
     const routeName = label.dataset.label;
-    label.textContent = state.routeLabels?.[routeName] || scenario.routeLabels?.[routeName] || "";
+    const routeLabel = state.routeLabels?.[routeName] || scenario.routeLabels?.[routeName] || "";
+    label.textContent = routeConditions[routeName]
+      ? `条件付き｜${routeConditions[routeName]}`
+      : routeLabel;
   });
   elements.inactiveNote.textContent = scenario.inactiveNote;
   elements.lawScenarioTitle.textContent = scenario.title;
@@ -140,11 +148,15 @@ function render() {
 
   const activeNodes = state.activeNodes || [];
   const activeRoutes = state.activeRoutes || [];
+  const conditionalRoutes = activeRoutes.filter((route) => routeConditions[route]);
   setActiveItems("[data-node]", activeNodes, "is-active");
   setActiveItems("[data-node]", state.completeNodes || [], "is-complete");
   setActiveItems("[data-node]", state.retiredNodes || [], "is-retired");
   setActiveItems("[data-route]", activeRoutes, "is-active");
   setActiveItems("[data-label]", activeRoutes, "is-active");
+  setActiveItems("[data-route]", conditionalRoutes, "is-conditional");
+  setActiveItems("[data-label]", conditionalRoutes, "is-conditional");
+  elements.conditionalRouteLegend.hidden = conditionalRoutes.length === 0;
 
   elements.back.disabled = currentStep === 0;
   elements.next.hidden = currentStep === stepTotal;

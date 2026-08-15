@@ -155,6 +155,26 @@ test("シナリオで許可した経路はSVGに定義されている", () => {
   }
 });
 
+test("条件付き経路は条件文と通常の表示名を持つ", () => {
+  const conditionalScenarios = scenarios.filter((scenario) => scenario.routeConditions);
+  assert.deepEqual(
+    [...conditionalScenarios.map((scenario) => scenario.id)],
+    ["discipline-individual", "discipline-corporation"],
+  );
+
+  for (const scenario of conditionalScenarios) {
+    for (const [route, condition] of Object.entries(scenario.routeConditions)) {
+      assert.ok(allowedRoutes.has(route), `${scenario.id}: ${route}`);
+      assert.ok(condition, `${scenario.id}: ${route} の条件文`);
+      assert.ok(scenario.routeLabels[route], `${scenario.id}: ${route} の表示名`);
+      assert.ok(
+        scenario.steps.some((step) => step.activeRoutes?.includes(route)),
+        `${scenario.id}: ${route} を使う段階`,
+      );
+    }
+  }
+});
+
 test("段階データが既知のノードと経路だけを参照する", () => {
   for (const scenario of scenarios) {
     for (const step of scenario.steps) {

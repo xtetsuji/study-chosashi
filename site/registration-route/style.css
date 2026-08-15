@@ -180,8 +180,15 @@ h1 span { color: #b64730; }
   marker-end: url(#arrow-active);
   animation: route-flow 850ms linear infinite;
 }
+.route-line.is-active.is-conditional {
+  stroke: #f2c14e;
+  stroke-dasharray: 3 7 14 7;
+  marker-end: url(#arrow-conditional);
+  animation-duration: 1100ms;
+}
 #arrow-muted path { fill: #67817d; }
 #arrow-active path { fill: #ef805f; }
+#arrow-conditional path { fill: #f2c14e; }
 .route-label {
   fill: #8da39f;
   font-size: 12px;
@@ -193,6 +200,23 @@ h1 span { color: #b64730; }
   stroke-width: 8px;
 }
 .route-label.is-active { fill: #ffd3c4; font-size: 14px; opacity: 1; }
+.route-label.is-active.is-conditional { fill: #ffe49b; }
+.conditional-route-legend {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+  margin: 0;
+  padding: 0.7rem 1rem;
+  border-top: 1px solid #54716d;
+  color: #ffe49b;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+.conditional-route-legend[hidden] { display: none; }
+.conditional-route-swatch {
+  width: 3.5rem;
+  border-top: 4px dashed #f2c14e;
+}
 .inactive-note { fill: #78918d; font-size: 11px; text-anchor: middle; }
 .outcome-panel rect { fill: #173b3a; stroke: #6f8b86; stroke-width: 1.5; }
 .outcome-panel text { fill: #d9e2df; font-size: 12px; font-weight: 700; }
@@ -216,6 +240,7 @@ h1 span { color: #b64730; }
 .reading-guide dd { margin: 0.5rem 0 0 2.75rem; color: #5d6964; font-size: 0.86rem; line-height: 1.75; }
 .sample-line { display: inline-block; width: 2rem; border-top: 2px dashed #6f8580; }
 .sample-line--active { border-top: 4px solid #e26d4e; }
+.sample-line--conditional { border-top: 4px dashed #d69f1e; }
 .sample-node { display: inline-block; width: 1.35rem; height: 1.35rem; border: 2px solid #6f8580; border-radius: 50%; }
 .sample-memory {
   display: inline-grid;
@@ -266,5 +291,6 @@ footer { padding: 2rem 0 0; color: #727a76; font-size: 0.72rem; text-align: cent
   .review-board-node rect,
   .court-node rect { transition: none; }
   .route-line.is-active { animation: none; stroke-dasharray: none; }
+  .route-line.is-active.is-conditional { stroke-dasharray: 3 7 14 7; }
   .map-panel.is-memory-flash { border-color: #75e2a5; box-shadow: inset 0 0 0 2px rgba(117, 226, 165, 0.55); animation: none; }
 }

@@ -265,8 +265,11 @@ window.registrationRouteScenarios = [
     routeLabels: {
       "minister-sanction": "懲戒処分",
       "minister-association-notice": "全処分：所属会へ通知",
-      "minister-federation-notice": "業務禁止：連合会にも通知",
+      "minister-federation-notice": "連合会にも通知",
       "minister-gazette": "遅滞なく官報に公告",
+    },
+    routeConditions: {
+      "minister-federation-notice": "業務禁止の場合のみ連合会へ通知",
     },
     inactiveNote: "懲戒権者は法務大臣",
     personKicker: "懲戒の対象",
@@ -308,7 +311,7 @@ window.registrationRouteScenarios = [
       {
         title: "所属会へ通知、業務禁止なら連合会にも通知",
         conclusion: "処分後は全件を所属調査士会へ通知し、業務禁止では連合会にも通知します。",
-        detail: "戒告・業務停止と業務禁止とで、通知先が一つ増える点を線の本数で区別します。",
+        detail: "戒告・業務停止と業務禁止とで、通知先が一つ増えます。連合会への線は黄色の条件付き矢印で区別します。",
         activeNodes: ["minister", "association", "federation"],
         activeRoutes: ["minister-association-notice", "minister-federation-notice"],
         next: "官報公告を見る",
@@ -325,7 +328,7 @@ window.registrationRouteScenarios = [
         title: "この一枚を覚える",
         conclusion: "法務大臣からの処分、処分後の通知、官報公告が一枚につながりました。",
         showSidePanel: true,
-        detail: "所属会には全処分を通知し、連合会への処分後通知は業務禁止の場合です。官報公告はすべての懲戒処分に続きます。",
+        detail: "所属会には全処分を通知し、黄色の条件付き矢印は業務禁止の場合だけ連合会へ進みます。官報公告はすべての懲戒処分に続きます。",
         activeNodes: ["person", "minister", "association", "federation", "gazette"],
         activeRoutes: [
           "minister-sanction",
@@ -347,8 +350,11 @@ window.registrationRouteScenarios = [
     routeLabels: {
       "minister-sanction": "懲戒処分",
       "minister-association-notice": "全処分：所属会へ通知",
-      "minister-federation-notice": "解散：連合会にも通知",
+      "minister-federation-notice": "連合会にも通知",
       "minister-gazette": "遅滞なく官報に公告",
+    },
+    routeConditions: {
+      "minister-federation-notice": "解散の場合のみ連合会へ通知",
     },
     inactiveNote: "法人の懲戒権者も法務大臣",
     personKicker: "懲戒の対象",
@@ -390,7 +396,7 @@ window.registrationRouteScenarios = [
       {
         title: "所属会へ通知、解散なら連合会にも通知",
         conclusion: "処分後は全件を所属調査士会へ通知し、解散では連合会にも通知します。",
-        detail: "戒告・業務停止では所属会へ、解散では所属会と連合会へ通知する点を個人版と対応させます。",
+        detail: "戒告・業務停止では所属会へ、解散では所属会と連合会へ通知します。連合会への線は黄色の条件付き矢印です。",
         activeNodes: ["minister", "association", "federation"],
         activeRoutes: ["minister-association-notice", "minister-federation-notice"],
         next: "官報公告を見る",
@@ -407,7 +413,7 @@ window.registrationRouteScenarios = [
         title: "この一枚を覚える",
         conclusion: "法人への処分、処分後の通知、官報公告が一枚につながりました。",
         showSidePanel: true,
-        detail: "個人の「業務禁止」に対応する最重処分は法人の「解散」です。連合会への処分後通知も、この最重処分の場合に加わります。",
+        detail: "個人の「業務禁止」に対応する最重処分は法人の「解散」です。黄色の条件付き矢印も、この最重処分の場合だけ加わります。",
         activeNodes: ["person", "minister", "association", "federation", "gazette"],
         activeRoutes: [
           "minister-sanction",

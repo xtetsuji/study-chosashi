@@ -104,6 +104,17 @@
               >
                 <path d="M 0 0 L 10 5 L 0 10 z" />
               </marker>
+              <marker
+                id="arrow-conditional"
+                viewBox="0 0 10 10"
+                refX="9"
+                refY="5"
+                markerWidth="7"
+                markerHeight="7"
+                orient="auto-start-reverse"
+              >
+                <path d="M 0 0 L 10 5 L 0 10 z" />
+              </marker>
             </defs>
 
             <path class="skeleton" d="M 180 105 L 450 560 L 720 105 Z" />
@@ -503,6 +514,10 @@
               この場面では右側を経由しない
             </text>
           </svg>
+          <p class="conditional-route-legend" id="conditional-route-legend" hidden>
+            <span class="conditional-route-swatch" aria-hidden="true"></span>
+            条件付きの経路（特定の処分の場合のみ）
+          </p>
         </div>
 
         <div class="explanation" id="explanation" aria-live="polite">
@@ -525,6 +540,10 @@
           <div>
             <dt><span class="sample-line sample-line--active"></span>朱色の矢印</dt>
             <dd>現在の段階で行う手続です。そばに法令上の動詞を表示します。</dd>
+          </div>
+          <div>
+            <dt><span class="sample-line sample-line--conditional"></span>黄色の条件付き矢印</dt>
+            <dd>複数の結果のうち、表示された条件に該当する場合だけ使う経路です。</dd>
           </div>
           <div>
             <dt><span class="sample-node"></span>点灯しないノード</dt>
