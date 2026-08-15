@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="土地家屋調査士の登録申請と所属会変更の経路を、固定座標の逆三角形図で学ぶ試作教材"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <title>登録経路・逆三角形マップ</title>
+  </head>
+  <body>
+    <main class="app-shell">
+      <nav><a href="../">← 学習ツール一覧</a></nav>
+
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">土地家屋調査士法・試作教材</p>
+          <h1>登録経路<br /><span>逆三角形マップ</span></h1>
+        </div>
+        <p class="intro">
+          同じ配置のまま、誰から誰へ線が伸びるかを一手ずつ観察します。
+          点灯しない機関も、手続に関与しないことを示す大切な情報です。
+        </p>
+      </header>
+
+      <section class="assumption" aria-label="この試作で扱う範囲">
+        <strong>今回の範囲</strong>
+        <span>
+          個人の新規登録と、事務所を他の法務局・地方法務局の管轄区域へ移転する場合の所属会変更を扱います。
+          登録拒否や審査請求は、まだ扱いません。
+        </span>
+      </section>
+
+      <section class="route-lab" aria-labelledby="lab-title">
+        <div class="mode-switch" role="group" aria-label="学習する場面">
+          <button class="is-selected" type="button" data-mode="registration" aria-pressed="true">
+            新規登録
+          </button>
+          <button type="button" data-mode="transfer" aria-pressed="false">所属会変更</button>
+        </div>
+
+        <div class="lab-heading">
+          <div>
+            <div class="step-row">
+              <p class="step-label" id="step-label">STEP 0 / 3</p>
+              <span class="memory-badge" id="memory-badge" hidden>暗記用の完成図</span>
+            </div>
+            <h2 id="lab-title">まず、固定配置を確認</h2>
+          </div>
+          <button class="reset-button" id="reset-button" type="button">最初に戻す</button>
+        </div>
+
+        <div class="map-panel">
+          <svg
+            id="route-map"
+            class="route-map"
+            viewBox="0 0 900 650"
+            role="img"
+            aria-labelledby="map-title map-description"
+          >
+            <title id="map-title">土地家屋調査士制度の逆三角形経路図</title>
+            <desc id="map-description">
+              左上に連合会、左辺中点に調査士会、右上に法務大臣、右辺中点に法務局・地方法務局、下に申請者または調査士を配置しています。
+            </desc>
+            <defs>
+              <marker
+                id="arrow-muted"
+                viewBox="0 0 10 10"
+                refX="9"
+                refY="5"
+                markerWidth="7"
+                markerHeight="7"
+                orient="auto-start-reverse"
+              >
+                <path d="M 0 0 L 10 5 L 0 10 z" />
+              </marker>
+              <marker
+                id="arrow-active"
+                viewBox="0 0 10 10"
+                refX="9"
+                refY="5"
+                markerWidth="7"
+                markerHeight="7"
+                orient="auto-start-reverse"
+              >
+                <path d="M 0 0 L 10 5 L 0 10 z" />
+              </marker>
+            </defs>
+
+            <path class="skeleton" d="M 180 105 L 450 560 L 720 105 Z" />
+
+            <g class="node" data-node="federation" transform="translate(180 105)">
+              <circle r="67" />
+              <text class="node-kicker" y="-12">全国</text>
+              <text y="10">日本土地家屋</text>
+              <text y="31">調査士会連合会</text>
+            </g>
+
+            <g class="node" data-node="minister" transform="translate(720 105)">
+              <circle r="67" />
+              <text class="node-kicker" y="-10">国</text>
+              <text class="node-title" y="19">法務大臣</text>
+            </g>
+
+            <g class="node" data-node="association" transform="translate(315 333)">
+              <circle r="61" />
+              <text class="node-kicker" y="-10" id="association-kicker">所在地に対応</text>
+              <text class="node-title" y="19" id="association-label">調査士会</text>
+            </g>
+
+            <g class="node" data-node="bureau" transform="translate(585 333)">
+              <circle r="61" />
+              <text class="node-kicker" y="-10">管轄行政機関</text>
+              <text y="14">法務局・</text>
+              <text y="35">地方法務局</text>
+            </g>
+
+            <g class="node person-node" data-node="person" transform="translate(450 560)">
+              <circle r="72" />
+              <text class="node-kicker" y="-15" id="person-kicker">申請者</text>
+              <text y="10" id="person-label-line1">調査士となる</text>
+              <text y="33" id="person-label-line2">資格を有する者</text>
+            </g>
+
+            <g class="old-association" data-node="old-association" transform="translate(105 410)" hidden>
+              <rect x="-79" y="-48" width="158" height="96" rx="12" />
+              <text class="node-kicker" y="-10">現在</text>
+              <text class="node-title" y="19">旧所属会</text>
+              <text class="effect-label" y="70">変更登録時に退会</text>
+            </g>
+
+            <path
+              class="route-line route-line--membership"
+              data-route="membership"
+              d="M 411 501 L 345 390"
+              marker-end="url(#arrow-muted)"
+            />
+            <text class="route-label route-label--membership" data-label="membership" x="350" y="460">
+              入会手続
+            </text>
+
+            <path
+              class="route-line route-line--application"
+              data-route="application"
+              d="M 414 500 L 346 385 L 216 166"
+              marker-end="url(#arrow-muted)"
+            />
+            <text class="route-label route-label--application" data-label="application" x="221" y="246">
+              登録申請（経由）
+            </text>
+
+            <path
+              class="route-line route-line--old-notice"
+              data-route="old-notice"
+              d="M 380 544 C 285 555, 219 510, 174 447"
+              marker-end="url(#arrow-muted)"
+              hidden
+            />
+            <text class="route-label route-label--old-notice" data-label="old-notice" x="228" y="542" hidden>
+              その旨を届出
+            </text>
+
+            <text class="inactive-note" x="668" y="565">この場面では右側を経由しない</text>
+          </svg>
+        </div>
+
+        <div class="explanation" id="explanation" aria-live="polite">
+          <p class="conclusion">五つの主体は、場面が変わっても同じ位置にあります。</p>
+          <p>「一つ進む」を押して、この場面で使う経路だけを点灯させます。</p>
+        </div>
+
+        <div class="controls">
+          <button class="secondary-button" id="back-button" type="button" disabled>一つ戻る</button>
+          <button class="primary-button" id="next-button" type="button">入会手続を見る</button>
+        </div>
+      </section>
+
+      <section class="reading-guide" aria-labelledby="guide-title">
+        <div>
+          <p class="eyebrow">HOW TO READ</p>
+          <h2 id="guide-title">図の読み方</h2>
+        </div>
+        <dl>
+          <div>
+            <dt><span class="sample-line sample-line--skeleton"></span>薄い骨格</dt>
+            <dd>制度上の位置を思い出すための固定配置です。骨格自体が手続経路とは限りません。</dd>
+          </div>
+          <div>
+            <dt><span class="sample-line sample-line--active"></span>朱色の矢印</dt>
+            <dd>現在の段階で行う手続です。そばに法令上の動詞を表示します。</dd>
+          </div>
+          <div>
+            <dt><span class="sample-node"></span>点灯しないノード</dt>
+            <dd>図から消さず、その手続では経由・関与しないことを示します。</dd>
+          </div>
+          <div>
+            <dt><span class="sample-memory">完成</span>最後の一枚</dt>
+            <dd>説明で見た線をすべて重ね、試験中に思い出す一枚の図として表示します。</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="law-note" aria-labelledby="law-title">
+        <p class="eyebrow">LEGAL BASIS</p>
+        <h2 id="law-title">根拠条文</h2>
+        <div class="law-grid">
+          <article>
+            <strong>新規登録</strong>
+            <p>土地家屋調査士法8条、9条、52条1項・2項</p>
+          </article>
+          <article>
+            <strong>所属会変更</strong>
+            <p>土地家屋調査士法13条、52条1項から3項</p>
+          </article>
+        </div>
+        <p>
+          2026年8月15日確認。正確な条文は
+          <a
+            href="https://laws.e-gov.go.jp/law/325AC1000000228?occasion_date=20260603"
+            target="_blank"
+            rel="noreferrer"
+          >e-Gov法令検索</a>で確認してください。
+        </p>
+      </section>
+
+      <footer>
+        この教材は土地家屋調査士試験の学習用に手続を図式化した試作であり、法的助言ではありません。
+      </footer>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>

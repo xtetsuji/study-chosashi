@@ -123,6 +123,7 @@ TypeScriptやパッケージ依存が必要な場合は、`period-flashcards/` �
 
 ```text
 /
+├── registration-route/
 ├── civil-rights-transitions/
 ├── cancellation-third-parties/
 ├── inheritance-tree/
