@@ -12,6 +12,10 @@ const indexSource = fs.readFileSync(
   path.join(__dirname, "../site/registration-route/index.html"),
   "utf8",
 );
+const styleSource = fs.readFileSync(
+  path.join(__dirname, "../site/registration-route/style.css"),
+  "utf8",
+);
 const context = { window: {} };
 vm.runInNewContext(source, context);
 
@@ -173,6 +177,14 @@ test("条件付き経路は条件文と通常の表示名を持つ", () => {
       );
     }
   }
+});
+
+test("条件付き経路のアニメーションは点線一周期分でループする", () => {
+  assert.match(styleSource, /stroke-dasharray:\s*3 7 14 7/);
+  assert.match(
+    styleSource,
+    /@keyframes conditional-route-flow\s*{\s*to\s*{\s*stroke-dashoffset:\s*-31;/,
+  );
 });
 
 test("段階データが既知のノードと経路だけを参照する", () => {

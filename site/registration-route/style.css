@@ -184,7 +184,8 @@ h1 span { color: #b64730; }
   stroke: #f2c14e;
   stroke-dasharray: 3 7 14 7;
   marker-end: url(#arrow-conditional);
-  animation-duration: 1100ms;
+  animation-name: conditional-route-flow;
+  animation-duration: 1320ms;
 }
 #arrow-muted path { fill: #67817d; }
 #arrow-active path { fill: #ef805f; }
@@ -262,6 +263,7 @@ h1 span { color: #b64730; }
 footer { padding: 2rem 0 0; color: #727a76; font-size: 0.72rem; text-align: center; }
 
 @keyframes route-flow { to { stroke-dashoffset: -20; } }
+@keyframes conditional-route-flow { to { stroke-dashoffset: -31; } }
 @keyframes memory-frame-flash {
   0% { border-color: #54716d; box-shadow: 0 0 0 0 rgba(117, 226, 165, 0); }
   38% { border-color: #75e2a5; box-shadow: 0 0 0 6px rgba(117, 226, 165, 0.5), 0 0 28px rgba(117, 226, 165, 0.38); }
