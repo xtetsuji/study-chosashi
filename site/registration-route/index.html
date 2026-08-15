@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="土地家屋調査士の登録申請と所属会変更の経路を、固定座標の逆三角形図で学ぶ試作教材"
+      content="土地家屋調査士法の手続経路を、固定座標の逆三角形図で学ぶ試作教材"
     />
     <link rel="stylesheet" href="./style.css" />
-    <title>登録経路・逆三角形マップ</title>
+    <title>調査士法・逆三角形マップ</title>
   </head>
   <body>
     <main class="app-shell">
@@ -17,7 +17,7 @@
       <header class="app-header">
         <div>
           <p class="eyebrow">土地家屋調査士法・試作教材</p>
-          <h1>登録経路<br /><span>逆三角形マップ</span></h1>
+          <h1>調査士法<br /><span>逆三角形マップ</span></h1>
         </div>
         <p class="intro">
           同じ配置のまま、誰から誰へ線が伸びるかを一手ずつ観察します。
@@ -25,11 +25,11 @@
         </p>
       </header>
 
-      <section class="assumption" aria-label="この試作で扱う範囲">
-        <strong>今回の範囲</strong>
+      <section class="assumption" aria-label="現在収録している範囲">
+        <strong>現在の収録</strong>
         <span>
-          個人の新規登録と、事務所を他の法務局・地方法務局の管轄区域へ移転する場合の所属会変更を扱います。
-          登録拒否や審査請求は、まだ扱いません。
+          新規登録、所属会変更、登録結果の通知、登録事項変更、調査士会の報告義務を扱います。
+          登録取消し、懲戒、法人は今後追加します。
         </span>
       </section>
 
@@ -164,7 +164,39 @@
               その旨を届出
             </text>
 
-            <text class="inactive-note" x="668" y="565">この場面では右側を経由しない</text>
+            <path
+              class="route-line route-line--federation-notice"
+              data-route="federation-notice"
+              d="M 140 158 C 18 285, 92 520, 375 565"
+              marker-end="url(#arrow-muted)"
+            />
+            <text
+              class="route-label route-label--federation-notice"
+              data-label="federation-notice"
+              x="58"
+              y="330"
+            >
+              書面により通知
+            </text>
+
+            <path
+              class="route-line route-line--association-report"
+              data-route="association-report"
+              d="M 365 296 C 470 185, 565 126, 650 115"
+              marker-end="url(#arrow-muted)"
+            />
+            <text
+              class="route-label route-label--association-report"
+              data-label="association-report"
+              x="437"
+              y="185"
+            >
+              法務大臣に報告
+            </text>
+
+            <text class="inactive-note" id="inactive-note" x="668" y="565">
+              この場面では右側を経由しない
+            </text>
           </svg>
         </div>
 

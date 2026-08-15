@@ -25,7 +25,7 @@ const elements = {
   oldAssociation: document.querySelector("[data-node='old-association']"),
   oldNoticeRoute: document.querySelector("[data-route='old-notice']"),
   oldNoticeLabel: document.querySelector("[data-label='old-notice']"),
-  applicationLabel: document.querySelector("[data-label='application']"),
+  inactiveNote: byId("inactive-note"),
   lawScenarioTitle: byId("law-scenario-title"),
   lawBasis: byId("law-basis"),
 };
@@ -90,7 +90,11 @@ function render() {
   elements.personKicker.textContent = scenario.personKicker;
   elements.personLine1.textContent = scenario.personLines[0];
   elements.personLine2.textContent = scenario.personLines[1];
-  elements.applicationLabel.textContent = scenario.applicationLabel;
+  document.querySelectorAll("[data-label]").forEach((label) => {
+    const routeName = label.dataset.label;
+    label.textContent = state.routeLabels?.[routeName] || scenario.routeLabels?.[routeName] || "";
+  });
+  elements.inactiveNote.textContent = scenario.inactiveNote;
   elements.lawScenarioTitle.textContent = scenario.title;
   elements.lawBasis.textContent = scenario.lawBasis;
 

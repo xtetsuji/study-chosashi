@@ -20,7 +20,13 @@ const allowedNodes = new Set([
   "bureau",
   "minister",
 ]);
-const allowedRoutes = new Set(["membership", "application", "old-notice"]);
+const allowedRoutes = new Set([
+  "membership",
+  "application",
+  "old-notice",
+  "federation-notice",
+  "association-report",
+]);
 
 test("論点IDが重複せず、選択表示に必要な情報を持つ", () => {
   assert.ok(Array.isArray(scenarios));
@@ -57,6 +63,10 @@ test("段階データが既知のノードと経路だけを参照する", () =>
       }
       for (const route of step.activeRoutes || []) {
         assert.ok(allowedRoutes.has(route), `${scenario.id}: ${route}`);
+        assert.ok(
+          step.routeLabels?.[route] || scenario.routeLabels?.[route],
+          `${scenario.id}: ${route} の表示名`,
+        );
       }
     }
   }

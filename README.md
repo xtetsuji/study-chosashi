@@ -6,7 +6,7 @@
 ## 収録内容
 
 - `period-flashcards/`: 保存期間などの数字知識を反復するフラッシュカード
-- `site/registration-route/`: 登録・所属会変更の経路を逆三角形図で学ぶ試作教材
+- `site/registration-route/`: 調査士法の手続経路を逆三角形図で学ぶ試作教材
 - `site/civil-rights-transitions/`: 不動産の二重譲渡と登記の関係を動かして学ぶ試作教材
 - `site/cancellation-third-parties/`: 取消し前・取消し後の第三者を時間軸で比べる試作教材
 - `site/inheritance-tree/`: 法定相続人と法定相続分を家系図で学ぶ試作教材
