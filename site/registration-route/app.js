@@ -80,6 +80,9 @@ function render() {
   const scenario = getCurrentScenario();
   const state = scenario.steps[currentStep];
   const stepTotal = scenario.steps.length - 1;
+  const sidePanel = scenario.sidePanel || (scenario.outcomes
+    ? { title: scenario.outcomeTitle || "処分の種類", items: scenario.outcomes }
+    : null);
 
   elements.stepLabel.textContent = `STEP ${currentStep} / ${stepTotal}`;
   elements.title.textContent = state.title;
@@ -106,10 +109,10 @@ function render() {
   elements.oldNoticeRoute.hidden = !scenario.showOldAssociation;
   elements.oldNoticeLabel.hidden = !scenario.showOldAssociation;
   elements.gazette.hidden = !scenario.showGazette;
-  elements.outcomePanel.hidden = !scenario.outcomes;
-  elements.outcomeTitle.textContent = scenario.outcomeTitle || "処分の種類";
+  elements.outcomePanel.hidden = !sidePanel;
+  elements.outcomeTitle.textContent = sidePanel?.title || "";
   elements.outcomeLines.forEach((line, index) => {
-    line.textContent = scenario.outcomes?.[index] ? `・${scenario.outcomes[index]}` : "";
+    line.textContent = sidePanel?.items[index] ? `・${sidePanel.items[index]}` : "";
   });
 
   const activeNodes = state.activeNodes || [];

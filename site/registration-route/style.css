@@ -128,7 +128,9 @@ h1 span { color: #b64730; }
 .route-line--minister-sanction,
 .route-line--minister-association-notice,
 .route-line--minister-federation-notice,
-.route-line--minister-gazette { stroke-linecap: round; }
+.route-line--minister-gazette,
+.route-line--direct-minister,
+.route-line--bureau-investigation { stroke-linecap: round; }
 .route-line.is-active {
   opacity: 1;
   stroke: #ef805f;

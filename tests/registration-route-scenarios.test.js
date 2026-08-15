@@ -31,6 +31,9 @@ const allowedRoutes = new Set([
   "minister-association-notice",
   "minister-federation-notice",
   "minister-gazette",
+  "direct-minister",
+  "person-bureau",
+  "bureau-investigation",
 ]);
 
 test("論点IDが重複せず、選択表示に必要な情報を持つ", () => {
@@ -52,6 +55,13 @@ test("処分一覧は比較欄に収まる三項目である", () => {
   for (const scenario of scenarios.filter((item) => item.outcomes)) {
     assert.equal(scenario.outcomes.length, 3, scenario.id);
     assert.equal(scenario.showGazette, true, scenario.id);
+  }
+});
+
+test("補足欄は三項目で要点を示す", () => {
+  for (const scenario of scenarios.filter((item) => item.sidePanel)) {
+    assert.ok(scenario.sidePanel.title, scenario.id);
+    assert.equal(scenario.sidePanel.items.length, 3, scenario.id);
   }
 });
 
