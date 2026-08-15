@@ -19,6 +19,7 @@ const elements = {
   back: byId("back-button"),
   reset: byId("reset-button"),
   memoryBadge: byId("memory-badge"),
+  mapPanel: document.querySelector(".map-panel"),
   associationKicker: byId("association-kicker"),
   associationLabel: byId("association-label"),
   personKicker: byId("person-kicker"),
@@ -96,6 +97,11 @@ function render() {
   elements.scenarioPosition.textContent = `全${scenarios.length}論点`;
   elements.title.textContent = state.title;
   elements.memoryBadge.hidden = !state.isMemory;
+  elements.mapPanel.classList.remove("is-memory-flash");
+  if (state.isMemory) {
+    void elements.mapPanel.offsetWidth;
+    elements.mapPanel.classList.add("is-memory-flash");
+  }
   elements.explanation.innerHTML = `
     <p class="conclusion">${state.conclusion}</p>
     <p>${state.detail}</p>
