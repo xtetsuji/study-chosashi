@@ -99,6 +99,25 @@ test("各論点は暗記用の完成図で終わる", () => {
   }
 });
 
+test("法人の成立は設立登記を先に、成立届を後に示す", () => {
+  const formation = scenarios.find((scenario) => scenario.id === "corporation-formation");
+  assert.ok(formation);
+
+  const registrationStep = formation.steps.findIndex((step) =>
+    step.activeRoutes?.includes("person-bureau"),
+  );
+  const filingStep = formation.steps.findIndex((step) =>
+    step.activeRoutes?.includes("direct-federation"),
+  );
+
+  assert.ok(registrationStep >= 0);
+  assert.ok(filingStep > registrationStep);
+  assert.deepEqual(
+    [...formation.steps[filingStep].activeRoutes],
+    ["membership", "direct-federation"],
+  );
+});
+
 test("段階データが既知のノードと経路だけを参照する", () => {
   for (const scenario of scenarios) {
     for (const step of scenario.steps) {
@@ -109,6 +128,7 @@ test("段階データが既知のノードと経路だけを参照する", () =>
       ]) {
         assert.ok(allowedNodes.has(node), `${scenario.id}: ${node}`);
       }
+      if (step.personLines) assert.equal(step.personLines.length, 2, scenario.id);
       for (const route of step.activeRoutes || []) {
         assert.ok(allowedRoutes.has(route), `${scenario.id}: ${route}`);
         assert.ok(

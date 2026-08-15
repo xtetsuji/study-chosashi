@@ -113,9 +113,10 @@ function render() {
 
   elements.associationKicker.textContent = scenario.associationKicker;
   elements.associationLabel.textContent = scenario.associationLabel;
-  elements.personKicker.textContent = scenario.personKicker;
-  elements.personLine1.textContent = scenario.personLines[0];
-  elements.personLine2.textContent = scenario.personLines[1];
+  const personLines = state.personLines || scenario.personLines;
+  elements.personKicker.textContent = state.personKicker || scenario.personKicker;
+  elements.personLine1.textContent = personLines[0];
+  elements.personLine2.textContent = personLines[1];
   document.querySelectorAll("[data-label]").forEach((label) => {
     const routeName = label.dataset.label;
     label.textContent = state.routeLabels?.[routeName] || scenario.routeLabels?.[routeName] || "";
