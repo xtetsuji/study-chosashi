@@ -8,6 +8,10 @@ const source = fs.readFileSync(
   path.join(__dirname, "../site/registration-route/scenarios.js"),
   "utf8",
 );
+const indexSource = fs.readFileSync(
+  path.join(__dirname, "../site/registration-route/index.html"),
+  "utf8",
+);
 const context = { window: {} };
 vm.runInNewContext(source, context);
 
@@ -30,9 +34,14 @@ const allowedRoutes = new Set([
   "old-notice",
   "federation-notice",
   "association-report",
+  "association-person",
+  "association-bureau",
+  "association-minister-via-bureau",
+  "minister-association-via-bureau",
   "minister-sanction",
   "minister-association-notice",
   "minister-federation-notice",
+  "federation-minister",
   "minister-gazette",
   "direct-minister",
   "person-bureau",
@@ -116,6 +125,34 @@ test("法人の成立は設立登記を先に、成立届を後に示す", () =>
     [...formation.steps[filingStep].activeRoutes],
     ["membership", "direct-federation"],
   );
+});
+
+test("追加した制度経路をそれぞれの完成図に含める", () => {
+  const expectedRoutes = {
+    "registration-appeal": ["federation-notice", "direct-minister"],
+    "bylaw-approval-comparison": [
+      "association-minister-via-bureau",
+      "minister-federation-notice",
+      "minister-association-via-bureau",
+      "federation-minister",
+    ],
+    "association-guidance": ["association-person", "association-bureau"],
+    "registration-administration-supervision": ["minister-federation-notice"],
+    "association-membership-notice": ["association-bureau"],
+  };
+
+  for (const [scenarioId, routes] of Object.entries(expectedRoutes)) {
+    const scenario = scenarios.find((item) => item.id === scenarioId);
+    assert.ok(scenario, scenarioId);
+    assert.deepEqual([...scenario.steps.at(-1).activeRoutes], routes, scenarioId);
+  }
+});
+
+test("シナリオで許可した経路はSVGに定義されている", () => {
+  for (const route of allowedRoutes) {
+    assert.match(indexSource, new RegExp(`data-route=["']${route}["']`), route);
+    assert.match(indexSource, new RegExp(`data-label=["']${route}["']`), route);
+  }
 });
 
 test("段階データが既知のノードと経路だけを参照する", () => {
