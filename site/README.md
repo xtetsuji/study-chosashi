@@ -24,6 +24,7 @@ study-chosashi/
 │   ├── index.html                     # 教材一覧
 │   ├── assets/                        # トップページの共通素材
 │   ├── registration-route/            # 調査士法の逆三角形マップ
+│   ├── boundary-determination-flow/    # 筆界特定の情報収束ダイヤモンド
 │   ├── civil-rights-transitions/      # 権利変動教材の試作
 │   ├── cancellation-third-parties/    # 取消し前後の第三者を比べる試作教材
 │   ├── stair-floor-area/               # 階段床面積の算入判定
@@ -40,6 +41,7 @@ study-chosashi/
 ```text
 /
 ├── registration-route/
+├── boundary-determination-flow/
 ├── period-flashcards/
 ├── civil-rights-transitions/
 ├── cancellation-third-parties/
@@ -120,6 +122,14 @@ study-chosashi/
 登録、通知、報告などで実際に使う経路だけを強調する試作教材です。関与しない機関も
 薄く残し、「誰が、誰に、何をし、どこを経由するか」を比較できるようにします。
 
+### 11. 筆界特定・情報収束ダイヤモンド
+
+申請人、筆界特定登記官、筆界調査委員、関係人を固定座標へ配置し、申請から調査・測量、
+意見・資料の提出、筆界特定までの基本フローと、手続保障、ロール分離、通知・公告、
+筆界確定訴訟、予納・却下などを8ストーリーで学ぶ教材です。
+土地家屋調査士は固定ノードにせず、申請人の代理人または筆界調査委員になり得る専門家
+という属性で表示します。
+
 ## 今後の優先順位
 
 1. GitHubへpushし、トップページと6教材をPagesで公開する
@@ -169,6 +179,7 @@ Viteアプリはリポジトリ名を含むURLでも素材を正しく読める�
 階段床面積・算入ビジュアライザーの試作、
 ダストシュート床面積ビジュアライザーの試作、
 調査士法・逆三角形マップの試作、
+筆界特定・情報収束ダイヤモンドの試作、
 既存の期間フラッシュカード、
 GitHub Actionsによる公開設定まで用意しました。ローカルで公開用ファイルを生成するには、
 次を実行します。
