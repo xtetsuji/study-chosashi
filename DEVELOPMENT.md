@@ -26,6 +26,7 @@ pnpm --dir period-flashcards install
 ```bash
 pnpm --dir period-flashcards build
 node --test tests/cancellation-third-parties.test.js
+node --test tests/registration-route-scenarios.test.js
 node scripts/build-site.mjs
 ```
 

@@ -1,109 +1,15 @@
-const modes = {
-  registration: {
-    stepTotal: 3,
-    personKicker: "申請者",
-    personLines: ["調査士となる", "資格を有する者"],
-    associationKicker: "事務所予定地に対応",
-    associationLabel: "調査士会",
-    showOldAssociation: false,
-    steps: [
-      {
-        title: "まず、固定配置を確認",
-        conclusion: "五つの主体は、場面が変わっても同じ位置にあります。",
-        detail: "この登録申請では左側だけを使います。右側の法務局・地方法務局と法務大臣は、薄いまま残ります。",
-        activeNodes: [],
-        activeRoutes: [],
-        next: "入会手続を見る",
-      },
-      {
-        title: "調査士会への入会手続",
-        conclusion: "登録申請と同時に、経由する調査士会へ入会する手続をとります。",
-        detail: "まだ調査士会の会員になったわけではありません。実際に会員になるのは、連合会による登録の時です。",
-        activeNodes: ["person", "association"],
-        activeRoutes: ["membership"],
-        next: "登録申請を見る",
-      },
-      {
-        title: "調査士会を経由して登録申請",
-        conclusion: "登録申請書の提出先は連合会で、所在地に対応する調査士会を経由します。",
-        detail: "法務局・地方法務局は、経由する調査士会を決める管轄の基準として登場しますが、申請書の経由先ではありません。",
-        activeNodes: ["person", "association", "federation"],
-        activeRoutes: ["application"],
-        next: "完成図を重ねる",
-      },
-      {
-        title: "この一枚を覚える",
-        conclusion: "入会手続と、調査士会を経由する登録申請が一枚につながりました。",
-        detail: "調査士会までの二本の線を見分けます。入会手続は調査士会まで、登録申請は調査士会を経由して連合会まで進み、右側は使いません。",
-        activeNodes: ["person", "association", "federation"],
-        activeRoutes: ["membership", "application"],
-        isMemory: true,
-        next: "",
-      },
-    ],
-  },
-  transfer: {
-    stepTotal: 4,
-    personKicker: "申請者",
-    personLines: ["土地家屋", "調査士"],
-    associationKicker: "新事務所所在地に対応",
-    associationLabel: "新調査士会",
-    showOldAssociation: true,
-    steps: [
-      {
-        title: "新旧二つの調査士会を確認",
-        conclusion: "事務所を他の管轄区域へ移すため、所属会も変わります。",
-        detail: "三角形の固定位置には、これから所属する新調査士会を置きます。旧所属会は、今回だけ左外側に現れます。",
-        activeNodes: [],
-        activeRoutes: [],
-        next: "同時に行う手続を見る",
-      },
-      {
-        title: "新会への入会手続・旧会への届出",
-        conclusion: "新調査士会への入会手続と、旧所属会への届出を行います。",
-        detail: "変更登録の申請と同時に新会への入会手続をとり、現に所属する旧会には、その申請をする旨を届け出ます。",
-        activeNodes: ["person", "association", "old-association"],
-        activeRoutes: ["membership", "old-notice"],
-        next: "変更登録申請を見る",
-      },
-      {
-        title: "新調査士会を経由して変更登録申請",
-        conclusion: "変更登録申請は、新しい事務所所在地に対応する調査士会を経由します。",
-        detail: "旧所属会を経由するのではありません。提出先は連合会で、法務局・地方法務局も経由しません。",
-        activeNodes: ["person", "association", "federation"],
-        activeRoutes: ["application"],
-        next: "変更登録の効果を見る",
-      },
-      {
-        title: "変更登録と同時に所属が切り替わる",
-        conclusion: "連合会が変更登録をすると、新会へ入会し、旧会を退会します。",
-        detail: "入会・退会の効力が生じる基準時は、事務所を移転した時や申請した時ではなく、変更登録の時です。",
-        activeNodes: ["federation", "association"],
-        completeNodes: ["association"],
-        retiredNodes: ["old-association"],
-        activeRoutes: [],
-        next: "完成図を重ねる",
-      },
-      {
-        title: "この一枚を覚える",
-        conclusion: "旧会への届出、新会への入会手続、新会経由の変更登録申請が一枚につながりました。",
-        detail: "経由するのは新調査士会です。連合会による変更登録の時に、新会へ入会し、旧会を退会します。右側は使いません。",
-        activeNodes: ["person", "federation"],
-        completeNodes: ["association"],
-        retiredNodes: ["old-association"],
-        activeRoutes: ["membership", "old-notice", "application"],
-        isMemory: true,
-        next: "",
-      },
-    ],
-  },
-};
+const scenarios = window.registrationRouteScenarios;
 
-let currentMode = "registration";
+if (!Array.isArray(scenarios) || scenarios.length === 0) {
+  throw new Error("論点データを読み込めませんでした。");
+}
+
+let currentScenarioId = scenarios[0].id;
 let currentStep = 0;
 
 const byId = (id) => document.getElementById(id);
 const elements = {
+  scenarioSwitch: byId("scenario-switch"),
   stepLabel: byId("step-label"),
   title: byId("lab-title"),
   explanation: byId("explanation"),
@@ -119,7 +25,14 @@ const elements = {
   oldAssociation: document.querySelector("[data-node='old-association']"),
   oldNoticeRoute: document.querySelector("[data-route='old-notice']"),
   oldNoticeLabel: document.querySelector("[data-label='old-notice']"),
+  applicationLabel: document.querySelector("[data-label='application']"),
+  lawScenarioTitle: byId("law-scenario-title"),
+  lawBasis: byId("law-basis"),
 };
+
+function getCurrentScenario() {
+  return scenarios.find((scenario) => scenario.id === currentScenarioId);
+}
 
 function setActiveItems(selector, activeNames, className) {
   document.querySelectorAll(selector).forEach((item) => {
@@ -128,11 +41,43 @@ function setActiveItems(selector, activeNames, className) {
   });
 }
 
-function render() {
-  const mode = modes[currentMode];
-  const state = mode.steps[currentStep];
+function selectScenario(scenarioId) {
+  currentScenarioId = scenarioId;
+  currentStep = 0;
 
-  elements.stepLabel.textContent = `STEP ${currentStep} / ${mode.stepTotal}`;
+  elements.scenarioSwitch.querySelectorAll("button").forEach((button) => {
+    const isSelected = button.dataset.scenario === scenarioId;
+    button.classList.toggle("is-selected", isSelected);
+    button.setAttribute("aria-pressed", String(isSelected));
+  });
+
+  render();
+}
+
+function buildScenarioSelector() {
+  scenarios.forEach((scenario, index) => {
+    const button = document.createElement("button");
+    const title = document.createElement("strong");
+    const summary = document.createElement("span");
+
+    button.type = "button";
+    button.dataset.scenario = scenario.id;
+    button.setAttribute("aria-pressed", String(index === 0));
+    button.classList.toggle("is-selected", index === 0);
+    title.textContent = scenario.title;
+    summary.textContent = scenario.summary;
+    button.append(title, summary);
+    button.addEventListener("click", () => selectScenario(scenario.id));
+    elements.scenarioSwitch.append(button);
+  });
+}
+
+function render() {
+  const scenario = getCurrentScenario();
+  const state = scenario.steps[currentStep];
+  const stepTotal = scenario.steps.length - 1;
+
+  elements.stepLabel.textContent = `STEP ${currentStep} / ${stepTotal}`;
   elements.title.textContent = state.title;
   elements.memoryBadge.hidden = !state.isMemory;
   elements.explanation.innerHTML = `
@@ -140,15 +85,18 @@ function render() {
     <p>${state.detail}</p>
   `;
 
-  elements.associationKicker.textContent = mode.associationKicker;
-  elements.associationLabel.textContent = mode.associationLabel;
-  elements.personKicker.textContent = mode.personKicker;
-  elements.personLine1.textContent = mode.personLines[0];
-  elements.personLine2.textContent = mode.personLines[1];
+  elements.associationKicker.textContent = scenario.associationKicker;
+  elements.associationLabel.textContent = scenario.associationLabel;
+  elements.personKicker.textContent = scenario.personKicker;
+  elements.personLine1.textContent = scenario.personLines[0];
+  elements.personLine2.textContent = scenario.personLines[1];
+  elements.applicationLabel.textContent = scenario.applicationLabel;
+  elements.lawScenarioTitle.textContent = scenario.title;
+  elements.lawBasis.textContent = scenario.lawBasis;
 
-  elements.oldAssociation.hidden = !mode.showOldAssociation;
-  elements.oldNoticeRoute.hidden = !mode.showOldAssociation;
-  elements.oldNoticeLabel.hidden = !mode.showOldAssociation;
+  elements.oldAssociation.hidden = !scenario.showOldAssociation;
+  elements.oldNoticeRoute.hidden = !scenario.showOldAssociation;
+  elements.oldNoticeLabel.hidden = !scenario.showOldAssociation;
 
   const activeNodes = state.activeNodes || [];
   const activeRoutes = state.activeRoutes || [];
@@ -158,30 +106,14 @@ function render() {
   setActiveItems("[data-route]", activeRoutes, "is-active");
   setActiveItems("[data-label]", activeRoutes, "is-active");
 
-  const applicationLabel = document.querySelector("[data-label='application']");
-  applicationLabel.textContent =
-    currentMode === "registration" ? "登録申請（経由）" : "変更登録申請（経由）";
-
   elements.back.disabled = currentStep === 0;
-  elements.next.hidden = currentStep === mode.stepTotal;
+  elements.next.hidden = currentStep === stepTotal;
   elements.next.textContent = state.next;
 }
 
-document.querySelectorAll("[data-mode]").forEach((button) => {
-  button.addEventListener("click", () => {
-    currentMode = button.dataset.mode;
-    currentStep = 0;
-    document.querySelectorAll("[data-mode]").forEach((candidate) => {
-      const isSelected = candidate === button;
-      candidate.classList.toggle("is-selected", isSelected);
-      candidate.setAttribute("aria-pressed", String(isSelected));
-    });
-    render();
-  });
-});
-
 elements.next.addEventListener("click", () => {
-  if (currentStep < modes[currentMode].stepTotal) currentStep += 1;
+  const stepTotal = getCurrentScenario().steps.length - 1;
+  if (currentStep < stepTotal) currentStep += 1;
   render();
 });
 
@@ -195,4 +127,5 @@ elements.reset.addEventListener("click", () => {
   render();
 });
 
+buildScenarioSelector();
 render();

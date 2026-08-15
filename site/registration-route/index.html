@@ -33,13 +33,15 @@
         </span>
       </section>
 
-      <section class="route-lab" aria-labelledby="lab-title">
-        <div class="mode-switch" role="group" aria-label="学習する場面">
-          <button class="is-selected" type="button" data-mode="registration" aria-pressed="true">
-            新規登録
-          </button>
-          <button type="button" data-mode="transfer" aria-pressed="false">所属会変更</button>
+      <section class="scenario-picker" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">SCENARIOS</p>
+          <h2 id="scenario-title">論点を選ぶ</h2>
         </div>
+        <div class="scenario-switch" id="scenario-switch" role="group" aria-label="学習する論点"></div>
+      </section>
+
+      <section class="route-lab" aria-labelledby="lab-title">
 
         <div class="lab-heading">
           <div>
@@ -207,12 +209,8 @@
         <h2 id="law-title">根拠条文</h2>
         <div class="law-grid">
           <article>
-            <strong>新規登録</strong>
-            <p>土地家屋調査士法8条、9条、52条1項・2項</p>
-          </article>
-          <article>
-            <strong>所属会変更</strong>
-            <p>土地家屋調査士法13条、52条1項から3項</p>
+            <strong id="law-scenario-title">新規登録</strong>
+            <p id="law-basis">土地家屋調査士法8条、9条、52条1項・2項</p>
           </article>
         </div>
         <p>
@@ -229,6 +227,7 @@
         この教材は土地家屋調査士試験の学習用に手続を図式化した試作であり、法的助言ではありません。
       </footer>
     </main>
+    <script src="./scenarios.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>
