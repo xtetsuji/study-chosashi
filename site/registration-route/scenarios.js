@@ -1,6 +1,7 @@
 window.registrationRouteScenarios = [
   {
     id: "registration",
+    category: "登録",
     title: "新規登録",
     summary: "資格を有する者が、調査士会を経由して連合会へ登録申請します。",
     lawBasis: "土地家屋調査士法8条、9条、52条1項・2項",
@@ -52,6 +53,7 @@ window.registrationRouteScenarios = [
   },
   {
     id: "transfer",
+    category: "登録",
     title: "所属会変更",
     summary: "他の管轄区域への事務所移転に伴い、旧会への届出と新会経由の申請を行います。",
     lawBasis: "土地家屋調査士法13条、52条1項から3項",
@@ -116,6 +118,7 @@ window.registrationRouteScenarios = [
   },
   {
     id: "registration-notice",
+    category: "登録",
     title: "登録に関する通知",
     summary: "連合会が、登録または登録拒否の結果を申請者へ書面で直接通知します。",
     lawBasis: "土地家屋調査士法11条（13条4項による所属会変更への準用を含む）",
@@ -169,6 +172,7 @@ window.registrationRouteScenarios = [
   },
   {
     id: "registered-details-change",
+    category: "登録",
     title: "登録事項変更",
     summary: "所属会変更以外の登録事項変更を、所属調査士会経由で連合会へ届け出ます。",
     lawBasis: "土地家屋調査士法14条",
@@ -211,6 +215,7 @@ window.registrationRouteScenarios = [
   },
   {
     id: "association-report",
+    category: "調査士会",
     title: "調査士会の報告義務",
     summary: "所属会員の法令違反を思料するとき、調査士会が法務大臣へ直接報告します。",
     lawBasis: "土地家屋調査士法55条",
@@ -253,6 +258,7 @@ window.registrationRouteScenarios = [
   },
   {
     id: "discipline-individual",
+    category: "懲戒",
     title: "調査士の懲戒",
     summary: "法務大臣による個人への処分と、処分後の通知・官報公告を追います。",
     lawBasis: "土地家屋調査士法42条、44条3項から5項、46条／土地家屋調査士法施行規則36条",
@@ -331,6 +337,7 @@ window.registrationRouteScenarios = [
   },
   {
     id: "discipline-corporation",
+    category: "懲戒",
     title: "調査士法人の懲戒",
     summary: "法人の処分を個人と対比し、全部・一部停止と解散を押さえます。",
     lawBasis: "土地家屋調査士法43条1項、44条3項から5項、46条／土地家屋調査士法施行規則36条",
@@ -409,6 +416,7 @@ window.registrationRouteScenarios = [
   },
   {
     id: "discipline-commencement",
+    category: "懲戒",
     title: "懲戒手続開始・取消制限",
     summary: "聴聞通知後の連合会への通告と、一定の登録取消しが制限される期間を追います。",
     lawBasis: "土地家屋調査士法45条／土地家屋調査士法施行規則35条の7第3号",
@@ -474,6 +482,7 @@ window.registrationRouteScenarios = [
   },
   {
     id: "discipline-report-investigation",
+    category: "懲戒",
     title: "違反事実の通知・調査",
     summary: "何人でもできる違反通知と、法務局長等に委任された受理・調査を区別します。",
     lawBasis: "土地家屋調査士法44条1項・2項／土地家屋調査士法施行規則35条の7第1号・第2号",
@@ -535,6 +544,7 @@ window.registrationRouteScenarios = [
   },
   {
     id: "registration-cancellation-required",
+    category: "登録",
     title: "必要的な登録取消し",
     summary: "取消事由の届出から、連合会による取消しと官報公告までを追います。",
     lawBasis: "土地家屋調査士法15条、17条、18条",
@@ -600,6 +610,7 @@ window.registrationRouteScenarios = [
   },
   {
     id: "registration-cancellation-discretionary",
+    category: "登録",
     title: "裁量的な登録取消し",
     summary: "二つの取消事由、登録審査会、理由付き通知と官報公告を追います。",
     lawBasis: "土地家屋調査士法16条から18条、62条（16条4項による10条1項後段の準用）",
@@ -674,6 +685,7 @@ window.registrationRouteScenarios = [
   },
   {
     id: "corporation-filings",
+    category: "法人",
     title: "調査士法人の届出",
     summary: "成立・定款変更・解散・合併を、調査士会と連合会の双方へ届け出ます。",
     lawBasis: "土地家屋調査士法33条、34条2項、39条2項、40条3項／土地家屋調査士法施行規則32条から34条",
@@ -778,6 +790,7 @@ window.registrationRouteScenarios = [
   },
   {
     id: "corporation-dissolution-supervision",
+    category: "法人",
     title: "法人の解散・清算監督",
     summary: "地方裁判所を独立表示し、法務大臣との双方向の関係を確認します。",
     lawBasis: "土地家屋調査士法39条の3、39条の4",

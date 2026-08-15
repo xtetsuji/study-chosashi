@@ -12,6 +12,7 @@ const context = { window: {} };
 vm.runInNewContext(source, context);
 
 const scenarios = context.window.registrationRouteScenarios;
+const allowedCategories = new Set(["登録", "調査士会", "懲戒", "法人"]);
 const allowedNodes = new Set([
   "person",
   "association",
@@ -52,6 +53,7 @@ test("論点IDが重複せず、選択表示に必要な情報を持つ", () => 
     assert.ok(scenario.id);
     assert.ok(scenario.title);
     assert.ok(scenario.summary);
+    assert.ok(allowedCategories.has(scenario.category), scenario.id);
     assert.ok(scenario.lawBasis);
     assert.equal(scenario.personLines.length, 2);
     assert.ok(scenario.steps.length >= 2);

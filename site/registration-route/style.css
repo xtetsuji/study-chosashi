@@ -56,25 +56,39 @@ h1 span { color: #b64730; }
 
 .scenario-picker { display: grid; grid-template-columns: 0.55fr 1.45fr; gap: 2rem; padding: 3rem 0 1rem; }
 .scenario-picker h2 { font-size: clamp(1.8rem, 4vw, 2.7rem); }
-.scenario-switch { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
-.scenario-switch button {
-  display: flex;
-  min-height: 7.5rem;
-  padding: 1rem;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: flex-start;
+.scenario-control { display: grid; gap: 0.65rem; align-content: start; }
+.scenario-control label { color: #68736e; font-size: 0.75rem; font-weight: 900; letter-spacing: 0.08em; }
+.scenario-select-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.75rem; align-items: center; }
+.scenario-select-wrap { position: relative; }
+.scenario-select-wrap::after {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-right: 2px solid #b64730;
+  border-bottom: 2px solid #b64730;
+  content: "";
+  pointer-events: none;
+  transform: translateY(-70%) rotate(45deg);
+}
+.scenario-control select {
+  width: 100%;
+  min-height: 3.75rem;
+  padding: 0.8rem 3rem 0.8rem 1rem;
+  appearance: none;
   border: 1px solid #bcb6ab;
-  background: rgba(255, 253, 248, 0.86);
+  border-radius: 0;
+  background: rgba(255, 253, 248, 0.92);
   color: #172b2a;
   cursor: pointer;
-  text-align: left;
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 1.12rem;
+  font-weight: 800;
 }
-.scenario-switch button strong { font-family: "Yu Mincho", "Hiragino Mincho ProN", serif; font-size: 1.25rem; }
-.scenario-switch button span { color: #68736e; font-size: 0.78rem; line-height: 1.6; }
-.scenario-switch button.is-selected { border-color: #b64730; box-shadow: inset 0 0 0 2px #b64730; }
-.scenario-switch button.is-selected strong { color: #b64730; }
-.scenario-switch button:focus-visible { outline: 3px solid rgba(182, 71, 48, 0.3); outline-offset: 2px; }
+.scenario-control select:focus-visible { outline: 3px solid rgba(182, 71, 48, 0.3); outline-offset: 2px; }
+.scenario-position { min-width: 3.5rem; color: #b64730; font-size: 0.8rem; font-weight: 900; text-align: right; }
+.scenario-summary { min-height: 2.8rem; margin: 0; color: #5d6964; font-size: 0.82rem; line-height: 1.7; }
 .route-lab { margin-top: 1rem; padding: clamp(1rem, 4vw, 2.5rem); background: #173b3a; color: #fffdf8; }
 .lab-heading { display: flex; align-items: start; justify-content: space-between; gap: 1rem; }
 .lab-heading h2 { font-size: clamp(1.7rem, 4vw, 2.8rem); }
@@ -223,7 +237,6 @@ footer { padding: 2rem 0 0; color: #727a76; font-size: 0.72rem; text-align: cent
   .scenario-picker { grid-template-columns: 1fr; gap: 1.25rem; }
   .assumption { grid-template-columns: 1fr; gap: 0.25rem; }
   .route-lab { padding-inline: 0.65rem; }
-  .scenario-switch { grid-template-columns: 1fr; }
   .lab-heading { align-items: end; }
   .reset-button { white-space: nowrap; }
   .route-map { min-height: 410px; }

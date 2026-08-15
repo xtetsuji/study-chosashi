@@ -38,7 +38,16 @@
           <p class="eyebrow">SCENARIOS</p>
           <h2 id="scenario-title">論点を選ぶ</h2>
         </div>
-        <div class="scenario-switch" id="scenario-switch" role="group" aria-label="学習する論点"></div>
+        <div class="scenario-control">
+          <label for="scenario-select">分野別に論点を選択</label>
+          <div class="scenario-select-row">
+            <div class="scenario-select-wrap">
+              <select id="scenario-select" aria-describedby="scenario-summary"></select>
+            </div>
+            <span class="scenario-position" id="scenario-position" aria-live="polite"></span>
+          </div>
+          <p class="scenario-summary" id="scenario-summary"></p>
+        </div>
       </section>
 
       <section class="route-lab" aria-labelledby="lab-title">

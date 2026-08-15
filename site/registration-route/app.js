@@ -9,7 +9,9 @@ let currentStep = 0;
 
 const byId = (id) => document.getElementById(id);
 const elements = {
-  scenarioSwitch: byId("scenario-switch"),
+  scenarioSelect: byId("scenario-select"),
+  scenarioSummary: byId("scenario-summary"),
+  scenarioPosition: byId("scenario-position"),
   stepLabel: byId("step-label"),
   title: byId("lab-title"),
   explanation: byId("explanation"),
@@ -55,32 +57,30 @@ function setActiveItems(selector, activeNames, className) {
 function selectScenario(scenarioId) {
   currentScenarioId = scenarioId;
   currentStep = 0;
-
-  elements.scenarioSwitch.querySelectorAll("button").forEach((button) => {
-    const isSelected = button.dataset.scenario === scenarioId;
-    button.classList.toggle("is-selected", isSelected);
-    button.setAttribute("aria-pressed", String(isSelected));
-  });
+  elements.scenarioSelect.value = scenarioId;
 
   render();
 }
 
 function buildScenarioSelector() {
-  scenarios.forEach((scenario, index) => {
-    const button = document.createElement("button");
-    const title = document.createElement("strong");
-    const summary = document.createElement("span");
+  const categoryOrder = ["登録", "調査士会", "懲戒", "法人"];
 
-    button.type = "button";
-    button.dataset.scenario = scenario.id;
-    button.setAttribute("aria-pressed", String(index === 0));
-    button.classList.toggle("is-selected", index === 0);
-    title.textContent = scenario.title;
-    summary.textContent = scenario.summary;
-    button.append(title, summary);
-    button.addEventListener("click", () => selectScenario(scenario.id));
-    elements.scenarioSwitch.append(button);
+  categoryOrder.forEach((category) => {
+    const categoryScenarios = scenarios.filter((scenario) => scenario.category === category);
+    if (categoryScenarios.length === 0) return;
+
+    const group = document.createElement("optgroup");
+    group.label = category;
+    categoryScenarios.forEach((scenario) => {
+      const option = document.createElement("option");
+      option.value = scenario.id;
+      option.textContent = scenario.title;
+      group.append(option);
+    });
+    elements.scenarioSelect.append(group);
   });
+
+  elements.scenarioSelect.value = currentScenarioId;
 }
 
 function render() {
@@ -92,6 +92,8 @@ function render() {
     : null);
 
   elements.stepLabel.textContent = `STEP ${currentStep} / ${stepTotal}`;
+  elements.scenarioSummary.textContent = scenario.summary;
+  elements.scenarioPosition.textContent = `全${scenarios.length}論点`;
   elements.title.textContent = state.title;
   elements.memoryBadge.hidden = !state.isMemory;
   elements.explanation.innerHTML = `
@@ -151,6 +153,10 @@ elements.back.addEventListener("click", () => {
 elements.reset.addEventListener("click", () => {
   currentStep = 0;
   render();
+});
+
+elements.scenarioSelect.addEventListener("change", (event) => {
+  selectScenario(event.target.value);
 });
 
 buildScenarioSelector();
