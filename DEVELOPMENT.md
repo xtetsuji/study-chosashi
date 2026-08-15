@@ -26,7 +26,9 @@ pnpm --dir period-flashcards install
 ```bash
 pnpm --dir period-flashcards build
 node --test tests/cancellation-third-parties.test.js
+node --test tests/registration-route-scenarios.test.js
 node scripts/build-site.mjs
+node scripts/check-site-links.mjs
 ```
 
 生成された `dist/index.html` が公開サイトの入口です。HTTPで確認する場合は、例えば
@@ -123,6 +125,7 @@ TypeScriptやパッケージ依存が必要な場合は、`period-flashcards/` �
 
 ```text
 /
+├── registration-route/
 ├── civil-rights-transitions/
 ├── cancellation-third-parties/
 ├── inheritance-tree/

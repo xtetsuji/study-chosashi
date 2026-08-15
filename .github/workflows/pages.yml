@@ -39,11 +39,17 @@ jobs:
       - name: Install dependencies
         run: pnpm --dir period-flashcards install --frozen-lockfile
 
+      - name: Run static content tests
+        run: node --test tests/*.test.js
+
       - name: Build period flashcards
         run: pnpm --dir period-flashcards build
 
       - name: Assemble site
         run: node scripts/build-site.mjs
+
+      - name: Check generated site links
+        run: node scripts/check-site-links.mjs
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
