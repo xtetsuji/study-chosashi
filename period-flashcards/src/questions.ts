@@ -238,7 +238,7 @@ const civilLawQuestions: Question[] = [
     explanation: "取消権は、追認をすることができる時から5年間行使しないと、時効によって消滅する。",
     source: `民法第126条前段（${confirmedAt}）`,
     sourceUrl: civilCodeUrl,
-    importance: 3,
+    importance: 2,
     tags: ["取消権", "消滅時効"],
   },
   {
@@ -251,7 +251,7 @@ const civilLawQuestions: Question[] = [
     explanation: "追認できる時からの5年とは別に、行為の時から20年を経過したときも取消権は消滅する。",
     source: `民法第126条後段（${confirmedAt}）`,
     sourceUrl: civilCodeUrl,
-    importance: 3,
+    importance: 2,
     tags: ["取消権", "消滅時効"],
   },
   {
@@ -303,7 +303,7 @@ const civilLawQuestions: Question[] = [
     explanation: "普通借地権の当初の存続期間は30年。契約で30年より長い期間を定めたときは、その期間となる。",
     source: `借地借家法第3条（${confirmedAt}）`,
     sourceUrl: landAndHouseLeaseActUrl,
-    importance: 1,
+    importance: 2,
     tags: ["借地権", "存続期間"],
   },
   {
@@ -316,7 +316,7 @@ const civilLawQuestions: Question[] = [
     explanation: "地上権の地代には永小作権の規定が準用され、引き続き2年以上支払を怠ると、土地所有者は消滅を請求できる。",
     source: `民法第266条第1項・第276条（${confirmedAt}）`,
     sourceUrl: civilCodeUrl,
-    importance: 1,
+    importance: 2,
     tags: ["地上権", "地代", "消滅請求"],
   },
   {
@@ -329,7 +329,7 @@ const civilLawQuestions: Question[] = [
     explanation: "地役権は所有権以外の財産権として20年で時効消滅する。起算点は、非継続地役権では最後の行使時、継続地役権では行使を妨げる事実が生じた時である。",
     source: `民法第166条第2項・第291条（${confirmedAt}）`,
     sourceUrl: civilCodeUrl,
-    importance: 1,
+    importance: 2,
     tags: ["地役権", "消滅時効"],
   },
   {
@@ -355,7 +355,7 @@ const civilLawQuestions: Question[] = [
     explanation: "裁判上の請求などが権利を確定させずに終了した場合、終了時から6か月を経過するまで時効は完成しない。",
     source: `民法第147条第1項（${confirmedAt}）`,
     sourceUrl: civilCodeUrl,
-    importance: 3,
+    importance: 2,
     tags: ["時効完成猶予", "裁判上の請求"],
   },
   {
@@ -368,7 +368,7 @@ const civilLawQuestions: Question[] = [
     explanation: "仮差押えまたは仮処分の事由が終了した時から6か月を経過するまで、時効は完成しない。",
     source: `民法第149条（${confirmedAt}）`,
     sourceUrl: civilCodeUrl,
-    importance: 3,
+    importance: 2,
     tags: ["時効完成猶予", "仮差押え", "仮処分"],
   },
   {
@@ -420,7 +420,7 @@ const civilLawQuestions: Question[] = [
     explanation: "相続人または法定代理人が相続権を侵害された事実を知った時から5年間行使しないと、時効で消滅する。",
     source: `民法第884条前段（${confirmedAt}）`,
     sourceUrl: civilCodeUrl,
-    importance: 2,
+    importance: 1,
     tags: ["相続回復請求権", "消滅時効"],
   },
   {
@@ -433,7 +433,7 @@ const civilLawQuestions: Question[] = [
     explanation: "相続開始の時から20年を経過したときも、相続回復請求権は消滅する。",
     source: `民法第884条後段（${confirmedAt}）`,
     sourceUrl: civilCodeUrl,
-    importance: 2,
+    importance: 1,
     tags: ["相続回復請求権"],
   },
   {
@@ -446,7 +446,7 @@ const civilLawQuestions: Question[] = [
     explanation: "相続開始と遺留分侵害の贈与・遺贈を知った時から1年間行使しないと、時効で消滅する。",
     source: `民法第1048条前段（${confirmedAt}）`,
     sourceUrl: civilCodeUrl,
-    importance: 3,
+    importance: 2,
     tags: ["遺留分侵害額請求権", "消滅時効"],
   },
   {
@@ -459,7 +459,7 @@ const civilLawQuestions: Question[] = [
     explanation: "相続開始の時から10年を経過したときも、遺留分侵害額請求権は消滅する。",
     source: `民法第1048条後段（${confirmedAt}）`,
     sourceUrl: civilCodeUrl,
-    importance: 2,
+    importance: 1,
     tags: ["遺留分侵害額請求権"],
   },
   {
@@ -472,7 +472,7 @@ const civilLawQuestions: Question[] = [
     explanation: "買戻しの期間は10年を超えられず、これより長く定めても10年となる。いったん定めた期間は後から伸長できない。",
     source: `民法第580条第1項・第2項（${confirmedAt}）`,
     sourceUrl: civilCodeUrl,
-    importance: 2,
+    importance: 1,
     tags: ["買戻し", "買戻特約"],
   },
   {
@@ -485,7 +485,7 @@ const civilLawQuestions: Question[] = [
     explanation: "買戻しについて期間を定めなかったときは、5年以内に買戻しをしなければならない。",
     source: `民法第580条第3項（${confirmedAt}）`,
     sourceUrl: civilCodeUrl,
-    importance: 2,
+    importance: 1,
     tags: ["買戻し", "買戻特約"],
   },
   {
@@ -550,7 +550,7 @@ const civilLawQuestions: Question[] = [
     explanation: "原則として3か月以内に単純承認・限定承認または放棄をしなければならない。家庭裁判所は請求により期間を伸長できる。",
     source: `民法第915条第1項（${confirmedAt}）`,
     sourceUrl: civilCodeUrl,
-    importance: 1,
+    importance: 3,
     tags: ["相続の承認", "相続放棄", "熟慮期間"],
   },
 ];
