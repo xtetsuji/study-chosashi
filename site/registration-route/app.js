@@ -25,6 +25,10 @@ const elements = {
   oldAssociation: document.querySelector("[data-node='old-association']"),
   oldNoticeRoute: document.querySelector("[data-route='old-notice']"),
   oldNoticeLabel: document.querySelector("[data-label='old-notice']"),
+  gazette: document.querySelector("[data-node='gazette']"),
+  outcomePanel: byId("outcome-panel"),
+  outcomeTitle: byId("outcome-title"),
+  outcomeLines: [byId("outcome-line-1"), byId("outcome-line-2"), byId("outcome-line-3")],
   inactiveNote: byId("inactive-note"),
   lawScenarioTitle: byId("law-scenario-title"),
   lawBasis: byId("law-basis"),
@@ -101,6 +105,12 @@ function render() {
   elements.oldAssociation.hidden = !scenario.showOldAssociation;
   elements.oldNoticeRoute.hidden = !scenario.showOldAssociation;
   elements.oldNoticeLabel.hidden = !scenario.showOldAssociation;
+  elements.gazette.hidden = !scenario.showGazette;
+  elements.outcomePanel.hidden = !scenario.outcomes;
+  elements.outcomeTitle.textContent = scenario.outcomeTitle || "処分の種類";
+  elements.outcomeLines.forEach((line, index) => {
+    line.textContent = scenario.outcomes?.[index] ? `・${scenario.outcomes[index]}` : "";
+  });
 
   const activeNodes = state.activeNodes || [];
   const activeRoutes = state.activeRoutes || [];

@@ -19,6 +19,7 @@ const allowedNodes = new Set([
   "federation",
   "bureau",
   "minister",
+  "gazette",
 ]);
 const allowedRoutes = new Set([
   "membership",
@@ -26,6 +27,10 @@ const allowedRoutes = new Set([
   "old-notice",
   "federation-notice",
   "association-report",
+  "minister-sanction",
+  "minister-association-notice",
+  "minister-federation-notice",
+  "minister-gazette",
 ]);
 
 test("論点IDが重複せず、選択表示に必要な情報を持つ", () => {
@@ -40,6 +45,13 @@ test("論点IDが重複せず、選択表示に必要な情報を持つ", () => 
     assert.ok(scenario.lawBasis);
     assert.equal(scenario.personLines.length, 2);
     assert.ok(scenario.steps.length >= 2);
+  }
+});
+
+test("処分一覧は比較欄に収まる三項目である", () => {
+  for (const scenario of scenarios.filter((item) => item.outcomes)) {
+    assert.equal(scenario.outcomes.length, 3, scenario.id);
+    assert.equal(scenario.showGazette, true, scenario.id);
   }
 });
 

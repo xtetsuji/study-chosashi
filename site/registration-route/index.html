@@ -28,8 +28,8 @@
       <section class="assumption" aria-label="現在収録している範囲">
         <strong>現在の収録</strong>
         <span>
-          新規登録、所属会変更、登録結果の通知、登録事項変更、調査士会の報告義務を扱います。
-          登録取消し、懲戒、法人は今後追加します。
+          登録手続、調査士会の報告義務、調査士・調査士法人の懲戒を扱います。
+          登録取消しなどは今後追加します。
         </span>
       </section>
 
@@ -92,6 +92,12 @@
             </defs>
 
             <path class="skeleton" d="M 180 105 L 450 560 L 720 105 Z" />
+
+            <g class="gazette-node" data-node="gazette" transform="translate(450 36)" hidden>
+              <rect x="-54" y="-24" width="108" height="48" rx="8" />
+              <text class="node-kicker" y="-5">公告媒体</text>
+              <text class="node-title" y="15">官報</text>
+            </g>
 
             <g class="node" data-node="federation" transform="translate(180 105)">
               <circle r="67" />
@@ -194,6 +200,75 @@
               法務大臣に報告
             </text>
 
+            <path
+              class="route-line route-line--minister-sanction"
+              data-route="minister-sanction"
+              d="M 764 156 C 852 294, 796 508, 523 558"
+              marker-end="url(#arrow-muted)"
+            />
+            <text
+              class="route-label route-label--minister-sanction"
+              data-label="minister-sanction"
+              x="753"
+              y="382"
+            >
+              懲戒処分
+            </text>
+
+            <path
+              class="route-line route-line--minister-association-notice"
+              data-route="minister-association-notice"
+              d="M 668 148 C 565 207, 472 276, 375 323"
+              marker-end="url(#arrow-muted)"
+            />
+            <text
+              class="route-label route-label--minister-association-notice"
+              data-label="minister-association-notice"
+              x="490"
+              y="247"
+            >
+              所属会へ通知
+            </text>
+
+            <path
+              class="route-line route-line--minister-federation-notice"
+              data-route="minister-federation-notice"
+              d="M 650 105 L 250 105"
+              marker-end="url(#arrow-muted)"
+            />
+            <text
+              class="route-label route-label--minister-federation-notice"
+              data-label="minister-federation-notice"
+              x="450"
+              y="93"
+              text-anchor="middle"
+            >
+              連合会へ通知
+            </text>
+
+            <path
+              class="route-line route-line--minister-gazette"
+              data-route="minister-gazette"
+              d="M 667 73 C 602 25, 552 23, 508 34"
+              marker-end="url(#arrow-muted)"
+            />
+            <text
+              class="route-label route-label--minister-gazette"
+              data-label="minister-gazette"
+              x="584"
+              y="36"
+            >
+              官報に公告
+            </text>
+
+            <g class="outcome-panel" id="outcome-panel" transform="translate(28 448)" hidden>
+              <rect width="244" height="150" rx="12" />
+              <text class="outcome-title" id="outcome-title" x="18" y="28">処分の種類</text>
+              <text class="outcome-line" id="outcome-line-1" x="18" y="62"></text>
+              <text class="outcome-line" id="outcome-line-2" x="18" y="94"></text>
+              <text class="outcome-line" id="outcome-line-3" x="18" y="126"></text>
+            </g>
+
             <text class="inactive-note" id="inactive-note" x="668" y="565">
               この場面では右側を経由しない
             </text>
@@ -246,12 +321,17 @@
           </article>
         </div>
         <p>
-          2026年8月15日確認。正確な条文は
+          2026年8月16日確認。正確な条文は
           <a
             href="https://laws.e-gov.go.jp/law/325AC1000000228?occasion_date=20260603"
             target="_blank"
             rel="noreferrer"
-          >e-Gov法令検索</a>で確認してください。
+          >土地家屋調査士法</a>と
+          <a
+            href="https://laws.e-gov.go.jp/law/354M50000010053/"
+            target="_blank"
+            rel="noreferrer"
+          >同法施行規則</a>で確認してください。
         </p>
       </section>
 

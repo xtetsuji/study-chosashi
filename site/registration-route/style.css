@@ -95,18 +95,24 @@ h1 span { color: #b64730; }
 .route-map { display: block; width: 100%; height: auto; overflow: visible; }
 .skeleton { fill: none; stroke: #496865; stroke-dasharray: 4 9; stroke-width: 2; }
 .node circle,
-.old-association rect { fill: #173b3a; stroke: #6f8b86; stroke-width: 2; transition: fill 240ms ease, stroke 240ms ease, stroke-width 240ms ease; }
+.old-association rect,
+.gazette-node rect { fill: #173b3a; stroke: #6f8b86; stroke-width: 2; transition: fill 240ms ease, stroke 240ms ease, stroke-width 240ms ease; }
 .node text,
-.old-association text { fill: #d9e2df; font-size: 15px; font-weight: 800; text-anchor: middle; }
+.old-association text,
+.gazette-node text { fill: #d9e2df; font-size: 15px; font-weight: 800; text-anchor: middle; }
 .node .node-kicker,
-.old-association .node-kicker { fill: #93aaa5; font-size: 10px; letter-spacing: 0.11em; }
+.old-association .node-kicker,
+.gazette-node .node-kicker { fill: #93aaa5; font-size: 10px; letter-spacing: 0.11em; }
 .node .node-title,
-.old-association .node-title { font-size: 17px; }
+.old-association .node-title,
+.gazette-node .node-title { font-size: 17px; }
 .old-association .effect-label { fill: #f0aa91; font-size: 11px; }
 .node.is-active circle,
-.old-association.is-active rect { fill: #214846; stroke: #f08969; stroke-width: 5; }
+.old-association.is-active rect,
+.gazette-node.is-active rect { fill: #214846; stroke: #f08969; stroke-width: 5; }
 .node.is-active text,
-.old-association.is-active text { fill: #fffdf8; }
+.old-association.is-active text,
+.gazette-node.is-active text { fill: #fffdf8; }
 .node.is-complete circle,
 .old-association.is-complete rect { fill: #f1d7a8; stroke: #f1d7a8; }
 .node.is-complete text,
@@ -118,7 +124,11 @@ h1 span { color: #b64730; }
 .route-line--membership { transform: translate(10px, -4px); }
 .route-line--old-notice { stroke-linecap: round; }
 .route-line--federation-notice,
-.route-line--association-report { stroke-linecap: round; }
+.route-line--association-report,
+.route-line--minister-sanction,
+.route-line--minister-association-notice,
+.route-line--minister-federation-notice,
+.route-line--minister-gazette { stroke-linecap: round; }
 .route-line.is-active {
   opacity: 1;
   stroke: #ef805f;
@@ -141,6 +151,9 @@ h1 span { color: #b64730; }
 }
 .route-label.is-active { fill: #ffd3c4; font-size: 14px; opacity: 1; }
 .inactive-note { fill: #78918d; font-size: 11px; text-anchor: middle; }
+.outcome-panel rect { fill: #173b3a; stroke: #6f8b86; stroke-width: 1.5; }
+.outcome-panel text { fill: #d9e2df; font-size: 12px; font-weight: 700; }
+.outcome-panel .outcome-title { fill: #f2ad95; font-size: 13px; font-weight: 900; }
 
 .explanation { min-height: 126px; padding: 1.25rem; border-left: 3px solid #e27f61; background: #214846; }
 .explanation p { margin: 0.45rem 0; color: #cbd8d4; line-height: 1.75; }
@@ -200,6 +213,7 @@ footer { padding: 2rem 0 0; color: #727a76; font-size: 0.72rem; text-align: cent
 
 @media (prefers-reduced-motion: reduce) {
   .node circle,
-  .old-association rect { transition: none; }
+  .old-association rect,
+  .gazette-node rect { transition: none; }
   .route-line.is-active { animation: none; stroke-dasharray: none; }
 }
