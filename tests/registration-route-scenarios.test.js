@@ -20,6 +20,7 @@ const allowedNodes = new Set([
   "bureau",
   "minister",
   "gazette",
+  "review-board",
 ]);
 const allowedRoutes = new Set([
   "membership",
@@ -34,6 +35,7 @@ const allowedRoutes = new Set([
   "direct-minister",
   "person-bureau",
   "bureau-investigation",
+  "federation-gazette",
 ]);
 
 test("論点IDが重複せず、選択表示に必要な情報を持つ", () => {
@@ -58,10 +60,11 @@ test("処分一覧は比較欄に収まる三項目である", () => {
   }
 });
 
-test("補足欄は三項目で要点を示す", () => {
+test("補足欄は二項目から四項目で要点を示す", () => {
   for (const scenario of scenarios.filter((item) => item.sidePanel)) {
     assert.ok(scenario.sidePanel.title, scenario.id);
-    assert.equal(scenario.sidePanel.items.length, 3, scenario.id);
+    assert.ok(scenario.sidePanel.items.length >= 2, scenario.id);
+    assert.ok(scenario.sidePanel.items.length <= 4, scenario.id);
   }
 });
 

@@ -28,7 +28,13 @@ const elements = {
   gazette: document.querySelector("[data-node='gazette']"),
   outcomePanel: byId("outcome-panel"),
   outcomeTitle: byId("outcome-title"),
-  outcomeLines: [byId("outcome-line-1"), byId("outcome-line-2"), byId("outcome-line-3")],
+  outcomeLines: [
+    byId("outcome-line-1"),
+    byId("outcome-line-2"),
+    byId("outcome-line-3"),
+    byId("outcome-line-4"),
+  ],
+  reviewBoard: document.querySelector("[data-node='review-board']"),
   inactiveNote: byId("inactive-note"),
   lawScenarioTitle: byId("law-scenario-title"),
   lawBasis: byId("law-basis"),
@@ -109,6 +115,7 @@ function render() {
   elements.oldNoticeRoute.hidden = !scenario.showOldAssociation;
   elements.oldNoticeLabel.hidden = !scenario.showOldAssociation;
   elements.gazette.hidden = !scenario.showGazette;
+  elements.reviewBoard.hidden = !scenario.showReviewBoard;
   elements.outcomePanel.hidden = !sidePanel;
   elements.outcomeTitle.textContent = sidePanel?.title || "";
   elements.outcomeLines.forEach((line, index) => {
