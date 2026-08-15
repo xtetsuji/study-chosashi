@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="筆界特定制度の登場人物と情報の流れを、固定配置のダイヤモンド図で学ぶ教材"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <title>筆界特定・情報収束ダイヤモンド</title>
+  </head>
+  <body>
+    <main class="app-shell">
+      <nav><a href="../">← 学習ツール一覧</a></nav>
+
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">不動産登記法・筆界特定</p>
+          <h1>筆界特定<br /><span>情報収束ダイヤモンド</span></h1>
+        </div>
+        <p class="intro">
+          下の申請人から手続が始まり、左右から調査結果や意見・資料が集まり、
+          上の筆界特定登記官が判断します。配置を変えず、情報の向きに注目します。
+        </p>
+      </header>
+
+      <section class="assumption" aria-label="図の前提">
+        <strong>ロールで読む</strong>
+        <span>
+          固定ノードは制度上の役割です。土地家屋調査士は独立ノードにせず、
+          「申請人の代理人」または「筆界調査委員になり得る専門家」という属性で示します。
+        </span>
+      </section>
+
+      <section class="scenario-picker" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">STORIES</p>
+          <h2 id="scenario-title">ストーリーを選ぶ</h2>
+        </div>
+        <div class="scenario-control">
+          <label for="scenario-select">学習する論点</label>
+          <div class="scenario-select-row">
+            <div class="scenario-select-wrap">
+              <select id="scenario-select" aria-describedby="scenario-summary"></select>
+            </div>
+            <span class="scenario-position" id="scenario-position" aria-live="polite">1 / 8</span>
+          </div>
+          <p class="scenario-summary" id="scenario-summary"></p>
+        </div>
+      </section>
+
+      <section class="flow-lab" aria-labelledby="lab-title">
+        <div class="lab-heading">
+          <div>
+            <p class="step-label" id="step-label">STEP 0 / 6</p>
+            <h2 id="lab-title">まず、4つのロールを確認</h2>
+          </div>
+          <div class="lab-actions">
+            <button class="reset-button" id="reset-button" type="button">最初に戻す</button>
+            <div class="controls">
+              <button class="secondary-button" id="back-button" type="button" disabled>一つ戻る</button>
+              <button class="primary-button" id="next-button" type="button">申請を見る</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="map-panel" id="map-panel">
+          <svg
+            id="flow-map"
+            class="flow-map"
+            viewBox="0 0 900 800"
+            role="img"
+            aria-labelledby="map-title map-description"
+          >
+            <title id="map-title">筆界特定手続の情報収束図</title>
+            <desc id="map-description">
+              上に筆界特定登記官、左に筆界調査委員、右に関係人、下に申請人を固定配置し、申請、通知、調査・測量、意見・資料の提出、筆界特定の流れを示します。
+            </desc>
+            <defs>
+              <marker id="arrow-muted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" />
+              </marker>
+              <marker id="arrow-active" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" />
+              </marker>
+              <marker id="arrow-complete" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" />
+              </marker>
+              <marker id="arrow-conditional" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" />
+              </marker>
+            </defs>
+
+            <path class="skeleton" d="M 450 115 L 185 370 L 450 650 L 715 370 Z" />
+            <text class="flow-caption" id="flow-caption" x="450" y="782">下から始まり、左右から集まり、上で判断</text>
+
+            <g class="target-land aux-item" data-aux="target-land" transform="translate(450 370)">
+              <path d="M -48 -38 L 48 -38 L 48 38 L -48 38 Z M 0 -38 L -10 38" />
+              <circle cx="0" cy="-38" r="4" />
+              <circle cx="-10" cy="38" r="4" />
+              <text y="60">対象土地の筆界</text>
+            </g>
+
+            <path class="route-line" data-route="application" d="M 432 574 C 390 500, 385 245, 430 183" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="application" x="350" y="475">筆界特定を申請</text>
+
+            <path class="route-line" data-route="notice" d="M 505 155 L 650 320" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="notice" x="610" y="224">申請を通知</text>
+
+            <path class="route-line" data-route="investigation" d="M 258 370 L 383 370" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="investigation" x="320" y="340" text-anchor="middle">調査・測量等</text>
+
+            <path class="route-line" data-route="commissioner-opinion" d="M 232 318 L 397 158" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="commissioner-opinion" x="300" y="216" text-anchor="middle">筆界について意見提出</text>
+
+            <path class="route-line" data-route="related-submission" d="M 668 318 L 503 158" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="related-submission" x="600" y="216" text-anchor="middle">
+              <tspan x="600">意見・資料を提出</tspan>
+              <tspan x="600" dy="18">（機会の保障）</tspan>
+            </text>
+
+            <path class="route-line" data-route="applicant-submission" d="M 475 588 C 548 500, 548 270, 475 177" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="applicant-submission" x="548" y="480" text-anchor="middle">意見・資料を提出</text>
+
+            <path class="route-line" data-route="survey-notice-applicant" d="M 117 128 C 42 300, 110 590, 382 642" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="survey-notice-applicant" x="92" y="390" text-anchor="middle">
+              <tspan x="92">測量等の</tspan><tspan x="92" dy="18">日時・場所を通知</tspan>
+            </text>
+
+            <path class="route-line" data-route="survey-notice-related" d="M 130 88 C 340 18, 700 65, 708 296" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="survey-notice-related" x="655" y="72" text-anchor="middle">測量等の日時・場所を通知</text>
+
+            <path class="route-line" data-route="hearing-notice-applicant" d="M 420 178 C 318 312, 326 510, 422 588" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="hearing-notice-applicant" x="314" y="475" text-anchor="middle">期日・場所を通知</text>
+
+            <path class="route-line" data-route="hearing-notice-related" d="M 505 156 C 575 218, 624 274, 664 326" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="hearing-notice-related" x="640" y="264" text-anchor="middle">期日・場所を通知</text>
+
+            <path class="route-line" data-route="hearing-statement-applicant" d="M 470 586 C 520 505, 520 280, 470 180" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="hearing-statement-applicant" x="530" y="510" text-anchor="middle">意見陳述・資料提出</text>
+
+            <path class="route-line" data-route="hearing-statement-related" d="M 663 324 C 610 260, 555 205, 500 160" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="hearing-statement-related" x="604" y="285" text-anchor="middle">意見陳述・資料提出</text>
+
+            <path class="route-line route-line--prohibited" data-route="role-conflict" d="M 225 428 L 405 602" />
+            <text class="route-label route-label--prohibited" data-label="role-conflict" x="304" y="530" text-anchor="middle">同一事件では指定不可</text>
+
+            <path class="route-line" data-route="result-notice-applicant" d="M 474 178 C 568 300, 565 510, 480 590" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="result-notice-applicant" x="570" y="490" text-anchor="middle">
+              <tspan x="570">筆界特定書の</tspan><tspan x="570" dy="18">内容を通知</tspan>
+            </text>
+
+            <path class="route-line" data-route="result-notice-related" d="M 506 156 L 661 326" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="result-notice-related" x="622" y="240" text-anchor="middle">筆界特定を通知</text>
+
+            <path class="route-line" data-route="result-publication" d="M 515 103 L 742 91" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="result-publication" x="630" y="78" text-anchor="middle">筆界特定を公告</text>
+
+            <path class="route-line" data-route="court-record-request" d="M 752 582 C 842 405, 770 190, 515 123" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="court-record-request" x="785" y="365" text-anchor="middle">
+              <tspan x="785">手続記録の</tspan><tspan x="785" dy="18">送付を嘱託</tspan>
+            </text>
+
+            <path class="route-line" data-route="judgment-conflict" d="M 783 577 C 868 330, 760 48, 535 24" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="judgment-conflict" x="805" y="300" text-anchor="middle">
+              <tspan x="805">確定判決と抵触する</tspan><tspan x="805" dy="18">範囲で効力を失う</tspan>
+            </text>
+
+            <path class="route-line" data-route="prepayment-order" d="M 415 176 C 302 305, 318 520, 416 592" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="prepayment-order" x="300" y="470" text-anchor="middle">概算額を予納させる</text>
+
+            <path class="route-line" data-route="prepayment" d="M 482 590 C 580 505, 588 300, 486 176" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="prepayment" x="590" y="470" text-anchor="middle">概算額を予納</text>
+
+            <path class="route-line" data-route="rejection-result" d="M 450 49 L 450 42" marker-end="url(#arrow-muted)" />
+
+            <path class="route-line" data-route="fact-request-applicant" d="M 225 428 L 405 602" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="fact-request-applicant" x="294" y="528" text-anchor="middle">
+              <tspan x="294">事実を聴取・</tspan><tspan x="294" dy="18">資料提出を求める</tspan>
+            </text>
+
+            <path class="route-line" data-route="fact-request-related" d="M 250 396 C 390 500, 580 490, 654 406" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="fact-request-related" x="500" y="482" text-anchor="middle">
+              <tspan x="500">事実を聴取・資料提出を求める</tspan>
+            </text>
+
+            <path class="route-line" data-route="agency-cooperation" d="M 132 683 C 330 735, 620 735, 765 683" marker-end="url(#arrow-muted)" />
+            <text class="route-label" data-label="agency-cooperation" x="450" y="744" text-anchor="middle">資料提出その他の協力を求める</text>
+
+            <path class="route-line result-route" data-route="determination" d="M 450 49 L 450 42" marker-end="url(#arrow-muted)" />
+            <g class="result aux-item" data-aux="determination-result" transform="translate(450 20)">
+              <rect x="-78" y="-21" width="156" height="42" rx="21" />
+              <text id="result-label" y="6">筆界を特定</text>
+            </g>
+
+            <g class="node" data-node="registrar" transform="translate(450 115)">
+              <circle r="66" />
+              <text class="node-kicker" y="-14">判断するロール</text>
+              <text y="10">筆界特定</text>
+              <text y="32">登記官</text>
+            </g>
+
+            <g class="node" data-node="commissioner" transform="translate(185 370)">
+              <circle r="72" />
+              <text class="node-kicker" y="-13">調査するロール</text>
+              <text y="12">筆界調査委員</text>
+            </g>
+
+            <g class="node" data-node="related" transform="translate(715 370)">
+              <circle r="66" />
+              <text class="node-kicker" y="-13">手続に参加</text>
+              <text class="node-title" y="17">関係人</text>
+            </g>
+
+            <g class="node" data-node="applicant" transform="translate(450 650)">
+              <circle r="66" />
+              <text class="node-kicker" y="-13">手続を開始</text>
+              <text class="node-title" y="17">申請人</text>
+            </g>
+
+            <g class="role-note aux-item" data-aux="commissioner-note">
+              <path d="M 128 430 L 92 464" />
+              <rect x="16" y="464" width="300" height="76" rx="10" />
+              <text class="note-kicker" x="32" y="488">ロールの担い手・補助者</text>
+              <text x="32" y="511">土地家屋調査士・弁護士等の専門家</text>
+              <text x="32" y="530">＋ 補助する法務局職員</text>
+            </g>
+
+            <g class="role-note aux-item" data-aux="applicant-note">
+              <path d="M 513 665 L 580 688" />
+              <rect x="580" y="652" width="292" height="70" rx="10" />
+              <text class="note-kicker" x="596" y="677">代理人を置く場合</text>
+              <text x="596" y="703">代理人：土地家屋調査士等</text>
+            </g>
+
+            <g class="aux-node aux-item" data-aux="bureau-chief" transform="translate(94 94)">
+              <rect x="-78" y="-32" width="156" height="64" rx="10" />
+              <text class="note-kicker" y="-8">手続を統括</text>
+              <text y="14">法務局・地方法務局長</text>
+            </g>
+
+            <g class="aux-node aux-item" data-aux="gazette" transform="translate(805 91)">
+              <rect x="-62" y="-28" width="124" height="56" rx="10" />
+              <text class="note-kicker" y="-7">公衆への伝達</text>
+              <text y="15">公告</text>
+            </g>
+
+            <g class="aux-node aux-item court-node" data-aux="court" transform="translate(790 620)">
+              <rect x="-82" y="-38" width="164" height="76" rx="10" />
+              <text class="note-kicker" y="-12">独立した別ルート</text>
+              <text y="12">裁判所</text>
+              <text class="aux-subtitle" y="29">筆界確定訴訟</text>
+            </g>
+
+            <g class="court-divider aux-item" data-aux="court-divider">
+              <path d="M 698 522 L 875 522" />
+              <text x="786" y="510">上級審ではない</text>
+            </g>
+
+            <g class="warning-node aux-item" data-aux="role-warning" transform="translate(305 525)">
+              <circle r="18" />
+              <path d="M -7 -7 L 7 7 M 7 -7 L -7 7" />
+            </g>
+
+            <g class="example-node aux-item" data-aux="co-owner-example">
+              <rect x="570" y="526" width="304" height="112" rx="10" />
+              <text class="note-kicker" x="588" y="552">共有地の単純化した事例</text>
+              <text x="588" y="578">共有者A：申請した → 申請人</text>
+              <text x="588" y="604">共有者B：申請しない → 関係人</text>
+              <text class="aux-subtitle" x="588" y="625">所有者という属性だけでは決まらない</text>
+            </g>
+
+            <g class="aux-node aux-item" data-aux="agency" transform="translate(806 683)">
+              <rect x="-72" y="-31" width="144" height="62" rx="10" />
+              <text class="note-kicker" y="-7">図外の情報源</text>
+              <text y="15">関係行政機関等</text>
+            </g>
+          </svg>
+        </div>
+
+        <div class="explanation" aria-live="polite">
+          <p class="explanation-kicker" id="explanation-kicker">固定配置</p>
+          <p class="conclusion" id="conclusion">資格名ではなく、制度上の役割を置きます。</p>
+          <p id="reason">土地家屋調査士は、代理人と筆界調査委員のどちらにもなり得るため、独立ノードにはしません。</p>
+          <p class="law-basis" id="law-basis">図の読解ルール</p>
+        </div>
+      </section>
+
+      <section class="reading-guide" aria-labelledby="guide-title">
+        <div>
+          <p class="eyebrow">HOW TO READ</p>
+          <h2 id="guide-title">図の読み方</h2>
+        </div>
+        <dl>
+          <div>
+            <dt><span class="sample-line"></span> 薄い線</dt>
+            <dd>固定された共通骨格です。現在の段階で使わない経路も、位置関係を保つため薄く残します。</dd>
+          </div>
+          <div>
+            <dt><span class="sample-line sample-line--active"></span> 朱色の矢印</dt>
+            <dd>現在注目する行為です。矢印の向きが「誰から、どこへ」を、ラベルが法令上の動作を示します。</dd>
+          </div>
+          <div>
+            <dt><span class="sample-node"></span> 固定ノード</dt>
+            <dd>上・左・右・下の座標は常に同じです。肩書や資格ではなく、手続上のロールを表します。</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="law-note" aria-labelledby="law-title">
+        <p class="eyebrow">LEGAL BASIS</p>
+        <h2 id="law-title">根拠と、収録範囲</h2>
+        <div class="law-grid">
+          <article>
+            <strong>申請・通知</strong>
+            <p>所有権登記名義人等による申請は不動産登記法131条、関係人への申請の通知は133条。</p>
+          </article>
+          <article>
+            <strong>調査・参加</strong>
+            <p>筆界調査委員による事実の調査・測量等は135・136条、意見・資料の提出と意見聴取等の機会は139・140条。</p>
+          </article>
+          <article>
+            <strong>意見の提出・筆界特定</strong>
+            <p>筆界調査委員の意見提出は142条、意見を踏まえた筆界特定登記官の判断は143条。</p>
+          </article>
+          <article>
+            <strong>ロール分離・結果通知</strong>
+            <p>筆界調査委員の指定除外は134条2項、筆界特定後の通知・公告は144条。</p>
+          </article>
+          <article>
+            <strong>費用・外部資料</strong>
+            <p>関係行政機関等への協力要求は138条、手続費用の予納と予納がない場合の却下は146条・132条。</p>
+          </article>
+          <article>
+            <strong>筆界確定訴訟</strong>
+            <p>手続記録の送付嘱託は147条、確定判決と抵触する範囲で筆界特定が効力を失う関係は148条。</p>
+          </article>
+        </div>
+        <p>
+          <a href="https://laws.e-gov.go.jp/law/416AC0000000123" target="_blank" rel="noreferrer">e-Gov法令検索「不動産登記法」</a>
+          および
+          <a href="https://houmukyoku.moj.go.jp/homu2/static/hikkaiSeido3.html" target="_blank" rel="noreferrer">法務局「筆界特定手続の流れ」</a>
+          を2026年8月16日に確認しました。土地家屋調査士の申請代理業務は土地家屋調査士法3条1項4号も参照しています。
+        </p>
+        <p>
+          各ストーリーは一つの論点へ集中するため、選択中の論点に不要な手続を省略しています。
+          裁判所は基本ダイヤモンドの内部には置かず、筆界確定訴訟を独立した別ルートとして表示します。
+          個人の試験学習用であり、法的助言ではありません。
+        </p>
+      </section>
+
+      <footer>筆界特定制度のストーリーマップ / Study Chosashi</footer>
+    </main>
+    <script src="./scenarios.js"></script>
+    <script src="./url-state.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
