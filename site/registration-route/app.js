@@ -55,6 +55,10 @@ function setActiveItems(selector, activeNames, className) {
   });
 }
 
+function setSvgHidden(element, hidden) {
+  element.toggleAttribute("hidden", hidden);
+}
+
 function selectScenario(scenarioId) {
   currentScenarioId = scenarioId;
   currentStep = 0;
@@ -120,13 +124,14 @@ function render() {
   elements.lawScenarioTitle.textContent = scenario.title;
   elements.lawBasis.textContent = scenario.lawBasis;
 
-  elements.oldAssociation.hidden = !scenario.showOldAssociation;
-  elements.oldNoticeRoute.hidden = !scenario.showOldAssociation;
-  elements.oldNoticeLabel.hidden = !scenario.showOldAssociation;
-  elements.gazette.hidden = !scenario.showGazette;
-  elements.reviewBoard.hidden = !scenario.showReviewBoard;
-  elements.court.hidden = !scenario.showCourt;
-  elements.outcomePanel.hidden = !sidePanel;
+  const showOldAssociation = scenario.id === "transfer" && scenario.showOldAssociation;
+  setSvgHidden(elements.oldAssociation, !showOldAssociation);
+  setSvgHidden(elements.oldNoticeRoute, !showOldAssociation);
+  setSvgHidden(elements.oldNoticeLabel, !showOldAssociation);
+  setSvgHidden(elements.gazette, !scenario.showGazette);
+  setSvgHidden(elements.reviewBoard, !scenario.showReviewBoard);
+  setSvgHidden(elements.court, !scenario.showCourt);
+  setSvgHidden(elements.outcomePanel, !sidePanel || !state.showSidePanel);
   elements.outcomeTitle.textContent = sidePanel?.title || "";
   elements.outcomeLines.forEach((line, index) => {
     line.textContent = sidePanel?.items[index] ? `・${sidePanel.items[index]}` : "";

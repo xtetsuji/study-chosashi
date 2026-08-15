@@ -75,6 +75,22 @@ test("補足欄は二項目から四項目で要点を示す", () => {
   }
 });
 
+test("旧所属会は所属会変更シナリオだけで使用する", () => {
+  const scenariosWithOldAssociation = [...scenarios]
+    .filter((scenario) => scenario.showOldAssociation)
+    .map((scenario) => scenario.id);
+  assert.deepEqual(scenariosWithOldAssociation, ["transfer"]);
+});
+
+test("補足欄は必要な段階だけに表示し、連合会への直接線を遮らない", () => {
+  for (const scenario of scenarios.filter((item) => item.sidePanel || item.outcomes)) {
+    assert.ok(scenario.steps.some((step) => step.showSidePanel), scenario.id);
+    for (const step of scenario.steps.filter((item) => item.activeRoutes?.includes("direct-federation"))) {
+      assert.notEqual(step.showSidePanel, true, `${scenario.id}: ${step.title}`);
+    }
+  }
+});
+
 test("各論点は暗記用の完成図で終わる", () => {
   for (const scenario of scenarios) {
     const finalStep = scenario.steps.at(-1);

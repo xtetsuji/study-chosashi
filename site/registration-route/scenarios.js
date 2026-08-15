@@ -280,6 +280,7 @@ window.registrationRouteScenarios = [
     steps: [
       {
         title: "個人に対する三種類の処分",
+        showSidePanel: true,
         conclusion: "法務大臣は、違反に応じて戒告・業務停止・業務禁止をすることができます。",
         detail: "業務停止の上限は2年です。最も重い処分は資格そのものの取消しではなく、「業務の禁止」と表現されます。",
         activeNodes: ["person", "minister"],
@@ -297,6 +298,7 @@ window.registrationRouteScenarios = [
       },
       {
         title: "法務大臣が懲戒処分",
+        showSidePanel: true,
         conclusion: "処分は、法務大臣から対象となる調査士へ下向きに作用します。",
         detail: "報告・申請の上向き経路とは逆向きです。処分の種類は、左下の比較欄でまとめて確認します。",
         activeNodes: ["person", "minister"],
@@ -322,6 +324,7 @@ window.registrationRouteScenarios = [
       {
         title: "この一枚を覚える",
         conclusion: "法務大臣からの処分、処分後の通知、官報公告が一枚につながりました。",
+        showSidePanel: true,
         detail: "所属会には全処分を通知し、連合会への処分後通知は業務禁止の場合です。官報公告はすべての懲戒処分に続きます。",
         activeNodes: ["person", "minister", "association", "federation", "gazette"],
         activeRoutes: [
@@ -359,6 +362,7 @@ window.registrationRouteScenarios = [
     steps: [
       {
         title: "法人に対する三種類の処分",
+        showSidePanel: true,
         conclusion: "法務大臣は、法人に戒告・業務停止・解散を命ずることができます。",
         detail: "個人との違いは、業務停止が「全部又は一部」を対象にでき、最も重い処分が「解散」であることです。",
         activeNodes: ["person", "minister"],
@@ -376,6 +380,7 @@ window.registrationRouteScenarios = [
       },
       {
         title: "法務大臣が法人を懲戒",
+        showSidePanel: true,
         conclusion: "法人の場合も、法務大臣から対象法人へ下向きに処分が作用します。",
         detail: "経路は個人と同じですが、処分の内容が異なります。左下の比較欄で個人版との差を確認します。",
         activeNodes: ["person", "minister"],
@@ -401,6 +406,7 @@ window.registrationRouteScenarios = [
       {
         title: "この一枚を覚える",
         conclusion: "法人への処分、処分後の通知、官報公告が一枚につながりました。",
+        showSidePanel: true,
         detail: "個人の「業務禁止」に対応する最重処分は法人の「解散」です。連合会への処分後通知も、この最重処分の場合に加わります。",
         activeNodes: ["person", "minister", "association", "federation", "gazette"],
         activeRoutes: [
@@ -453,6 +459,7 @@ window.registrationRouteScenarios = [
       },
       {
         title: "手続結了まで一部の登録取消しを制限",
+        showSidePanel: true,
         conclusion: "連合会は、懲戒手続の結了通知を受けるまで、一定の登録取消しができません。",
         detail: "制限対象は、業務廃止による必要的取消しと、2年以上の不業務・心身の故障による裁量的取消しです。死亡など、15条1項の他の取消事由まで一律に止まるわけではありません。",
         activeNodes: ["person", "federation", "minister"],
@@ -471,6 +478,7 @@ window.registrationRouteScenarios = [
       {
         title: "この一枚を覚える",
         conclusion: "聴聞通知後の通告から、手続結了通知まで登録取消しが制限されます。",
+        showSidePanel: true,
         detail: "法務大臣から連合会への一本の線に、「直ちに通告」「結了通知まで限定的な取消制限」という時間の幅を結び付けます。",
         activeNodes: ["person", "minister", "federation"],
         activeRoutes: ["minister-federation-notice"],
@@ -567,6 +575,7 @@ window.registrationRouteScenarios = [
     steps: [
       {
         title: "必要的取消しの四事由",
+        showSidePanel: true,
         conclusion: "四事由のいずれかに該当すると、連合会は登録を取り消さなければなりません。",
         detail: "「取り消すことができる」裁量的取消しと異なり、取消し自体に裁量はありません。四事由を左下の一覧で確認します。",
         activeNodes: ["person", "federation"],
@@ -600,6 +609,7 @@ window.registrationRouteScenarios = [
       {
         title: "この一枚を覚える",
         conclusion: "取消事由の届出、連合会による必要的取消し、官報公告が一枚につながりました。",
+        showSidePanel: true,
         detail: "届出は調査士会経由、取消しと公告は連合会です。右側の行政ルートは使いません。",
         activeNodes: ["person", "association", "federation", "gazette"],
         activeRoutes: ["application", "federation-gazette"],
@@ -634,6 +644,7 @@ window.registrationRouteScenarios = [
     steps: [
       {
         title: "裁量的取消しの二事由",
+        showSidePanel: true,
         conclusion: "二事由のいずれかに該当すると、連合会は登録を取り消すことができます。",
         detail: "引き続き2年以上業務を行わない場合と、心身の故障により業務を行うことができない場合です。",
         activeNodes: ["person", "federation"],
@@ -675,6 +686,7 @@ window.registrationRouteScenarios = [
       {
         title: "この一枚を覚える",
         conclusion: "届出、登録審査会、理由付き通知、官報公告が一枚につながりました。",
+        showSidePanel: true,
         detail: "届出の線は心身の故障のおそれがある場合のものです。取消しは登録審査会の議決に基づき、本人への書面通知と官報公告が続きます。",
         activeNodes: ["person", "association", "federation", "review-board", "gazette"],
         activeRoutes: ["application", "federation-notice", "federation-gazette"],
@@ -710,6 +722,7 @@ window.registrationRouteScenarios = [
     steps: [
       {
         title: "法人の四つの届出場面",
+        showSidePanel: true,
         conclusion: "成立・定款変更・解散・合併では、法人自身が届出を行います。",
         detail: "四つの場面はいずれも、成立日・変更日・解散日・合併日から二週間以内という共通点があります。",
         activeNodes: ["person"],
@@ -814,6 +827,7 @@ window.registrationRouteScenarios = [
     steps: [
       {
         title: "解散・清算は裁判所の監督に属する",
+        showSidePanel: true,
         conclusion: "調査士法人の解散・清算を監督するのは裁判所です。",
         detail: "管轄は、法人の主たる事務所所在地を管轄する地方裁判所です。通常の職能団体・行政ルートとは別に登場します。",
         activeNodes: ["person", "court"],
@@ -839,6 +853,7 @@ window.registrationRouteScenarios = [
       {
         title: "この一枚を覚える",
         conclusion: "裁判所による監督と、法務大臣との双方向の連携が一枚につながりました。",
+        showSidePanel: true,
         detail: "裁判所は必要な論点でだけ上辺中央の外側に現れます。法務大臣との二本の矢印は、上下関係ではなく意見・調査の連携です。",
         activeNodes: ["person", "court", "minister"],
         activeRoutes: ["court-minister-request", "minister-court-opinion"],
