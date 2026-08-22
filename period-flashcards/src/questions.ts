@@ -1,6 +1,6 @@
 export type Question = {
   id: string;
-  set?: "storage" | "civil-law";
+  set?: "storage" | "real-estate-registration" | "civil-law";
   category: string;
   prompt: string;
   choices: string[];
@@ -13,6 +13,9 @@ export type Question = {
 };
 
 const storagePeriodSource = "不動産登記規則第28条（2026年8月6日確認）";
+const realEstateRegistrationRulesUrl = "https://laws.e-gov.go.jp/law/417M60000010018";
+const registrationAndLicenseTaxActUrl = "https://laws.e-gov.go.jp/law/342AC0000000035";
+const realEstateRegistrationConfirmedAt = "2026年8月23日確認";
 
 export const questions: Question[] = [
   {
@@ -194,6 +197,66 @@ export const questions: Question[] = [
     explanation: "請求書類つづり込み帳の書類に記載された情報は、受付の日から1年間保存される。",
     source: storagePeriodSource,
     tags: ["登記事項証明書", "交付請求", "請求書類つづり込み帳"],
+  },
+  {
+    id: "registration-identification-electronic-unreceived",
+    set: "real-estate-registration",
+    category: "不動産登記法・登記識別情報",
+    prompt:
+      "電子情報処理組織を使用して登記識別情報の通知を受ける場合、いつまでに自己の電子計算機のファイルへ記録しないと、通知を要しない場合に当たる？",
+    choices: ["7日以内", "14日以内", "30日以内", "2か月以内", "3か月以内"],
+    correctChoice: "30日以内",
+    explanation:
+      "登記識別情報が登記官のファイルに記録され、送信可能になった時から30日以内に、通知を受けるべき者が自己の電子計算機のファイルへ記録しない場合である。単に申請日や登記完了日から30日ではない点に注意する。",
+    source: `不動産登記規則第64条第1項第2号（${realEstateRegistrationConfirmedAt}）`,
+    sourceUrl: realEstateRegistrationRulesUrl,
+    importance: 2,
+    tags: ["登記識別情報", "電子申請", "通知を要しない場合"],
+  },
+  {
+    id: "registration-identification-paper-unreceived",
+    set: "real-estate-registration",
+    category: "不動産登記法・登記識別情報",
+    prompt:
+      "書面で登記識別情報の通知を受ける場合、いつまでに登記識別情報通知書を受領しないと、通知を要しない場合に当たる？",
+    choices: ["30日以内", "2か月以内", "3か月以内", "6か月以内", "1年以内"],
+    correctChoice: "3か月以内",
+    explanation:
+      "通知を受けるべき者が、登記完了の時から3か月以内に登記識別情報を記載した書面を受領しない場合である。起算点は申請日ではなく登記完了時となる。",
+    source: `不動産登記規則第64条第1項第3号（${realEstateRegistrationConfirmedAt}）`,
+    sourceUrl: realEstateRegistrationRulesUrl,
+    importance: 2,
+    tags: ["登記識別情報", "書面申請", "通知を要しない場合"],
+  },
+  {
+    id: "registration-electronic-attachment-paper-deadline",
+    set: "real-estate-registration",
+    category: "不動産登記法・申請手続",
+    prompt:
+      "電子申請で、特例により添付情報を記載した書面を提出する場合、その書面を登記所へ提出する期限は？",
+    choices: ["受付の日から2日以内", "受付の日から3日以内", "受付の日から7日以内", "受付の日から14日以内", "受付の日から30日以内"],
+    correctChoice: "受付の日から2日以内",
+    explanation:
+      "電子申請で添付情報を別途書面により提供する場合、当該書面は申請の受付の日から2日以内に提出する。送付する場合は、引受けと配達の記録が残る書留郵便等による。",
+    source: `不動産登記規則第21条第2項・第4項（${realEstateRegistrationConfirmedAt}）`,
+    sourceUrl: realEstateRegistrationRulesUrl,
+    importance: 2,
+    tags: ["電子申請", "添付情報", "添付書面", "特例"],
+  },
+  {
+    id: "registration-tax-reuse-after-withdrawal",
+    set: "real-estate-registration",
+    category: "不動産登記法・登録免許税",
+    prompt:
+      "取下げに伴い再使用証明を受けた登録免許税の領収証書・収入印紙を、同じ登記官署等で再使用できる期限は？",
+    choices: ["取下げの日から3か月以内", "取下げの日から6か月以内", "取下げの日から1年以内", "証明の日から1年以内", "取下げの日から5年以内"],
+    correctChoice: "取下げの日から1年以内",
+    explanation:
+      "申請の取下げと同時に再使用の申出をして証明を受けると、取下げの日から1年以内に同じ登記官署等で再使用できる。再使用証明を受けた場合、その登録免許税は原則として還付されない。再使用しないこととなった場合の還付申出期限は、証明の日から1年を経過する日までであり、別の期間である。",
+    source: `登録免許税法第31条第3項・第5項（${realEstateRegistrationConfirmedAt}）`,
+    sourceUrl: registrationAndLicenseTaxActUrl,
+    importance: 2,
+    tags: ["登録免許税", "申請の取下げ", "再使用証明", "還付"],
   },
 ];
 
