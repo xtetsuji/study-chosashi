@@ -199,6 +199,19 @@ export const questions: Question[] = [
     tags: ["登記事項証明書", "交付請求", "請求書類つづり込み帳"],
   },
   {
+    id: "storage-legal-inheritance-information-list-file",
+    category: "保存期間",
+    prompt: "法定相続情報一覧図つづり込み帳の保存期間は？",
+    choices: ["作成の年の翌年から1年", "作成の年の翌年から3年", "作成の年の翌年から5年", "作成の年の翌年から10年", "永久"],
+    correctChoice: "作成の年の翌年から5年",
+    explanation:
+      "法定相続情報一覧図つづり込み帳には、法定相続情報一覧図とその保管の申出に関する書類がつづり込まれ、作成の年の翌年から5年間保存される。法務局の案内では、一覧図は申出日の翌年から起算して5年間保存され、その間は当初の申出人が写しの再交付を受けられる。",
+    source: "不動産登記規則第27条の9・第28条第2項第6号（2026年8月25日確認）",
+    sourceUrl: realEstateRegistrationRulesUrl,
+    importance: 2,
+    tags: ["法定相続情報一覧図", "法定相続情報一覧図つづり込み帳", "再交付"],
+  },
+  {
     id: "registration-identification-electronic-unreceived",
     set: "real-estate-registration",
     category: "不動産登記法・登記識別情報",
