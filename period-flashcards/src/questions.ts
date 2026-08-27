@@ -13,9 +13,13 @@ export type Question = {
 };
 
 const storagePeriodSource = "不動産登記規則第28条（2026年8月6日確認）";
+const realEstateRegistrationActUrl = "https://laws.e-gov.go.jp/law/416AC0000000123";
+const realEstateRegistrationOrderUrl = "https://laws.e-gov.go.jp/law/416CO0000000379";
 const realEstateRegistrationRulesUrl = "https://laws.e-gov.go.jp/law/417M60000010018";
 const registrationAndLicenseTaxActUrl = "https://laws.e-gov.go.jp/law/342AC0000000035";
+const addressChangeRegistrationGuideUrl = "https://www.moj.go.jp/MINJI/minji05_00693.html";
 const realEstateRegistrationConfirmedAt = "2026年8月23日確認";
+const realEstateRegistrationDeadlinesConfirmedAt = "2026年8月28日確認";
 
 export const questions: Question[] = [
   {
@@ -270,6 +274,139 @@ export const questions: Question[] = [
     sourceUrl: registrationAndLicenseTaxActUrl,
     importance: 2,
     tags: ["登録免許税", "申請の取下げ", "再使用証明", "還付"],
+  },
+  {
+    id: "registration-prior-notice-domestic",
+    set: "real-estate-registration",
+    category: "不動産登記法・事前通知",
+    prompt:
+      "登記識別情報を提供できず事前通知を受けた登記義務者が国内に住所を有する場合、申請が真実である旨を申し出る期間は？",
+    choices: ["通知発送日から1週間", "通知発送日から2週間", "通知受領日から2週間", "申請受付日から2週間", "通知発送日から4週間"],
+    correctChoice: "通知発送日から2週間",
+    explanation:
+      "国内に住所を有する登記義務者の申出期間は、事前通知を発送した日から2週間である。通知を受け取った日ではなく、発送日が起算点となる。",
+    source: `不動産登記法第23条第1項・不動産登記規則第70条第8項（${realEstateRegistrationDeadlinesConfirmedAt}）`,
+    sourceUrl: realEstateRegistrationRulesUrl,
+    importance: 3,
+    tags: ["事前通知", "登記識別情報", "国内住所", "申出期間"],
+  },
+  {
+    id: "registration-prior-notice-foreign",
+    set: "real-estate-registration",
+    category: "不動産登記法・事前通知",
+    prompt:
+      "登記識別情報を提供できず事前通知を受けた登記義務者が外国に住所を有する場合、申請が真実である旨を申し出る期間は？",
+    choices: ["通知発送日から2週間", "通知受領日から2週間", "通知発送日から3週間", "通知発送日から4週間", "通知受領日から4週間"],
+    correctChoice: "通知発送日から4週間",
+    explanation:
+      "登記義務者が外国に住所を有する場合の申出期間は、事前通知を発送した日から4週間である。国内住所の場合の2週間と対比して覚える。",
+    source: `不動産登記法第23条第1項・不動産登記規則第70条第8項ただし書（${realEstateRegistrationDeadlinesConfirmedAt}）`,
+    sourceUrl: realEstateRegistrationRulesUrl,
+    importance: 3,
+    tags: ["事前通知", "登記識別情報", "外国住所", "申出期間"],
+  },
+  {
+    id: "registration-inheritance-basic-obligation",
+    set: "real-estate-registration",
+    category: "不動産登記法・相続登記",
+    prompt: "相続により不動産の所有権を取得した者が、相続登記を申請しなければならない期限は？",
+    choices: ["相続開始を知った日から1年以内", "相続開始を知った日から3年以内", "所有権取得を知った日から3年以内", "相続開始と所有権取得を知った日から3年以内", "相続開始の日から10年以内"],
+    correctChoice: "相続開始と所有権取得を知った日から3年以内",
+    explanation:
+      "自己のために相続の開始があったことを知り、かつ、その不動産の所有権を取得したことを知った日から3年以内に申請する。相続人に対する遺贈で所有権を取得した者も同様である。",
+    source: `不動産登記法第76条の2第1項（${realEstateRegistrationDeadlinesConfirmedAt}）`,
+    sourceUrl: realEstateRegistrationActUrl,
+    importance: 3,
+    tags: ["相続登記", "申請義務", "遺贈", "所有権移転登記"],
+  },
+  {
+    id: "registration-inheritance-partition-obligation",
+    set: "real-estate-registration",
+    category: "不動産登記法・相続登記",
+    prompt:
+      "法定相続分による相続登記後、遺産分割により法定相続分を超える所有権を取得した者が、その結果に基づく登記を申請する期限は？",
+    choices: ["相続開始の日から3年以内", "相続登記の日から3年以内", "遺産分割の日から1年以内", "遺産分割の日から3年以内", "遺産分割の日から10年以内"],
+    correctChoice: "遺産分割の日から3年以内",
+    explanation:
+      "法定相続分による相続登記後に遺産分割が成立した場合は、遺産分割の日から3年以内に、その結果を反映する所有権移転登記を申請する。相続人申告登記後に遺産分割で所有権を取得した場合も、同じく遺産分割の日から3年以内である。",
+    source: `不動産登記法第76条の2第2項・第76条の3第4項（${realEstateRegistrationDeadlinesConfirmedAt}）`,
+    sourceUrl: realEstateRegistrationActUrl,
+    importance: 3,
+    tags: ["相続登記", "遺産分割", "相続人申告登記", "申請義務"],
+  },
+  {
+    id: "registration-owner-address-name-change-obligation",
+    set: "real-estate-registration",
+    category: "不動産登記法・住所等変更",
+    prompt: "所有権の登記名義人の氏名・名称・住所に変更があった場合、変更登記を申請する期限は？",
+    choices: ["変更の日から1年以内", "変更の日から2年以内", "変更を知った日から2年以内", "変更の日から3年以内", "次の登記申請まで"],
+    correctChoice: "変更の日から2年以内",
+    explanation:
+      "所有権の登記名義人は、住所等の変更があった日から2年以内に変更登記を申請する。2026年4月1日より前の変更で未登記のものも対象となり、原則として2028年3月31日までに申請する必要がある。",
+    source: `不動産登記法第76条の5・民法等の一部を改正する法律附則第5条第7項（${realEstateRegistrationDeadlinesConfirmedAt}）`,
+    sourceUrl: addressChangeRegistrationGuideUrl,
+    importance: 3,
+    tags: ["住所等変更登記", "氏名変更", "住所変更", "申請義務"],
+  },
+  {
+    id: "registration-attached-seal-certificate-age",
+    set: "real-estate-registration",
+    category: "不動産登記法・添付情報",
+    prompt:
+      "不動産登記令第16条第2項または第18条第2項により書面へ添付する印鑑証明書は、原則として作成後どの期間内のものが必要？",
+    choices: ["1か月以内", "3か月以内", "6か月以内", "1年以内", "期間制限なし"],
+    correctChoice: "3か月以内",
+    explanation:
+      "申請情報を記載した書面や代理権限を証する書面に押印した印鑑について、同令の規定により添付する証明書は、作成後3か月以内のものでなければならない。官庁・公署による嘱託など、添付自体を要しない場合がある。",
+    source: `不動産登記令第16条第2項・第3項、第18条第2項・第3項（${realEstateRegistrationDeadlinesConfirmedAt}）`,
+    sourceUrl: realEstateRegistrationOrderUrl,
+    importance: 2,
+    tags: ["印鑑証明書", "書面申請", "代理権限証明情報", "添付情報"],
+  },
+  {
+    id: "registration-representative-qualification-document-age",
+    set: "real-estate-registration",
+    category: "不動産登記法・添付情報",
+    prompt:
+      "法人の代表者等の資格を証する情報として、公務員が職務上作成した書面を提供する場合、原則として作成後どの期間内のものが必要？",
+    choices: ["1か月以内", "3か月以内", "6か月以内", "1年以内", "期間制限なし"],
+    correctChoice: "3か月以内",
+    explanation:
+      "不動産登記令第7条第1項第1号ロまたは第2号の情報を記載した公務員作成の書面は、作成後3か月以内のものに限られる。会社法人等番号を提供して資格証明情報を省略できる場合などがある。",
+    source: `不動産登記令第17条（${realEstateRegistrationDeadlinesConfirmedAt}）`,
+    sourceUrl: realEstateRegistrationOrderUrl,
+    importance: 2,
+    tags: ["資格証明情報", "代表者", "法人", "添付情報"],
+  },
+  {
+    id: "registration-tax-refund-after-unused-reuse-certificate",
+    set: "real-estate-registration",
+    category: "不動産登記法・登録免許税",
+    prompt:
+      "再使用証明を受けた登録免許税の領収証書・収入印紙を再使用しないこととなった場合、還付を申し出られる期限は？",
+    choices: ["取下げの日から6か月を経過する日まで", "取下げの日から1年を経過する日まで", "証明の日から6か月を経過する日まで", "証明の日から1年を経過する日まで", "証明の日から5年を経過する日まで"],
+    correctChoice: "証明の日から1年を経過する日まで",
+    explanation:
+      "再使用しないこととなったときは、再使用証明をした登記機関に対し、証明の日から1年を経過する日までに、証明の無効化と登録免許税の還付を申し出ることができる。再使用期限の起算点は取下げの日、還付申出期限の起算点は証明の日である。",
+    source: `登録免許税法第31条第5項（${realEstateRegistrationDeadlinesConfirmedAt}）`,
+    sourceUrl: registrationAndLicenseTaxActUrl,
+    importance: 2,
+    tags: ["登録免許税", "再使用証明", "還付", "申出期限"],
+  },
+  {
+    id: "registration-tax-electronic-payment-no-application",
+    set: "real-estate-registration",
+    category: "不動産登記法・登録免許税",
+    prompt:
+      "電子的な方法で登録免許税を納付した後、登記等を受けることをやめた場合、還付に必要な税務署長への通知を請求できる期限は？",
+    choices: ["納付の日から30日を経過する日まで", "納付の日から3か月を経過する日まで", "納付の日から6か月を経過する日まで", "申請予定日から6か月を経過する日まで", "納付の日から1年を経過する日まで"],
+    correctChoice: "納付の日から6か月を経過する日まで",
+    explanation:
+      "原則として納付の日から6か月を経過する日までに、登記機関へ申し出て税務署長への通知を請求する。納付委託の場合は委託の日が起算点となる。申請をしないまま6か月を経過した場合は、この請求があったものとみなされる。",
+    source: `登録免許税法第31条第6項・第7項（${realEstateRegistrationDeadlinesConfirmedAt}）`,
+    sourceUrl: registrationAndLicenseTaxActUrl,
+    importance: 2,
+    tags: ["登録免許税", "電子納付", "還付", "通知請求"],
   },
 ];
 
