@@ -1,6 +1,6 @@
 export type Question = {
   id: string;
-  set?: "storage" | "civil-law";
+  set?: "storage" | "real-estate-registration" | "civil-law";
   category: string;
   prompt: string;
   choices: string[];
@@ -13,6 +13,13 @@ export type Question = {
 };
 
 const storagePeriodSource = "不動産登記規則第28条（2026年8月6日確認）";
+const realEstateRegistrationActUrl = "https://laws.e-gov.go.jp/law/416AC0000000123";
+const realEstateRegistrationOrderUrl = "https://laws.e-gov.go.jp/law/416CO0000000379";
+const realEstateRegistrationRulesUrl = "https://laws.e-gov.go.jp/law/417M60000010018";
+const registrationAndLicenseTaxActUrl = "https://laws.e-gov.go.jp/law/342AC0000000035";
+const addressChangeRegistrationGuideUrl = "https://www.moj.go.jp/MINJI/minji05_00693.html";
+const realEstateRegistrationConfirmedAt = "2026年8月23日確認";
+const realEstateRegistrationDeadlinesConfirmedAt = "2026年8月28日確認";
 
 export const questions: Question[] = [
   {
@@ -194,6 +201,212 @@ export const questions: Question[] = [
     explanation: "請求書類つづり込み帳の書類に記載された情報は、受付の日から1年間保存される。",
     source: storagePeriodSource,
     tags: ["登記事項証明書", "交付請求", "請求書類つづり込み帳"],
+  },
+  {
+    id: "storage-legal-inheritance-information-list-file",
+    category: "保存期間",
+    prompt: "法定相続情報一覧図つづり込み帳の保存期間は？",
+    choices: ["作成の年の翌年から1年", "作成の年の翌年から3年", "作成の年の翌年から5年", "作成の年の翌年から10年", "永久"],
+    correctChoice: "作成の年の翌年から5年",
+    explanation:
+      "法定相続情報一覧図つづり込み帳には、法定相続情報一覧図とその保管の申出に関する書類がつづり込まれ、作成の年の翌年から5年間保存される。法務局の案内では、一覧図は申出日の翌年から起算して5年間保存され、その間は当初の申出人が写しの再交付を受けられる。",
+    source: "不動産登記規則第27条の9・第28条第2項第6号（2026年8月25日確認）",
+    sourceUrl: realEstateRegistrationRulesUrl,
+    importance: 2,
+    tags: ["法定相続情報一覧図", "法定相続情報一覧図つづり込み帳", "再交付"],
+  },
+  {
+    id: "registration-identification-electronic-unreceived",
+    set: "real-estate-registration",
+    category: "不動産登記法・登記識別情報",
+    prompt:
+      "電子情報処理組織を使用して登記識別情報の通知を受ける場合、いつまでに自己の電子計算機のファイルへ記録しないと、通知を要しない場合に当たる？",
+    choices: ["7日以内", "14日以内", "30日以内", "2か月以内", "3か月以内"],
+    correctChoice: "30日以内",
+    explanation:
+      "登記識別情報が登記官のファイルに記録され、送信可能になった時から30日以内に、通知を受けるべき者が自己の電子計算機のファイルへ記録しない場合である。単に申請日や登記完了日から30日ではない点に注意する。",
+    source: `不動産登記規則第64条第1項第2号（${realEstateRegistrationConfirmedAt}）`,
+    sourceUrl: realEstateRegistrationRulesUrl,
+    importance: 2,
+    tags: ["登記識別情報", "電子申請", "通知を要しない場合"],
+  },
+  {
+    id: "registration-identification-paper-unreceived",
+    set: "real-estate-registration",
+    category: "不動産登記法・登記識別情報",
+    prompt:
+      "書面で登記識別情報の通知を受ける場合、いつまでに登記識別情報通知書を受領しないと、通知を要しない場合に当たる？",
+    choices: ["30日以内", "2か月以内", "3か月以内", "6か月以内", "1年以内"],
+    correctChoice: "3か月以内",
+    explanation:
+      "通知を受けるべき者が、登記完了の時から3か月以内に登記識別情報を記載した書面を受領しない場合である。起算点は申請日ではなく登記完了時となる。",
+    source: `不動産登記規則第64条第1項第3号（${realEstateRegistrationConfirmedAt}）`,
+    sourceUrl: realEstateRegistrationRulesUrl,
+    importance: 2,
+    tags: ["登記識別情報", "書面申請", "通知を要しない場合"],
+  },
+  {
+    id: "registration-electronic-attachment-paper-deadline",
+    set: "real-estate-registration",
+    category: "不動産登記法・申請手続",
+    prompt:
+      "電子申請で、特例により添付情報を記載した書面を提出する場合、その書面を登記所へ提出する期限は？",
+    choices: ["受付の日から2日以内", "受付の日から3日以内", "受付の日から7日以内", "受付の日から14日以内", "受付の日から30日以内"],
+    correctChoice: "受付の日から2日以内",
+    explanation:
+      "電子申請で添付情報を別途書面により提供する場合、当該書面は申請の受付の日から2日以内に提出する。送付する場合は、引受けと配達の記録が残る書留郵便等による。",
+    source: `不動産登記規則第21条第2項・第4項（${realEstateRegistrationConfirmedAt}）`,
+    sourceUrl: realEstateRegistrationRulesUrl,
+    importance: 2,
+    tags: ["電子申請", "添付情報", "添付書面", "特例"],
+  },
+  {
+    id: "registration-tax-reuse-after-withdrawal",
+    set: "real-estate-registration",
+    category: "不動産登記法・登録免許税",
+    prompt:
+      "取下げに伴い再使用証明を受けた登録免許税の領収証書・収入印紙を、同じ登記官署等で再使用できる期限は？",
+    choices: ["取下げの日から3か月以内", "取下げの日から6か月以内", "取下げの日から1年以内", "証明の日から1年以内", "取下げの日から5年以内"],
+    correctChoice: "取下げの日から1年以内",
+    explanation:
+      "申請の取下げと同時に再使用の申出をして証明を受けると、取下げの日から1年以内に同じ登記官署等で再使用できる。再使用証明を受けた場合、その登録免許税は原則として還付されない。再使用しないこととなった場合の還付申出期限は、証明の日から1年を経過する日までであり、別の期間である。",
+    source: `登録免許税法第31条第3項・第5項（${realEstateRegistrationConfirmedAt}）`,
+    sourceUrl: registrationAndLicenseTaxActUrl,
+    importance: 2,
+    tags: ["登録免許税", "申請の取下げ", "再使用証明", "還付"],
+  },
+  {
+    id: "registration-prior-notice-domestic",
+    set: "real-estate-registration",
+    category: "不動産登記法・事前通知",
+    prompt:
+      "登記識別情報を提供できず事前通知を受けた登記義務者が国内に住所を有する場合、申請が真実である旨を申し出る期間は？",
+    choices: ["通知発送日から1週間", "通知発送日から2週間", "通知受領日から2週間", "申請受付日から2週間", "通知発送日から4週間"],
+    correctChoice: "通知発送日から2週間",
+    explanation:
+      "国内に住所を有する登記義務者の申出期間は、事前通知を発送した日から2週間である。通知を受け取った日ではなく、発送日が起算点となる。",
+    source: `不動産登記法第23条第1項・不動産登記規則第70条第8項（${realEstateRegistrationDeadlinesConfirmedAt}）`,
+    sourceUrl: realEstateRegistrationRulesUrl,
+    importance: 3,
+    tags: ["事前通知", "登記識別情報", "国内住所", "申出期間"],
+  },
+  {
+    id: "registration-prior-notice-foreign",
+    set: "real-estate-registration",
+    category: "不動産登記法・事前通知",
+    prompt:
+      "登記識別情報を提供できず事前通知を受けた登記義務者が外国に住所を有する場合、申請が真実である旨を申し出る期間は？",
+    choices: ["通知発送日から2週間", "通知受領日から2週間", "通知発送日から3週間", "通知発送日から4週間", "通知受領日から4週間"],
+    correctChoice: "通知発送日から4週間",
+    explanation:
+      "登記義務者が外国に住所を有する場合の申出期間は、事前通知を発送した日から4週間である。国内住所の場合の2週間と対比して覚える。",
+    source: `不動産登記法第23条第1項・不動産登記規則第70条第8項ただし書（${realEstateRegistrationDeadlinesConfirmedAt}）`,
+    sourceUrl: realEstateRegistrationRulesUrl,
+    importance: 3,
+    tags: ["事前通知", "登記識別情報", "外国住所", "申出期間"],
+  },
+  {
+    id: "registration-inheritance-basic-obligation",
+    set: "real-estate-registration",
+    category: "不動産登記法・相続登記",
+    prompt: "相続により不動産の所有権を取得した者が、相続登記を申請しなければならない期限は？",
+    choices: ["相続開始を知った日から1年以内", "相続開始を知った日から3年以内", "所有権取得を知った日から3年以内", "相続開始と所有権取得を知った日から3年以内", "相続開始の日から10年以内"],
+    correctChoice: "相続開始と所有権取得を知った日から3年以内",
+    explanation:
+      "自己のために相続の開始があったことを知り、かつ、その不動産の所有権を取得したことを知った日から3年以内に申請する。相続人に対する遺贈で所有権を取得した者も同様である。",
+    source: `不動産登記法第76条の2第1項（${realEstateRegistrationDeadlinesConfirmedAt}）`,
+    sourceUrl: realEstateRegistrationActUrl,
+    importance: 3,
+    tags: ["相続登記", "申請義務", "遺贈", "所有権移転登記"],
+  },
+  {
+    id: "registration-inheritance-partition-obligation",
+    set: "real-estate-registration",
+    category: "不動産登記法・相続登記",
+    prompt:
+      "法定相続分による相続登記後、遺産分割により法定相続分を超える所有権を取得した者が、その結果に基づく登記を申請する期限は？",
+    choices: ["相続開始の日から3年以内", "相続登記の日から3年以内", "遺産分割の日から1年以内", "遺産分割の日から3年以内", "遺産分割の日から10年以内"],
+    correctChoice: "遺産分割の日から3年以内",
+    explanation:
+      "法定相続分による相続登記後に遺産分割が成立した場合は、遺産分割の日から3年以内に、その結果を反映する所有権移転登記を申請する。相続人申告登記後に遺産分割で所有権を取得した場合も、同じく遺産分割の日から3年以内である。",
+    source: `不動産登記法第76条の2第2項・第76条の3第4項（${realEstateRegistrationDeadlinesConfirmedAt}）`,
+    sourceUrl: realEstateRegistrationActUrl,
+    importance: 3,
+    tags: ["相続登記", "遺産分割", "相続人申告登記", "申請義務"],
+  },
+  {
+    id: "registration-owner-address-name-change-obligation",
+    set: "real-estate-registration",
+    category: "不動産登記法・住所等変更",
+    prompt: "所有権の登記名義人の氏名・名称・住所に変更があった場合、変更登記を申請する期限は？",
+    choices: ["変更の日から1年以内", "変更の日から2年以内", "変更を知った日から2年以内", "変更の日から3年以内", "次の登記申請まで"],
+    correctChoice: "変更の日から2年以内",
+    explanation:
+      "所有権の登記名義人は、住所等の変更があった日から2年以内に変更登記を申請する。2026年4月1日より前の変更で未登記のものも対象となり、原則として2028年3月31日までに申請する必要がある。",
+    source: `不動産登記法第76条の5・民法等の一部を改正する法律附則第5条第7項（${realEstateRegistrationDeadlinesConfirmedAt}）`,
+    sourceUrl: addressChangeRegistrationGuideUrl,
+    importance: 3,
+    tags: ["住所等変更登記", "氏名変更", "住所変更", "申請義務"],
+  },
+  {
+    id: "registration-attached-seal-certificate-age",
+    set: "real-estate-registration",
+    category: "不動産登記法・添付情報",
+    prompt:
+      "不動産登記令第16条第2項または第18条第2項により書面へ添付する印鑑証明書は、原則として作成後どの期間内のものが必要？",
+    choices: ["1か月以内", "3か月以内", "6か月以内", "1年以内", "期間制限なし"],
+    correctChoice: "3か月以内",
+    explanation:
+      "申請情報を記載した書面や代理権限を証する書面に押印した印鑑について、同令の規定により添付する証明書は、作成後3か月以内のものでなければならない。官庁・公署による嘱託など、添付自体を要しない場合がある。",
+    source: `不動産登記令第16条第2項・第3項、第18条第2項・第3項（${realEstateRegistrationDeadlinesConfirmedAt}）`,
+    sourceUrl: realEstateRegistrationOrderUrl,
+    importance: 2,
+    tags: ["印鑑証明書", "書面申請", "代理権限証明情報", "添付情報"],
+  },
+  {
+    id: "registration-representative-qualification-document-age",
+    set: "real-estate-registration",
+    category: "不動産登記法・添付情報",
+    prompt:
+      "法人の代表者等の資格を証する情報として、公務員が職務上作成した書面を提供する場合、原則として作成後どの期間内のものが必要？",
+    choices: ["1か月以内", "3か月以内", "6か月以内", "1年以内", "期間制限なし"],
+    correctChoice: "3か月以内",
+    explanation:
+      "不動産登記令第7条第1項第1号ロまたは第2号の情報を記載した公務員作成の書面は、作成後3か月以内のものに限られる。会社法人等番号を提供して資格証明情報を省略できる場合などがある。",
+    source: `不動産登記令第17条（${realEstateRegistrationDeadlinesConfirmedAt}）`,
+    sourceUrl: realEstateRegistrationOrderUrl,
+    importance: 2,
+    tags: ["資格証明情報", "代表者", "法人", "添付情報"],
+  },
+  {
+    id: "registration-tax-refund-after-unused-reuse-certificate",
+    set: "real-estate-registration",
+    category: "不動産登記法・登録免許税",
+    prompt:
+      "再使用証明を受けた登録免許税の領収証書・収入印紙を再使用しないこととなった場合、還付を申し出られる期限は？",
+    choices: ["取下げの日から6か月を経過する日まで", "取下げの日から1年を経過する日まで", "証明の日から6か月を経過する日まで", "証明の日から1年を経過する日まで", "証明の日から5年を経過する日まで"],
+    correctChoice: "証明の日から1年を経過する日まで",
+    explanation:
+      "再使用しないこととなったときは、再使用証明をした登記機関に対し、証明の日から1年を経過する日までに、証明の無効化と登録免許税の還付を申し出ることができる。再使用期限の起算点は取下げの日、還付申出期限の起算点は証明の日である。",
+    source: `登録免許税法第31条第5項（${realEstateRegistrationDeadlinesConfirmedAt}）`,
+    sourceUrl: registrationAndLicenseTaxActUrl,
+    importance: 2,
+    tags: ["登録免許税", "再使用証明", "還付", "申出期限"],
+  },
+  {
+    id: "registration-tax-electronic-payment-no-application",
+    set: "real-estate-registration",
+    category: "不動産登記法・登録免許税",
+    prompt:
+      "電子的な方法で登録免許税を納付した後、登記等を受けることをやめた場合、還付に必要な税務署長への通知を請求できる期限は？",
+    choices: ["納付の日から30日を経過する日まで", "納付の日から3か月を経過する日まで", "納付の日から6か月を経過する日まで", "申請予定日から6か月を経過する日まで", "納付の日から1年を経過する日まで"],
+    correctChoice: "納付の日から6か月を経過する日まで",
+    explanation:
+      "原則として納付の日から6か月を経過する日までに、登記機関へ申し出て税務署長への通知を請求する。納付委託の場合は委託の日が起算点となる。申請をしないまま6か月を経過した場合は、この請求があったものとみなされる。",
+    source: `登録免許税法第31条第6項・第7項（${realEstateRegistrationDeadlinesConfirmedAt}）`,
+    sourceUrl: registrationAndLicenseTaxActUrl,
+    importance: 2,
+    tags: ["登録免許税", "電子納付", "還付", "通知請求"],
   },
 ];
 

@@ -1,7 +1,7 @@
 import "./style.css";
 import { questions, type Question } from "./questions";
 
-type ModeId = "storage" | "civil-law" | "all";
+type ModeId = "storage" | "real-estate-registration" | "civil-law" | "all";
 
 type StudyMode = {
   id: ModeId;
@@ -23,7 +23,14 @@ const studyModes: StudyMode[] = [
     label: "保存期間モード",
     shortLabel: "保存期間",
     description: "登記記録・図面・帳簿などの保存期間だけを集中して覚える",
-    filter: (question) => question.set !== "civil-law",
+    filter: (question) => !question.set || question.set === "storage",
+  },
+  {
+    id: "real-estate-registration",
+    label: "不動産登記法モード",
+    shortLabel: "不動産登記法",
+    description: "申請手続、登記識別情報、登録免許税などの期限を覚える",
+    filter: (question) => question.set === "real-estate-registration",
   },
   {
     id: "civil-law",
@@ -36,7 +43,7 @@ const studyModes: StudyMode[] = [
     id: "all",
     label: "総合モード",
     shortLabel: "総合",
-    description: "保存期間と民法の問題を混ぜて、本番に近い切り替えを練習する",
+    description: "保存期間、不動産登記法、民法の問題を混ぜて、本番に近い切り替えを練習する",
     filter: () => true,
   },
 ];
@@ -126,7 +133,7 @@ const renderModePicker = (): void => {
       </section>
 
       <aside class="study-note">
-        民法モードは、期間ナビの整理内容を基に、重複や表記を整えたうえで現行法令と照合しています。
+        各問題は、根拠となる現行法令と照合し、条文と確認基準日を記録しています。
       </aside>
       <footer>試験学習用の教材です。個別事案への法的助言ではありません。</footer>
     </section>
