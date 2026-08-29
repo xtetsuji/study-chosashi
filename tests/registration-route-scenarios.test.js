@@ -149,6 +149,7 @@ test("追加した制度経路をそれぞれの完成図に含める", () => {
     "association-guidance": ["association-person", "association-bureau"],
     "registration-administration-supervision": ["minister-federation-notice"],
     "association-membership-notice": ["association-bureau"],
+    "assistant-filing": ["membership", "association-bureau"],
   };
 
   for (const [scenarioId, routes] of Object.entries(expectedRoutes)) {
