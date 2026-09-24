@@ -1,7 +1,7 @@
 import "./style.css";
-import { questions, type Question } from "./questions";
+import { questions, type Question, type QuestionSet } from "./questions";
 
-type ModeId = "storage" | "real-estate-registration" | "civil-law" | "all";
+type ModeId = QuestionSet | "all";
 
 type StudyMode = {
   id: ModeId;
@@ -23,27 +23,41 @@ const studyModes: StudyMode[] = [
     label: "保存期間モード",
     shortLabel: "保存期間",
     description: "登記記録・図面・帳簿などの保存期間だけを集中して覚える",
-    filter: (question) => !question.set || question.set === "storage",
+    filter: (question) => !question.sets || question.sets.includes("storage"),
   },
   {
     id: "real-estate-registration",
     label: "不動産登記法モード",
     shortLabel: "不動産登記法",
     description: "申請手続、登記識別情報、登録免許税などの期限を覚える",
-    filter: (question) => question.set === "real-estate-registration",
+    filter: (question) => question.sets?.includes("real-estate-registration") ?? false,
+  },
+  {
+    id: "boundary-determination",
+    label: "筆界特定モード",
+    shortLabel: "筆界特定",
+    description: "筆界特定の保存期間、帳簿、通知の到達時期を覚える",
+    filter: (question) => question.sets?.includes("boundary-determination") ?? false,
+  },
+  {
+    id: "surveyor-law",
+    label: "土地家屋調査士法モード",
+    shortLabel: "土地家屋調査士法",
+    description: "登録、懲戒、事件簿など調査士法の期間を覚える",
+    filter: (question) => question.sets?.includes("surveyor-law") ?? false,
   },
   {
     id: "civil-law",
     label: "民法モード",
     shortLabel: "民法",
     description: "時効、物権、契約、相続など、民法を中心とする期間を覚える",
-    filter: (question) => question.set === "civil-law",
+    filter: (question) => question.sets?.includes("civil-law") ?? false,
   },
   {
     id: "all",
     label: "総合モード",
     shortLabel: "総合",
-    description: "保存期間、不動産登記法、民法の問題を混ぜて、本番に近い切り替えを練習する",
+    description: "全分野の問題を混ぜて、本番に近い切り替えを練習する",
     filter: () => true,
   },
 ];

@@ -1,6 +1,14 @@
+export type QuestionSet =
+  | "storage"
+  | "real-estate-registration"
+  | "boundary-determination"
+  | "surveyor-law"
+  | "civil-law";
+
 export type Question = {
   id: string;
-  set?: "storage" | "real-estate-registration" | "civil-law";
+  /** 省略時は、従来どおり保存期間モードに属する。 */
+  sets?: QuestionSet[];
   category: string;
   prompt: string;
   choices: string[];
@@ -17,6 +25,8 @@ const realEstateRegistrationActUrl = "https://laws.e-gov.go.jp/law/416AC00000001
 const realEstateRegistrationOrderUrl = "https://laws.e-gov.go.jp/law/416CO0000000379";
 const realEstateRegistrationRulesUrl = "https://laws.e-gov.go.jp/law/417M60000010018";
 const registrationAndLicenseTaxActUrl = "https://laws.e-gov.go.jp/law/342AC0000000035";
+const surveyorActUrl = "https://laws.e-gov.go.jp/law/325AC1000000228";
+const surveyorRulesUrl = "https://laws.e-gov.go.jp/law/354M50000010053";
 const addressChangeRegistrationGuideUrl = "https://www.moj.go.jp/MINJI/minji05_00693.html";
 const realEstateRegistrationConfirmedAt = "2026年8月23日確認";
 const realEstateRegistrationDeadlinesConfirmedAt = "2026年8月28日確認";
@@ -217,7 +227,7 @@ export const questions: Question[] = [
   },
   {
     id: "registration-identification-electronic-unreceived",
-    set: "real-estate-registration",
+    sets: ["real-estate-registration"],
     category: "不動産登記法・登記識別情報",
     prompt:
       "電子情報処理組織を使用して登記識別情報の通知を受ける場合、いつまでに自己の電子計算機のファイルへ記録しないと、通知を要しない場合に当たる？",
@@ -232,7 +242,7 @@ export const questions: Question[] = [
   },
   {
     id: "registration-identification-paper-unreceived",
-    set: "real-estate-registration",
+    sets: ["real-estate-registration"],
     category: "不動産登記法・登記識別情報",
     prompt:
       "書面で登記識別情報の通知を受ける場合、いつまでに登記識別情報通知書を受領しないと、通知を要しない場合に当たる？",
@@ -247,7 +257,7 @@ export const questions: Question[] = [
   },
   {
     id: "registration-electronic-attachment-paper-deadline",
-    set: "real-estate-registration",
+    sets: ["real-estate-registration"],
     category: "不動産登記法・申請手続",
     prompt:
       "電子申請で、特例により添付情報を記載した書面を提出する場合、その書面を登記所へ提出する期限は？",
@@ -262,7 +272,7 @@ export const questions: Question[] = [
   },
   {
     id: "registration-tax-reuse-after-withdrawal",
-    set: "real-estate-registration",
+    sets: ["real-estate-registration"],
     category: "不動産登記法・登録免許税",
     prompt:
       "取下げに伴い再使用証明を受けた登録免許税の領収証書・収入印紙を、同じ登記官署等で再使用できる期限は？",
@@ -277,7 +287,7 @@ export const questions: Question[] = [
   },
   {
     id: "registration-prior-notice-domestic",
-    set: "real-estate-registration",
+    sets: ["real-estate-registration"],
     category: "不動産登記法・事前通知",
     prompt:
       "登記識別情報を提供できず事前通知を受けた登記義務者が国内に住所を有する場合、申請が真実である旨を申し出る期間は？",
@@ -292,7 +302,7 @@ export const questions: Question[] = [
   },
   {
     id: "registration-prior-notice-foreign",
-    set: "real-estate-registration",
+    sets: ["real-estate-registration"],
     category: "不動産登記法・事前通知",
     prompt:
       "登記識別情報を提供できず事前通知を受けた登記義務者が外国に住所を有する場合、申請が真実である旨を申し出る期間は？",
@@ -307,7 +317,7 @@ export const questions: Question[] = [
   },
   {
     id: "registration-inheritance-basic-obligation",
-    set: "real-estate-registration",
+    sets: ["real-estate-registration"],
     category: "不動産登記法・相続登記",
     prompt: "相続により不動産の所有権を取得した者が、相続登記を申請しなければならない期限は？",
     choices: ["相続開始を知った日から1年以内", "相続開始を知った日から3年以内", "所有権取得を知った日から3年以内", "相続開始と所有権取得を知った日から3年以内", "相続開始の日から10年以内"],
@@ -321,7 +331,7 @@ export const questions: Question[] = [
   },
   {
     id: "registration-inheritance-partition-obligation",
-    set: "real-estate-registration",
+    sets: ["real-estate-registration"],
     category: "不動産登記法・相続登記",
     prompt:
       "法定相続分による相続登記後、遺産分割により法定相続分を超える所有権を取得した者が、その結果に基づく登記を申請する期限は？",
@@ -336,7 +346,7 @@ export const questions: Question[] = [
   },
   {
     id: "registration-owner-address-name-change-obligation",
-    set: "real-estate-registration",
+    sets: ["real-estate-registration"],
     category: "不動産登記法・住所等変更",
     prompt: "所有権の登記名義人の氏名・名称・住所に変更があった場合、変更登記を申請する期限は？",
     choices: ["変更の日から1年以内", "変更の日から2年以内", "変更を知った日から2年以内", "変更の日から3年以内", "次の登記申請まで"],
@@ -350,7 +360,7 @@ export const questions: Question[] = [
   },
   {
     id: "registration-attached-seal-certificate-age",
-    set: "real-estate-registration",
+    sets: ["real-estate-registration"],
     category: "不動産登記法・添付情報",
     prompt:
       "不動産登記令第16条第2項または第18条第2項により書面へ添付する印鑑証明書は、原則として作成後どの期間内のものが必要？",
@@ -365,7 +375,7 @@ export const questions: Question[] = [
   },
   {
     id: "registration-representative-qualification-document-age",
-    set: "real-estate-registration",
+    sets: ["real-estate-registration"],
     category: "不動産登記法・添付情報",
     prompt:
       "法人の代表者等の資格を証する情報として、公務員が職務上作成した書面を提供する場合、原則として作成後どの期間内のものが必要？",
@@ -380,7 +390,7 @@ export const questions: Question[] = [
   },
   {
     id: "registration-tax-refund-after-unused-reuse-certificate",
-    set: "real-estate-registration",
+    sets: ["real-estate-registration"],
     category: "不動産登記法・登録免許税",
     prompt:
       "再使用証明を受けた登録免許税の領収証書・収入印紙を再使用しないこととなった場合、還付を申し出られる期限は？",
@@ -395,7 +405,7 @@ export const questions: Question[] = [
   },
   {
     id: "registration-tax-electronic-payment-no-application",
-    set: "real-estate-registration",
+    sets: ["real-estate-registration"],
     category: "不動産登記法・登録免許税",
     prompt:
       "電子的な方法で登録免許税を納付した後、登記等を受けることをやめた場合、還付に必要な税務署長への通知を請求できる期限は？",
@@ -417,7 +427,7 @@ const confirmedAt = "2026年8月13日確認";
 const civilLawQuestions: Question[] = [
   {
     id: "civil-absence-ordinary",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・総則",
     prompt: "普通失踪で、失踪宣告の要件となる生死不明の期間は？",
     choices: ["1年", "3年", "5年", "7年", "10年"],
@@ -430,7 +440,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-absence-special",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・総則",
     prompt: "特別失踪で、危難が去った後に生死不明が続く必要期間は？",
     choices: ["6か月", "1年", "3年", "5年", "7年"],
@@ -443,7 +453,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-rescission-subjective",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・総則",
     prompt: "取消権は、追認できる時から何年間行使しないと時効で消滅する？",
     choices: ["1年", "3年", "5年", "10年", "20年"],
@@ -456,7 +466,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-rescission-objective",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・総則",
     prompt: "取消権は、行為の時から何年を経過すると消滅する？",
     choices: ["5年", "10年", "15年", "20年", "30年"],
@@ -469,7 +479,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-acquisitive-prescription-good-faith",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・物権",
     prompt: "所有の意思をもって平穏・公然に占有し、占有開始時に善意無過失だった場合、所有権の取得時効期間は？",
     choices: ["5年", "7年", "10年", "15年", "20年"],
@@ -482,7 +492,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-acquisitive-prescription-general",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・物権",
     prompt: "善意無過失の短期取得時効が成立しない場合、所有権の取得時効期間は？",
     choices: ["5年", "10年", "15年", "20年", "30年"],
@@ -495,7 +505,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-lease-maximum",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・契約",
     prompt: "民法上の賃貸借について、1回に定められる存続期間の上限は？",
     choices: ["10年", "20年", "30年", "50年", "上限なし"],
@@ -508,7 +518,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-land-lease-minimum",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・契約",
     prompt: "借地借家法上の普通借地権について、当初の存続期間は原則何年？",
     choices: ["10年", "20年", "30年", "50年", "上限なし"],
@@ -521,7 +531,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-superficies-ground-rent-default",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・物権",
     prompt: "定期の地代を支払う地上権者が、何年以上続けて地代を支払わないと、土地所有者は地上権の消滅を請求できる？",
     choices: ["1年以上", "2年以上", "3年以上", "5年以上", "10年以上"],
@@ -534,7 +544,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-easement-extinctive-prescription",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・物権",
     prompt: "地役権の消滅時効期間は？",
     choices: ["5年", "10年", "15年", "20年", "30年"],
@@ -547,7 +557,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-immovable-pledge-duration",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・物権",
     prompt: "不動産質権の1回の存続期間の上限は？",
     choices: ["5年", "10年", "20年", "30年", "50年"],
@@ -560,7 +570,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-prescription-court-claim",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・時効",
     prompt: "裁判上の請求が、権利を確定させずに終了した場合、その終了時から時効完成が猶予される期間は？",
     choices: ["3か月", "6か月", "1年", "3年", "5年"],
@@ -573,7 +583,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-prescription-provisional-seizure",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・時効",
     prompt: "仮差押え・仮処分の事由が終了した後、時効完成が猶予される期間は？",
     choices: ["3か月", "6か月", "1年", "3年", "5年"],
@@ -586,7 +596,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-prescription-demand",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・時効",
     prompt: "催告があった時から、時効完成が猶予される期間は？",
     choices: ["3か月", "6か月", "1年", "3年", "5年"],
@@ -599,7 +609,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-claim-prescription-subjective",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・時効",
     prompt: "債権者が権利を行使できることを知った時から、債権の消滅時効期間は？",
     choices: ["1年", "3年", "5年", "10年", "20年"],
@@ -612,7 +622,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-claim-prescription-objective",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・時効",
     prompt: "権利を行使できる時から、債権の消滅時効期間は？",
     choices: ["3年", "5年", "10年", "20年", "30年"],
@@ -625,7 +635,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-inheritance-recovery-subjective",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・相続",
     prompt: "相続権を侵害された事実を知った時から、相続回復請求権の消滅時効期間は？",
     choices: ["1年", "3年", "5年", "10年", "20年"],
@@ -638,7 +648,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-inheritance-recovery-objective",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・相続",
     prompt: "相続開始の時から、相続回復請求権が消滅するまでの期間は？",
     choices: ["5年", "10年", "15年", "20年", "30年"],
@@ -651,7 +661,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-legitime-subjective",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・相続",
     prompt: "相続開始と遺留分を侵害する贈与・遺贈を知った時から、遺留分侵害額請求権の消滅時効期間は？",
     choices: ["6か月", "1年", "3年", "5年", "10年"],
@@ -664,7 +674,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-legitime-objective",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・相続",
     prompt: "相続開始の時から、遺留分侵害額請求権が消滅するまでの期間は？",
     choices: ["1年", "3年", "5年", "10年", "20年"],
@@ -677,7 +687,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-repurchase-maximum",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・契約",
     prompt: "買戻しの期間として特約で定められる上限は？",
     choices: ["3年", "5年", "10年", "20年", "50年"],
@@ -690,7 +700,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-repurchase-unspecified",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・契約",
     prompt: "買戻しについて期間を定めなかった場合、何年以内に買戻しをしなければならない？",
     choices: ["1年", "3年", "5年", "10年", "20年"],
@@ -703,7 +713,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-short-lease-forest",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・契約",
     prompt: "処分権限のない者がする、樹木の栽植・伐採を目的とする山林の短期賃貸借の上限は？",
     choices: ["3年", "5年", "10年", "20年", "50年"],
@@ -716,7 +726,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-short-lease-land",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・契約",
     prompt: "処分権限のない者がする、山林以外の土地の短期賃貸借の上限は？",
     choices: ["1年", "3年", "5年", "10年", "20年"],
@@ -729,7 +739,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-short-lease-building",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・契約",
     prompt: "処分権限のない者がする、建物の短期賃貸借の上限は？",
     choices: ["1年", "2年", "3年", "5年", "10年"],
@@ -742,7 +752,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-short-lease-movables",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・契約",
     prompt: "処分権限のない者がする、動産の短期賃貸借の上限は？",
     choices: ["3か月", "6か月", "1年", "3年", "5年"],
@@ -755,7 +765,7 @@ const civilLawQuestions: Question[] = [
   },
   {
     id: "civil-inheritance-deliberation",
-    set: "civil-law",
+    sets: ["civil-law"],
     category: "民法・相続",
     prompt: "相続人が自己のために相続開始があったことを知った時から、承認・放棄を決める熟慮期間は？",
     choices: ["1か月", "3か月", "6か月", "1年", "3年"],
@@ -769,3 +779,154 @@ const civilLawQuestions: Question[] = [
 ];
 
 questions.push(...civilLawQuestions);
+
+const boundaryDeterminationQuestions: Question[] = [
+  {
+    id: "boundary-determination-record",
+    sets: ["storage", "boundary-determination"],
+    category: "筆界特定・保存期間",
+    prompt: "筆界特定書に記載され、又は記録された情報の保存期間は？",
+    choices: ["永久", "作成の年の翌年から30年", "送付を受けた年の翌年から30年", "閉鎖後30年", "10年"],
+    correctChoice: "永久",
+    explanation: "筆界特定書に記載され、又は記録された情報は、永久に保存される。筆界特定書以外の手続記録は30年であり、区別が重要である。",
+    source: "不動産登記規則第235条第1項第1号（2026年9月24日確認）",
+    sourceUrl: realEstateRegistrationRulesUrl,
+    importance: 3,
+    tags: ["筆界特定書", "保存期間"],
+  },
+  {
+    id: "boundary-determination-other-procedure-record",
+    sets: ["storage", "boundary-determination"],
+    category: "筆界特定・保存期間",
+    prompt: "筆界特定書以外の筆界特定手続記録に記載され、又は記録された情報の保存期間は？",
+    choices: ["受付の日から30年", "作成の年の翌年から30年", "送付を受けた年の翌年から30年", "閉鎖後30年", "永久"],
+    correctChoice: "送付を受けた年の翌年から30年",
+    explanation: "対象土地の所在地を管轄する登記所が、規則233条により筆界特定手続記録の送付を受けた年の翌年から30年間保存する。申請の受付日や筆界特定日が起算点ではない。",
+    source: "不動産登記規則第235条第1項第2号（2026年9月24日確認）",
+    sourceUrl: realEstateRegistrationRulesUrl,
+    importance: 3,
+    tags: ["筆界特定手続記録", "保存期間", "起算点"],
+  },
+  {
+    id: "boundary-determination-ledgers",
+    sets: ["storage", "boundary-determination"],
+    category: "筆界特定・保存期間",
+    prompt: "筆界特定受付等記録簿及び筆界特定関係簿の保存期間は？",
+    choices: ["受付の日から30年", "作成の年の翌年から30年", "送付を受けた年の翌年から30年", "作成の日から10年", "永久"],
+    correctChoice: "作成の年の翌年から30年",
+    explanation: "筆界特定受付等記録簿及び筆界特定関係簿は、作成の年の翌年から30年間保存する。筆界特定書以外の手続記録の起算点とは異なる。",
+    source: "不動産登記規則第235条の2第1号（2026年9月24日確認）",
+    sourceUrl: realEstateRegistrationRulesUrl,
+    importance: 2,
+    tags: ["筆界特定受付等記録簿", "筆界特定関係簿", "保存期間"],
+  },
+  {
+    id: "boundary-determination-diaries",
+    sets: ["storage", "boundary-determination"],
+    category: "筆界特定・保存期間",
+    prompt: "筆界特定事務日記帳及び筆界特定関係事務日記帳の保存期間は？",
+    choices: ["作成の年の翌年から1年", "作成の年の翌年から3年", "作成の年の翌年から5年", "作成の年の翌年から10年", "作成の年の翌年から30年"],
+    correctChoice: "作成の年の翌年から3年",
+    explanation: "両事務日記帳は、作成の年の翌年から3年間保存する。受付等記録簿・関係簿の30年と混同しない。",
+    source: "不動産登記規則第235条の2第2号（2026年9月24日確認）",
+    sourceUrl: realEstateRegistrationRulesUrl,
+    importance: 1,
+    tags: ["筆界特定事務日記帳", "筆界特定関係事務日記帳", "保存期間"],
+  },
+  {
+    id: "boundary-determination-unknown-party-notice",
+    sets: ["boundary-determination"],
+    category: "筆界特定・通知",
+    prompt: "所在不明の関係人に対し公告・掲示等の措置で筆界特定申請の通知をした場合、いつ通知が到達したものとみなされる？",
+    choices: ["措置を開始した日", "措置を開始した日から1週間を経過したとき", "措置を開始した日から2週間を経過したとき", "公告の日から30日を経過したとき", "筆界特定の日"],
+    correctChoice: "措置を開始した日から2週間を経過したとき",
+    explanation: "関係人の所在が判明しないときは、法定の閲覧可能措置と掲示等で通知できる。この措置を開始した日から2週間を経過したときに到達擬制が生じる。筆界特定後の通知にも準用される。",
+    source: "不動産登記法第133条第2項・第144条第2項（2026年9月24日確認）",
+    sourceUrl: realEstateRegistrationActUrl,
+    importance: 2,
+    tags: ["筆界特定", "所在不明", "通知", "到達擬制"],
+  },
+];
+
+const surveyorLawQuestions: Question[] = [
+  {
+    id: "surveyor-law-registration-cancellation-no-practice",
+    sets: ["surveyor-law"],
+    category: "土地家屋調査士法・登録",
+    prompt: "調査士が引き続き業務を行わないことを理由に、調査士会連合会が登録を取り消すことができるのは、どの期間を経過したとき？",
+    choices: ["6か月", "1年", "2年", "3年", "5年"],
+    correctChoice: "2年",
+    explanation: "引き続き2年以上業務を行わないとき、調査士会連合会は登録を取り消すことができる。法15条の当然取消しではなく、法16条1項1号による『できる』取消しである。",
+    source: "土地家屋調査士法第16条第1項第1号（2026年9月24日確認）",
+    sourceUrl: surveyorActUrl,
+    importance: 2,
+    tags: ["登録取消し", "業務を行わない", "任意的取消し"],
+  },
+  {
+    id: "surveyor-law-registration-application-no-disposition",
+    sets: ["surveyor-law"],
+    category: "土地家屋調査士法・登録",
+    prompt: "調査士名簿への登録を申請した日から、何か月を経過しても処分がないとき、申請者はどうできる？",
+    choices: ["1か月後、登録されたものとして業務を開始できる", "3か月後、登録されたものとして業務を開始できる", "3か月後、登録を拒否されたものとして法務大臣に審査請求できる", "6か月後、法務局長に異議申立てできる", "1年後、当然に登録される"],
+    correctChoice: "3か月後、登録を拒否されたものとして法務大臣に審査請求できる",
+    explanation: "申請の日から3月を経過しても何らの処分がないときは、登録されたものとみなされるのではない。登録を拒否されたものとして、法務大臣に審査請求できる。",
+    source: "土地家屋調査士法第12条第2項（2026年9月24日確認）",
+    sourceUrl: surveyorActUrl,
+    importance: 3,
+    tags: ["登録申請", "不作為", "審査請求"],
+  },
+  {
+    id: "surveyor-law-business-suspension",
+    sets: ["surveyor-law"],
+    category: "土地家屋調査士法・懲戒",
+    prompt: "法務大臣が、調査士又は調査士法人に命じることができる業務停止の最長期間は？",
+    choices: ["6か月以内", "1年以内", "2年以内", "3年以内", "5年以内"],
+    correctChoice: "2年以内",
+    explanation: "調査士は2年以内の業務停止、調査士法人は2年以内の業務の全部又は一部の停止を命じられ得る。いずれも最長は2年である。",
+    source: "土地家屋調査士法第42条第2号・第43条第1項第2号（2026年9月24日確認）",
+    sourceUrl: surveyorActUrl,
+    importance: 2,
+    tags: ["懲戒", "業務停止", "調査士法人"],
+  },
+  {
+    id: "surveyor-law-business-prohibition-disqualification",
+    sets: ["surveyor-law"],
+    category: "土地家屋調査士法・欠格事由",
+    prompt: "土地家屋調査士法42条により業務禁止の処分を受けた者が、再び調査士となる資格を有するまでの欠格期間は？",
+    choices: ["処分の日から1年", "処分の日から2年", "処分の日から3年", "処分の日から5年", "処分の日から10年"],
+    correctChoice: "処分の日から3年",
+    explanation: "業務禁止処分を受けた日から3年を経過しない者は欠格者である。禁錮以上の刑、公務員の懲戒免職などにも3年の欠格事由がある。",
+    source: "土地家屋調査士法第5条第1項第5号（2026年9月24日確認）",
+    sourceUrl: surveyorActUrl,
+    importance: 2,
+    tags: ["業務禁止", "欠格事由", "3年"],
+  },
+  {
+    id: "surveyor-law-case-register",
+    sets: ["storage", "surveyor-law"],
+    category: "土地家屋調査士法・保存期間",
+    prompt: "調査士の事件簿の保存期間は？",
+    choices: ["作成の日から3年", "受託の日から5年", "閉鎖後5年", "閉鎖後7年", "永久"],
+    correctChoice: "閉鎖後7年",
+    explanation: "調査士の事件簿は、閉鎖後7年間保存しなければならない。作成日から3年の領収証副本とは、対象と起算点の両方が異なる。",
+    source: "土地家屋調査士法施行規則第28条第2項（2026年9月24日確認）",
+    sourceUrl: surveyorRulesUrl,
+    importance: 3,
+    tags: ["事件簿", "保存期間", "閉鎖後"],
+  },
+  {
+    id: "surveyor-law-receipt-copy",
+    sets: ["storage", "surveyor-law"],
+    category: "土地家屋調査士法・保存期間",
+    prompt: "調査士が依頼者から報酬を受けて作成する領収証の副本の保存期間は？",
+    choices: ["作成の日から1年", "作成の日から3年", "作成の日から5年", "閉鎖後7年", "永久"],
+    correctChoice: "作成の日から3年",
+    explanation: "領収証の副本は、作成の日から3年間保存しなければならない。事件簿は閉鎖後7年であり、期間・起算点とも異なる。領収証は電磁的記録でも作成・保存できる。",
+    source: "土地家屋調査士法施行規則第27条第1項・第2項（2026年9月24日確認）",
+    sourceUrl: surveyorRulesUrl,
+    importance: 2,
+    tags: ["領収証", "副本", "保存期間"],
+  },
+];
+
+questions.push(...boundaryDeterminationQuestions, ...surveyorLawQuestions);

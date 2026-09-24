@@ -6,10 +6,12 @@
 
 - 保存期間モード: 登記記録、図面、帳簿などの保存期間
 - 不動産登記法モード: 申請手続、登記識別情報、登録免許税などの期限
+- 筆界特定モード: 筆界特定の保存期間、帳簿、通知の到達時期
+- 土地家屋調査士法モード: 登録、懲戒、事件簿などの期間
 - 民法モード: 時効、物権、契約、相続などの期間
 - 総合モード: 全分野を混ぜて出題
 
-URLのクエリ文字列でもモードを直接開けます（例: `?mode=civil-law`）。
+URLのクエリ文字列でもモードを直接開けます（例: `?mode=boundary-determination`、`?mode=surveyor-law`）。
 
 ## キーボード操作
 
@@ -47,7 +49,7 @@ pnpm build
 ```typescript
 {
   id: "一意なID",
-  set: "real-estate-registration",
+  sets: ["real-estate-registration"],
   category: "不動産登記法・申請手続",
   prompt: "問題文",
   choices: ["永久", "50年", "30年"],
@@ -58,9 +60,11 @@ pnpm build
 }
 ```
 
-`set` を省略するか `storage` を指定した問題は保存期間モード、
-`real-estate-registration` を指定した問題は不動産登記法モード、
-`civil-law` を指定した問題は民法モードに入ります。
+`sets` には `storage`、`real-estate-registration`、`boundary-determination`、
+`surveyor-law`、`civil-law` を指定できます。複数のモードへ出題したいときは配列に
+併記します。例えば、筆界特定書の保存期間は `sets: ["storage", "boundary-determination"]`
+とし、問題を重複定義しません。既存の保存期間問題との互換性のため、`sets` を省略した
+問題は保存期間モードに入ります。
 問題を追加・修正するときは、根拠法令の最新条文を確認し、`source` に条文と確認基準日を記録してください。
 
 ## 民法データについて
