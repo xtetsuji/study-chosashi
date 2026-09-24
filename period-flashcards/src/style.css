@@ -221,6 +221,8 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0.65rem 3rem;
+  line-height: 1.5;
 }
 
 .choice-button kbd {
@@ -353,6 +355,11 @@ footer {
   .choice-button kbd,
   .keyboard-hint {
     display: none;
+  }
+
+  .choice-button {
+    padding-right: 1rem;
+    padding-left: 1rem;
   }
 }
 
