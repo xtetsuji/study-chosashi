@@ -107,6 +107,16 @@ h1 {
   font-size: 0.9rem;
 }
 
+.saved-score {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin-top: 1rem;
+  color: #245f3d;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
 .mode-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -155,6 +165,60 @@ h1 {
   line-height: 1.65;
 }
 
+.mode-progress {
+  grid-column: 1 / -1;
+  color: #245f3d;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.review-panel {
+  margin-top: 1rem;
+  padding: 1.15rem;
+  border: 1px solid #a6bdad;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.review-panel h2 {
+  margin: 0;
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 1.2rem;
+}
+
+.review-panel p {
+  margin: 0.65rem 0 1rem;
+  color: #596760;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.review-button,
+.clear-progress {
+  min-height: 2.75rem;
+  border-radius: 0.65rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.review-button {
+  padding: 0.6rem 1rem;
+  border: 2px solid #245f3d;
+  background: #245f3d;
+  color: #fff;
+}
+
+.review-button:hover:not(:disabled),
+.review-button:focus-visible {
+  background: #19472d;
+}
+
+.review-button:disabled,
+.clear-progress:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
 .study-note {
   margin-top: 1rem;
   padding: 0.9rem 1rem;
@@ -163,6 +227,23 @@ h1 {
   color: #596760;
   font-size: 0.85rem;
   line-height: 1.65;
+}
+
+.clear-progress {
+  display: block;
+  margin: 1rem auto 0;
+  padding: 0.45rem 0.8rem;
+  border: 0;
+  background: transparent;
+  color: #596760;
+  font-size: 0.8rem;
+  text-decoration: underline;
+  text-underline-offset: 0.2rem;
+}
+
+.clear-progress:hover:not(:disabled),
+.clear-progress:focus-visible {
+  color: #9d3b28;
 }
 
 .card {
@@ -350,6 +431,11 @@ footer {
     align-items: flex-start;
     flex-direction: column;
     gap: 0.75rem;
+  }
+
+  .saved-score,
+  .score {
+    gap: 0.4rem 0.75rem;
   }
 
   .choice-button kbd,
